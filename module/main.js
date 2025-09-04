@@ -47,6 +47,22 @@ Hooks.once("init", () => {
   Handlebars.registerHelper('getWeaponType', function(itemType) {
     return itemType.replace('weapon-', '');
   });
+  
+  Handlebars.registerHelper('getWeaponProperty', function(weaponType, property) {
+    const weaponData = WEAPON_TYPES[weaponType];
+    return weaponData ? weaponData[property] : '';
+  });
+  
+  Handlebars.registerHelper('getWeaponDamage', function(weaponType, isTwoHanded) {
+    const weaponData = WEAPON_TYPES[weaponType];
+    if (!weaponData) return 0;
+    
+    let damage = weaponData.damageMod || 0;
+    if (isTwoHanded && weaponData.twoHandedBonus) {
+      damage += 1;
+    }
+    return damage;
+  });
 
   // Register the custom document classes
   CONFIG.Actor.documentClass = BLBActor;
@@ -72,4 +88,5 @@ Hooks.once("init", () => {
     types: ["weapon"],
     makeDefault: true
   });
+
 });

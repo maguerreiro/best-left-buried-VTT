@@ -128,42 +128,42 @@
             </div>
           </div>
 
+
+
           <div class="weapons-section">
                 <h2>Weapons</h2>
-                <table class="weapons-table">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Type</th>
-                            <th>Range</th>
-                            <th>Attack</th>
-                            <th>Dmg</th>
-                            <th>Init</th>
-                            <th>Controls</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                <div class="weapons-list">
+                    <div class="weapon-headers">
+                        <div>Name</div>
+                        <div>Type</div>
+                        <div>Range</div>
+                        <div>Attack</div>
+                        <div>Dmg</div>
+                        <div>Init</div>
+                        <div>Controls</div>
+                    </div>
                     {{#each actor.items as |item|}}
                         {{#if (eq item.type "weapon")}}
-                        <tr class="weapon-row" data-item-id="{{item._id}}">
-                            <td class="weapon-name">
+                          <div class="weapon-row" data-item-id="{{item._id}}">
+                            <div class="weapon-name">
                                 <img src="{{item.img}}" width="24" height="24"/>
-                                {{item.name}}
-                            </td>
-                            <td>{{lookup (lookup @root.WEAPON_TYPES item.system.type) "label"}}</td>
-                            <td>{{lookup (lookup @root.WEAPON_TYPES item.system.type) "range"}}</td>
-                            <td>{{lookup (lookup @root.WEAPON_TYPES item.system.type) "attackStat"}}</td>
-                            <td>{{lookup (lookup @root.WEAPON_TYPES item.system.type) "damageMod"}}</td>
-                            <td>{{lookup (lookup @root.WEAPON_TYPES item.system.type) "initiative"}}</td>
-                            <td class="weapon-controls">
-                                <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                                <span>{{item.name}}</span>
+                            </div>
+                            <div class="weapon-prop">{{getWeaponProperty item.system.type "label"}}</div>
+                            <div class="weapon-prop">{{getWeaponProperty item.system.type "range"}}</div>
+                            <div class="weapon-prop">{{getWeaponProperty item.system.type "attackStat"}}</div>
+                            <div class="weapon-prop">{{getWeaponDamage item.system.type item.system.isTwoHanded}}</div>
+                            <div class="weapon-prop">{{getWeaponProperty item.system.type "initiative"}}</div>
+                            <div class="weapon-controls">
+                                <button type="button" class="weapon-roll" data-weapon-id="{{item._id}}" title="Roll Attack">
+                                    <i class="fas fa-dice-d6"></i>
+                                </button>
                                 <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
-                            </td>
-                        </tr>
+                            </div>
+                        </div>
                         {{/if}}
                     {{/each}}
-                    </tbody>
-                </table>
+                </div>
             </div>
         </div>
 

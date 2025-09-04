@@ -7,8 +7,8 @@ export class MiniActorSheet extends ActorSheet {
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ["best-left-buried", "sheet", "actor"],
-      width: 900,
-      height: 700,
+      width: 1000,
+      height: 900,
       template: "systems/best-left-buried/templates/actor-template.hbs",
       tabs: [{navSelector: ".tabs", contentSelector: ".sheet-body", initial: "stats"}]
     });
@@ -134,10 +134,14 @@ export class MiniActorSheet extends ActorSheet {
 
 
     // Listener: Click on an item's name or image to open its sheet
-    html.find(".item-list .item-summary").click((event) => {
-      const li = $(event.currentTarget).parents(".item");
-      const item = this.actor.items.get(li.data("item-id"));
-      item.sheet.render(true);
+    html.find(".weapon-name").click((event) => {
+      event.preventDefault();
+      const weaponRow = event.currentTarget.closest(".weapon-row");
+      const itemId = weaponRow.dataset.itemId;
+      const item = this.actor.items.get(itemId);
+      if (item) {
+        item.sheet.render(true);
+      }
     });
 
 
@@ -154,43 +158,84 @@ export class MiniActorSheet extends ActorSheet {
 
     // Listener: Roll a weapon attack
     html.find(".weapon-roll").click(async (event) => {
+      event.preventDefault();
       const weaponId = event.currentTarget.dataset.weaponId;
       const weapon = this.actor.items.get(weaponId);
-      const weaponData = weapon.system;
+      
+      if (!weapon) {
+        console.error("Weapon not found:", weaponId);
+        return;
+      }
 
-      let attackStat = weaponData.attackStat;
-      if (Array.isArray(attackStat)) {
-        // For throwing weapons, let user choose stat
-        attackStat = await new Promise(resolve => {
+      // Get weapon type from WEAPON_TYPES
+      const weaponType = weapon.system.type || "hand";
+      const weaponTypeData = WEAPON_TYPES[weaponType];
+      
+      if (!weaponTypeData) {
+        console.error("Weapon type data not found for:", weaponType);
+        return;
+      }
+
+      // Get the attack stat
+      let attackStat = weaponTypeData.attackStat;
+      
+      // Handle throwing weapons that can use either wit or brawn
+      if (weaponType === "throwing" && weapon.system.inMelee) {
+        const choice = await new Promise(resolve => {
           new Dialog({
             title: "Choose Attack Stat",
             content: `<p>Choose stat for ${weapon.name} attack:</p>`,
             buttons: {
               wit: {
-                label: "Wit",
+                label: "Wit (Normal)",
                 callback: () => resolve("wit")
               },
               brawn: {
-                label: "Brawn",
+                label: "Brawn (Penalty)",
                 callback: () => resolve("brawn")
               }
-            }
+            },
+            default: "wit"
           }).render(true);
         });
+        attackStat = choice;
       }
 
-      const statMod = this.actor.system[attackStat].total;
-      let damageMod = weaponData.damageMod;
+      const attackStatValue = this.actor.system[attackStat + "Total"] || 0;
       
-      if (weaponData.isTwoHanded && (weaponData.weaponType === "hand" || weaponData.weaponType === "long")) {
+      // Calculate damage modifier
+      let damageMod = weaponTypeData.damageMod || 0;
+      if (weapon.system.isTwoHanded && weaponTypeData.twoHandedBonus) {
         damageMod += 1;
       }
 
-      const roll = await new Roll(`1d20 + ${statMod} + ${damageMod}`).evaluate({async: true});
+      // Add penalty for throwing weapons in melee using brawn
+      let attackPenalty = 0;
+      if (weaponType === "throwing" && weapon.system.inMelee && attackStat === "brawn") {
+        attackPenalty = -2;
+      }
 
-      roll.toMessage({
+      // Roll attack
+      const attackFormula = `1d20 + ${attackStatValue} + ${attackPenalty}`;
+      const attackRoll = await new Roll(attackFormula).evaluate({async: true});
+      
+      let flavorText = `${weapon.name} Attack Roll (${attackStat})`;
+      if (attackPenalty < 0) {
+        flavorText += ` with penalty`;
+      }
+      
+      attackRoll.toMessage({
         speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-        flavor: `${weapon.name} Attack Roll`
+        flavor: flavorText
+      });
+
+      // Roll damage
+      const damageFormula = `1d6 + ${damageMod}`;
+      const damageRoll = await new Roll(damageFormula).evaluate({async: true});
+      
+      damageRoll.toMessage({
+        speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+        flavor: `${weapon.name} Damage Roll`
       });
     });
   }

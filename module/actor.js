@@ -160,6 +160,7 @@ export class BLBActorData extends foundry.abstract.TypeDataModel {
     // Calculate total stats scores, formula: base + bonus
     this.brawnTotal = this.brawn.base + this.brawn.bonus;
     this.witTotal = this.wit.base + this.wit.bonus;
+    this.willTotal = this.will.base + this.will.bonus;
     this.affluenceTotal = this.affluence.base + this.affluence.bonus;
     this.vigourTotal = this.vigour.base + this.vigour.bonus;
     this.gripTotal = this.grip.base + this.grip.bonus;
@@ -178,8 +179,9 @@ export class BLBActorData extends foundry.abstract.TypeDataModel {
     
 
     // Calculate max health (base + constitution modifier)
-    if (this.health.max < (10 + this.constitutionMod)) {
-      this.health.max = Math.max(1, 10 + this.constitutionMod);
+    const vigourMod = Math.floor((this.vigourTotal - 10) / 2);
+    if (this.health.max < (10 + vigourMod)) {
+      this.health.max = Math.max(1, 10 + vigourMod);
     }
   }
 }

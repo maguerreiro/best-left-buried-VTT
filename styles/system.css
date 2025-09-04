@@ -399,7 +399,7 @@ button:hover {
     background: #e0e0e0;
     border-bottom: 2px solid black;
     display: grid;
-    grid-template-columns: 2fr repeat(4, 1fr) 2fr 80px;
+    grid-template-columns: 2fr 1fr 1fr 1fr 0.5fr 0.5fr 80px;
     padding: 8px 5px;
     font-weight: bold;
     text-align: center;
@@ -416,7 +416,7 @@ button:hover {
 
 .weapon-row {
     display: grid;
-    grid-template-columns: 2fr repeat(4, 1fr) 2fr 80px;
+    grid-template-columns: 2fr 1fr 1fr 1fr 0.5fr 0.5fr 80px;
     padding: 8px 5px;
     align-items: center;
     border-bottom: 1px solid #eee;
@@ -446,10 +446,6 @@ button:hover {
 
 .weapon-controls a {
     cursor: pointer;
-}
-
-.weapon-controls .item-delete {
-    color: #aa0000;
 }
 
 .weapon-controls .item-delete:hover {
@@ -501,7 +497,7 @@ button:hover {
 }
 
 .item-delete {
-    color: #000;
+    color: #000000;
     cursor: pointer;
     width: 24px;
     height: 24px;
@@ -514,6 +510,19 @@ button:hover {
     text-shadow: #ff0000;
 }
 
+.weapon-name {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.weapon-name:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+}
+
+.weapon-name:hover span {
+    text-decoration: underline;
+}
 
 
 /* \ BLB formatting \ */
