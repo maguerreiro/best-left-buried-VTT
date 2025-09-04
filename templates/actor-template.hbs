@@ -1,0 +1,201 @@
+{{! actor-template.hbs }}
+
+
+<form class="{{cssClass}} my-system">
+    <header class="sheet-header">
+        <div class="title-area">
+            <h1>Best Left Buried</h1>
+            <div class="character-info">
+                <input type="text" name="name" value="{{actor.name}}" placeholder="Name"/>
+                <input type="text" name="system.archetype" value="{{system.archetype}}" placeholder="Archetype"/>
+            </div>
+        </div>
+        <div class="xp-tracker">
+            <h3>XP Tracker</h3>
+            <div class="xp-counter">
+                <div class="xp-controls">
+                    <button type="button" class="xp-button decrease">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <input type="number" name="system.xp" value="{{system.xp}}" data-dtype="Number" min="0"/>
+                    <button type="button" class="xp-button increase">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="tabs" data-group="primary">
+        <a class="item" data-tab="stats">Stats & Weapons</a>
+        <a class="item" data-tab="equipment">Equipment & Treasure</a>
+        <a class="item" data-tab="advancements">Advancements & Consequences</a>
+    </nav>
+
+    <section class="sheet-body">
+        <div class="tab" data-group="primary" data-tab="stats">
+            <h3>Stats</h3>  
+             
+            <div class="stats-grid">
+         
+            {{! Top row stats }}
+
+          <div class="stat-box">
+            <div class="stat-name">Brawn</div>
+              <div class="ability-breakdown">
+                <input type="number" name="system.brawn.base" value="{{system.brawn.base}}" data-dtype="Number"/>
+                <span class="plus">+</span>
+                <input type="number" name="system.brawn.bonus" value="{{system.brawn.bonus}}" data-dtype="Number"/>
+                <span class="equals">=</span>
+                <span class="total-score">{{system.brawnTotal}}</span>
+              </div>
+    {{!          <div class="starting-rule">Starting: +2 in one stat</div>       }}
+          </div>
+
+
+            <div class="stat-box">
+              <div class="stat-name">Wit</div>
+                <div class="ability-breakdown">
+                  <input type="number" name="system.wit.base" value="{{system.wit.base}}" data-dtype="Number"/>
+                  <span class="plus">+</span>
+                  <input type="number" name="system.wit.bonus" value="{{system.wit.bonus}}" data-dtype="Number"/>
+                  <span class="equals">=</span>
+                  <span class="total-score">{{system.witTotal}}</span>
+               </div>
+            </div>
+
+            <div class="stat-box">
+              <div class="stat-name">Will</div>
+                <div class="ability-breakdown">
+                  <input type="number" name="system.will.base" value="{{system.will.base}}" data-dtype="Number"/>
+                  <span class="plus">+</span>
+                  <input type="number" name="system.will.bonus" value="{{system.will.bonus}}" data-dtype="Number"/>
+                  <span class="equals">=</span>
+                  <span class="total-score">{{system.willTotal}}</span>
+                </div>
+            </div>
+          
+            <div class="stat-box">
+              <div class="stat-name">Affluence</div>
+                <div class="ability-breakdown">
+                  <input type="number" name="system.affluence.base" value="{{system.affluence.base}}" data-dtype="Number"/>
+                  <span class="plus">+</span>
+                  <input type="number" name="system.affluence.bonus" value="{{system.affluence.bonus}}" data-dtype="Number"/>
+                  <span class="equals">=</span>
+                  <span class="total-score">{{system.affluenceTotal}}</span>
+                </div>
+                  <div class="optional-rule">Optional Rule</div>
+          </div>
+
+
+        {{! Bottom row }}
+
+            <div class="stat-box">
+              <div class="stat-name">Vigour</div>
+                  <div class="ability-breakdown">
+                  <input type="number" name="system.vigour.base" value="{{system.vigour.base}}" data-dtype="Number"/>
+                  <span class="plus">+</span>
+                  <input type="number" name="system.vigour.bonus" value="{{system.vigour.bonus}}" data-dtype="Number"/>
+                  <span class="equals">=</span>
+                  <span class="total-score">{{system.vigourTotal}}</span>
+                </div>
+    {{!          <div class="starting-rule">Starting: 6+Brawn | Max: 5+Brawn+Adv. Qty.</div>       }}
+            </div>
+
+            <div class="stat-box">
+              <div class="stat-name">Grip</div>
+                  <div class="ability-breakdown">
+                  <input type="number" name="system.grip.base" value="{{system.grip.base}}" data-dtype="Number"/>
+                  <span class="plus">+</span>
+                  <input type="number" name="system.grip.bonus" value="{{system.grip.bonus}}" data-dtype="Number"/>
+                  <span class="equals">=</span>
+                  <span class="total-score">{{system.gripTotal}}</span>
+                </div>
+
+    {{!          <div class="starting-rule">Starting: 4+Will</div>       }}
+            </div>
+
+
+            <div class="stat-box armor">
+              <div class="stat-name">Armour</div>
+              <div class="armor-options">
+                <label><input type="radio" name="armor-type" value="shield"> Shield (+1)</label>
+                <label><input type="radio" name="armor-type" value="basic"> Basic (8)</label>
+                <label><input type="radio" name="armor-type" value="plate"> Plate (9)</label>
+              </div>
+              <div class="starting-rule">Starting: 7+Armor</div>
+    {{!          <div class="optional-rule">Shield, Basic, or Plate</div>       }}
+            </div>
+          </div>
+
+          <div class="weapons-section">
+                <h2>Weapons</h2>
+                <table class="weapons-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Range</th>
+                            <th>Attack</th>
+                            <th>Dmg</th>
+                            <th>Init</th>
+                            <th>Controls</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {{#each actor.items as |item|}}
+                        {{#if (eq item.type "weapon")}}
+                        <tr class="weapon-row" data-item-id="{{item._id}}">
+                            <td class="weapon-name">
+                                <img src="{{item.img}}" width="24" height="24"/>
+                                {{item.name}}
+                            </td>
+                            <td>{{lookup (lookup @root.WEAPON_TYPES item.system.type) "label"}}</td>
+                            <td>{{lookup (lookup @root.WEAPON_TYPES item.system.type) "range"}}</td>
+                            <td>{{lookup (lookup @root.WEAPON_TYPES item.system.type) "attackStat"}}</td>
+                            <td>{{lookup (lookup @root.WEAPON_TYPES item.system.type) "damageMod"}}</td>
+                            <td>{{lookup (lookup @root.WEAPON_TYPES item.system.type) "initiative"}}</td>
+                            <td class="weapon-controls">
+                                <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                                <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+                            </td>
+                        </tr>
+                        {{/if}}
+                    {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        {{! Equipment Tab Content }}
+        <div class="tab" data-tab="equipment">
+          <div class="equipment-grid">
+            <div class="equipment-section">
+              <h3>Equipment</h3>
+              <!-- Equipment list here -->
+            </div>
+            <div class="treasure-section">
+              <h3>Treasure</h3>
+              <!-- Treasure list here -->
+            </div>
+          </div>
+        </div>
+
+
+
+        {{! Advancements Tab Content }}
+        <div class="tab" data-tab="advancements">
+          <div class="advancement-grid">
+            <div class="advancement-section">
+              <h3>Advancements</h3>
+              <!-- Advancements list here -->
+            </div>
+            <div class="consequence-section">
+              <h3>Consequences</h3>
+              <!-- Consequences list here -->
+            </div>
+          </div>
+        </div>
+    </section>
+</form>
+

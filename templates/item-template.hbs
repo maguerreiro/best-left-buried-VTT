@@ -1,0 +1,44 @@
+<form class="{{cssClass}}" autocomplete="off">
+    <header class="sheet-header">
+        <img src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64"/>
+        <h1><input name="name" type="text" value="{{item.name}}" placeholder="Name"/></h1>
+    </header>
+
+    <nav class="sheet-tabs tabs" data-group="primary">
+        <a class="item" data-tab="properties">Properties</a>
+        <a class="item" data-tab="description">Description</a>
+    </nav>
+
+    <section class="sheet-body">
+        <div class="tab" data-group="primary" data-tab="properties">
+            <div class="form-group">
+                <label>Type</label>
+                <select name="system.type" value="{{system.type}}">
+                    {{#select system.type}}
+                    {{#each WEAPON_TYPES as |type id|}}
+                        <option value="{{id}}">{{type.label}}</option>
+                    {{/each}}
+                    {{/select}}
+                </select>
+            </div>
+
+            {{#if (or (eq system.type "hand") (eq system.type "long"))}}
+            <div class="form-group">
+                <label>Two-Handed</label>
+                <input type="checkbox" name="system.isTwoHanded" {{checked system.isTwoHanded}}/>
+            </div>
+            {{/if}}
+
+            {{#if (eq system.type "throwing")}}
+            <div class="form-group">
+                <label>In Melee Range</label>
+                <input type="checkbox" name="system.inMelee" {{checked system.inMelee}}/>
+            </div>
+            {{/if}}
+        </div>
+
+        <div class="tab" data-group="primary" data-tab="description">
+            {{editor system.description target="system.description" button=true owner=owner editable=editable}}
+        </div>
+    </section>
+</form>

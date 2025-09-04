@@ -1,0 +1,30 @@
+{
+  "id": "best-left-buried",
+  "title": "Best Left Buried",
+  "description": "Best Left Buried system (Foundry V13 compatible).",
+  "version": "0.1.0",
+
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13",
+    "maximum": "13"
+  },
+
+  "authors": [
+    { "name": "Marco Guerreiro" }
+  ],
+
+  "scripts": [],
+  "esmodules": ["module/main.js"],
+  "styles": ["styles/system.css"],
+  "packs": [],
+
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ]
+}
+
