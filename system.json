@@ -6,6 +6,7 @@
   
   "url": "https://github.com/maguerreiro/best-left-buried-VTT",
   "manifest": "https://raw.githubusercontent.com/maguerreiro/best-left-buried-VTT/main/system.json",
+  "download": "https://github.com/maguerreiro/best-left-buried-VTT/archive/refs/heads/main.zip",
 
   "compatibility": {
     "minimum": "13",
