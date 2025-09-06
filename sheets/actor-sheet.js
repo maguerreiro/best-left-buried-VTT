@@ -19,14 +19,34 @@ export class MiniActorSheet extends ActorSheet {
     const context = super.getData(options);
     context.system = context.actor.system;
     
-      // Categorize items by type
+    // Sort weapons by type first, then by name
+    const sortedWeapons = context.actor.items
+        .filter(item => item.type === "weapon")
+        .sort((a, b) => {
+            // First sort by weapon type
+            const typeA = a.system.type || "hand";
+            const typeB = b.system.type || "hand";
+            
+            // Get the weapon type labels for consistent ordering
+            const weaponTypeOrder = ["hand", "light", "heavy", "long", "throwing", "ranged"];
+            const typeIndexA = weaponTypeOrder.indexOf(typeA);
+            const typeIndexB = weaponTypeOrder.indexOf(typeB);
+            
+            if (typeIndexA !== typeIndexB) {
+                return typeIndexA - typeIndexB;
+            }
+            
+            // If types are the same, sort by name
+            return a.name.localeCompare(b.name);
+        });
+
+    // Categorize items by type with sorted weapons
     context.items = {
-      weapon: context.actor.items.filter(item => item.type === "weapon"),
+        weapon: sortedWeapons,
       armor: context.actor.items.filter(item => item.type === "armor"),
       shield: context.actor.items.filter(item => item.type === "shield"),
     };
     
-   
     context.WEAPON_TYPES = WEAPON_TYPES;
     context.ARMOR_TYPES = ARMOR_TYPES;
     context.SHIELD_TYPES = SHIELD_TYPES;
