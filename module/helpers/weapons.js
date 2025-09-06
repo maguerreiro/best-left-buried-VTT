@@ -1,3 +1,5 @@
+// helpers/weapons.js
+
 export const WEAPON_TYPES = {
     hand: {
         label: "Hand Weapon",

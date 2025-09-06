@@ -51,6 +51,25 @@ export class BLBActorData extends foundry.abstract.TypeDataModel {
       }),
 
 
+      will: new fields.SchemaField({
+        base: new fields.NumberField({
+          required: true,
+          integer: true,
+          initial: 10,
+          min: 0,
+          max: 30,
+        }),
+
+        bonus: new fields.NumberField({
+          required: true,
+          integer: true,
+          initial: 0,
+          min: 0,
+          max: 20,
+        }),
+      }),
+
+
       affluence: new fields.SchemaField({
         base: new fields.NumberField({
           required: true,
@@ -71,20 +90,19 @@ export class BLBActorData extends foundry.abstract.TypeDataModel {
 
 
       vigour: new fields.SchemaField({
-        base: new fields.NumberField({
+        min: new fields.NumberField({
           required: true,
           integer: true,
           initial: 10,
           min: 0,
-          max: 30,
         }),
-        
-        bonus: new fields.NumberField({
+
+
+        max: new fields.NumberField({
           required: true,
           integer: true,
-          initial: 0,
+          initial: 10,
           min: 0,
-          max: 20,
         }),
       }),
 
@@ -108,24 +126,6 @@ export class BLBActorData extends foundry.abstract.TypeDataModel {
       }),
 
 
-      // Health/Hit Points
-      health: new fields.SchemaField({
-        value: new fields.NumberField({
-          required: true,
-          integer: true,
-          initial: 10,
-          min: 0,
-        }),
-
-
-        max: new fields.NumberField({
-          required: true,
-          integer: true,
-          initial: 10,
-          min: 0,
-        }),
-      }),
-
 
       // Armor (base value before modifiers)
       armor: new fields.SchemaField({
@@ -133,6 +133,7 @@ export class BLBActorData extends foundry.abstract.TypeDataModel {
           required: true,
           integer: true,
           initial: 7,
+          min: 0,
         }),
       }),
 
@@ -161,7 +162,7 @@ export class BLBActorData extends foundry.abstract.TypeDataModel {
     this.willTotal = this.will.base + this.will.bonus;
     this.affluenceTotal = this.affluence.base + this.affluence.bonus;
     this.vigourTotal = this.vigour.base + this.vigour.bonus;
-    this.gripTotal = this.grip.base + this.grip.bonus;
+    //     this.gripTotal = this.grip.base + this.grip.bonus;
     this.armorTotal = this.armor.base;
     this.armorBonus = 0; // Initialize armor bonus
     
@@ -198,5 +199,6 @@ export class BLBActorData extends foundry.abstract.TypeDataModel {
     if (this.health.max < (10 + vigourMod)) {
       this.health.max = Math.max(1, 10 + vigourMod);
     }
+
   }
 }

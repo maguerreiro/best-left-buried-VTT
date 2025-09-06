@@ -19,17 +19,52 @@ export class MiniActorSheet extends ActorSheet {
     const context = super.getData(options);
     context.system = context.actor.system;
     
-    // Categorize items by type
+      // Categorize items by type
     context.items = {
       weapon: context.actor.items.filter(item => item.type === "weapon"),
       armor: context.actor.items.filter(item => item.type === "armor"),
       shield: context.actor.items.filter(item => item.type === "shield"),
     };
     
+   
     context.WEAPON_TYPES = WEAPON_TYPES;
     context.ARMOR_TYPES = ARMOR_TYPES;
     context.SHIELD_TYPES = SHIELD_TYPES;
     
+    const sys = context.system ?? {};
+
+    // Ensure base armor exists
+    sys.armor = sys.armor || {};
+    sys.armor.base = Number(sys.armor.base ?? 0);
+
+    // Initialize derived fields so template always has numbers
+    sys.armorBonus = 0;
+    sys.armorTotal = Number(sys.armor.base);
+
+    // Add armor bonuses from equipped armor items
+    const armorItems = context.actor.items.filter(i => i.type === "armor");
+    for (const ai of armorItems) {
+      if (ai.system?.equipped) {
+        if (ai.system.armorType === "basic") {
+          sys.armorTotal += 1;
+          sys.armorBonus += 1;
+        } else if (ai.system.armorType === "plate") {
+          sys.armorTotal += 2;
+          sys.armorBonus += 2;
+        }
+      }
+    };
+
+    // Add shield bonuses
+    const shieldItems = context.actor.items.filter(i =>
+      (i.type === "shield" || i.system?.armorType === "shield") && i.system?.equipped
+    );
+    for (const sh of shieldItems) {
+      sys.armorTotal += 1; 
+      sys.armorBonus = (sys.armorBonus ?? 0) + 1; // track it with armor bonus too
+    };
+
+
     // Debug log to check data
     console.log("Actor Items:", this.actor.items);
     console.log("Weapon Types:", WEAPON_TYPES);
@@ -121,6 +156,20 @@ export class MiniActorSheet extends ActorSheet {
             
             for (let armor of otherArmor) {
                 await armor.update({"system.equipped": false});
+            }
+        }
+
+        // For shields, only allow one piece to be equipped at a time
+        if (item.type === "shield" && isEquipped) {
+            // Unequip all other armor first
+            const otherShield = this.actor.items.filter(i => 
+                i.type === "shield" && 
+                i._id !== itemId && 
+                i.system.equipped
+            );
+            
+            for (let shield of otherShield) {
+                await shield.update({"system.equipped": false});
             }
         }
 
