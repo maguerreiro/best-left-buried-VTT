@@ -111,7 +111,7 @@
           "armor": {
             "base": {
               "type": "Number",
-              "default": 10
+              "default": 7
             }
           }
 
@@ -120,7 +120,7 @@
   },
 
   "Item": {
-    "types": ["weapon"],
+    "types": ["weapon", "armor", "shield"],
     "templates": {
       "baseItem": {
         "description": {
@@ -129,6 +129,8 @@
         }
       }
     },
+
+
     "weapon": {
       "templates": ["baseItem"],
       "type": {
@@ -140,6 +142,27 @@
         "default": false
       },
       "inMelee": {
+        "type": "Boolean",
+        "default": false
+      }
+    },
+
+    "armor": {
+      "templates": ["baseItem"],
+      "armorType": {
+        "type": "String",
+        "default": "none"
+      },
+
+      "equipped": {
+        "type": "Boolean",
+        "default": false
+      }
+    },
+
+    "shield": {
+      "templates": ["baseItem"],
+      "equipped": {
         "type": "Boolean",
         "default": false
       }

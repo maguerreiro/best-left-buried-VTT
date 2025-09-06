@@ -132,16 +132,14 @@ export class BLBActorData extends foundry.abstract.TypeDataModel {
         base: new fields.NumberField({
           required: true,
           integer: true,
-          initial: 10,
-          min: 0,
+          initial: 7,
         }),
       }),
-
 
       armorType: new fields.StringField({
         required: true,
         initial: "none",
-        choices: ["none", "shield", "basic", "plate"]
+        choices: ["none", "basic", "plate"],
       }),
 
 
@@ -165,6 +163,7 @@ export class BLBActorData extends foundry.abstract.TypeDataModel {
     this.vigourTotal = this.vigour.base + this.vigour.bonus;
     this.gripTotal = this.grip.base + this.grip.bonus;
     this.armorTotal = this.armor.base;
+    this.armorBonus = 0; // Initialize armor bonus
     
     // Add armor bonuses from equipped items
     const actor = this.parent;
@@ -172,11 +171,27 @@ export class BLBActorData extends foundry.abstract.TypeDataModel {
       const armorItems = actor.items.filter(item => item.type === "armor");
       for (let armor of armorItems) {
         if (armor.system.equipped) {
-          this.armorTotal += armor.system.armor.bonus || 0;
+          // Basic armor adds +1, Plate armor adds +2
+          if (armor.system.armorType === "basic") {
+            this.armorTotal += 1;
+            this.armorBonus += 1;
+          } else if (armor.system.armorType === "plate") {
+            this.armorTotal += 2;
+            this.armorBonus += 2;
+          }
         }
       }
     }
     
+    // Add shield bonuses (independent of armor)
+    if (actor) {
+      const shieldItems = actor.items.filter(item => item.type === "shield");
+      for (let shield of shieldItems) {
+        if (shield.system.equipped) {
+          this.armorTotal += 1; // Shields add +1
+        }
+      }
+    }
 
     // Calculate max health (base + constitution modifier)
     const vigourMod = Math.floor((this.vigourTotal - 10) / 2);

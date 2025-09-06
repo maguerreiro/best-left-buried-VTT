@@ -1,4 +1,7 @@
+// item-sheet.js
+
 import { WEAPON_TYPES } from "../module/helpers/weapons.js";
+import { ARMOR_TYPES, SHIELD_TYPES} from "../module/helpers/armor.js";
 
 export class MiniItemSheet extends ItemSheet {
     static get defaultOptions() {
@@ -13,16 +16,17 @@ export class MiniItemSheet extends ItemSheet {
 
     getData(options) {
         const context = super.getData(options);
-        
+       
         // Ensure we're working with the correct data structure
         context.system = context.item.system;
         context.WEAPON_TYPES = WEAPON_TYPES;
+        context.ARMOR_TYPES = ARMOR_TYPES;
+        context.SHIELD_TYPES = SHIELD_TYPES;
 
         // For debugging
         console.log("Item data:", {
             type: this.item.type,
-            systemData: context.system,
-            weaponType: context.system.type
+            systemData: context.system
         });
 
         return context;
@@ -35,8 +39,7 @@ export class MiniItemSheet extends ItemSheet {
         html.find('select[name="system.type"]').change(async (event) => {
             event.preventDefault();
             const newType = event.target.value;
-            
-            // For debugging
+           
             console.log("Updating weapon type:", {
                 old: this.item.system.type,
                 new: newType
@@ -51,6 +54,35 @@ export class MiniItemSheet extends ItemSheet {
                 });
             } catch (err) {
                 console.error("Error updating weapon type:", err);
+            }
+        });
+
+        // Handle armor type changes
+        html.find('select[name="system.armorType"]').change(async (event) => {
+            event.preventDefault();
+            const newArmorType = event.target.value;
+           
+            try {
+                await this.item.update({
+                    "system.armorType": newArmorType,
+                });
+            } catch (err) {
+                console.error("Error updating armor type:", err);
+            }
+        });
+
+        // Handle equipped checkbox for armor and shields
+        html.find('input[name="system.equipped"]').change(async (event) => {
+            event.preventDefault();
+            const isEquipped = event.target.checked;
+           
+            try {
+                await this.item.update({
+                    "system.equipped": isEquipped,
+                    "equipped": false
+                });
+            } catch (err) {
+                console.error("Error updating equipped status:", err);
             }
         });
     }

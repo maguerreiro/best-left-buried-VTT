@@ -323,6 +323,11 @@ button:hover {
     color: #666;
 }
 
+
+
+
+
+
 /* BLB formatting */
 
 
@@ -570,35 +575,35 @@ button:hover {
 }
 
 /* Tab Content */
-.tab-content {
+.tab {
   display: none;
 }
 
-.tab-content.active {
+.tab.active {
   display: block;
 }
 
 
 /* Drag and drop styling */
-.tab-content {
+.tab {
   min-height: 200px;
   position: relative;
 }
 
-.tab-content.dragover {
+.tab.dragover {
   background-color: #f0f8ff;
   border: 2px dashed #007bff;
 }
 
 /* Ensure the item list takes full width in tabs */
-.tab-content .item-list {
+.tab .item-list {
   width: 100%;
 }
 
 
-.tabs .item[data-tab="main"]:hover, 
-.tabs .item[data-tab="inventory"]:hover,
-.tabs .item[data-tab="spells"]:hover,
+.tabs .item[data-tab="stats"]:hover, 
+.tabs .item[data-tab="equipment"]:hover,
+.tabs .item[data-tab="advancements"]:hover,
 .tabs .item.active {
   text-shadow: none !important;
 }
@@ -692,13 +697,6 @@ button:hover {
     margin-bottom: 15px;
 }
 
-.form-group {
-    margin: 15px 0;
-    padding: 10px;
-    border: 1px solid #ccc;
-    background: white;
-}
-
 .form-group label {
     display: block;
     margin-bottom: 5px;
@@ -731,3 +729,177 @@ button:hover {
     background: #4e4e4e;
     font-weight: bold;
 }
+
+
+/* Equipment Section Styles */
+.equipment-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+  height: 100%;
+}
+
+.equipment-section, .treasure-section {
+  padding: 15px;
+  border: 2px solid black;
+  background: white;
+  position: relative;
+}
+
+.equipment-section::before,
+.equipment-section::after,
+.treasure-section::before,
+.treasure-section::after {
+  content: '';
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  border: 2px solid black;
+}
+
+.equipment-section::before,
+.treasure-section::before {
+  top: -5px;
+  right: -5px;
+  border-left: none;
+  border-bottom: none;
+}
+
+.equipment-section::after,
+.treasure-section::after {
+  bottom: -5px;
+  left: -5px;
+  border-right: none;
+  border-top: none;
+}
+
+.armor-list, .shield-list {
+  margin-bottom: 20px;
+}
+
+.equipment-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 80px;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.equipment-row:hover {
+  background-color: #f5f5f5;
+}
+
+.equipment-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.equipment-name:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+}
+
+.equipment-name img {
+  flex: 0 0 24px;
+}
+
+.equipment-type {
+  text-align: center;
+  font-style: italic;
+  color: #666;
+}
+
+.equipment-equipped {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  justify-content: center;
+}
+
+.equipment-equipped input[type="checkbox"] {
+  margin: 0;
+}
+
+.equipment-equipped label {
+  font-size: 0.9em;
+  cursor: pointer;
+}
+
+.equipment-controls {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.equipment-controls .item-control {
+  cursor: pointer;
+  color: #666;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.equipment-controls .item-control:hover {
+  color: #333;
+}
+
+.equipment-controls .item-delete:hover {
+  color: #ff0000;
+}
+
+/* Fix the armor display */
+.armor-base, .armor-bonus {
+  font-weight: bold;
+  color: #333;
+}
+
+/* Advancement grid */
+.advancement-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  height: 100%;
+}
+
+.advancement-section, .consequence-section {
+  padding: 15px;
+  border: 2px solid black;
+  background: white;
+  position: relative;
+}
+
+.advancement-section::before,
+.advancement-section::after,
+.consequence-section::before,
+.consequence-section::after {
+  content: '';
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  border: 2px solid black;
+}
+
+.advancement-section::before,
+.consequence-section::before {
+  top: -5px;
+  right: -5px;
+  border-left: none;
+  border-bottom: none;
+}
+
+.advancement-section::after,
+.consequence-section::after {
+  bottom: -5px;
+  left: -5px;
+  border-right: none;
+  border-top: none;
+}
+
+
+

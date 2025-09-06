@@ -3,7 +3,7 @@
         <img src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64"/>
         <h1><input name="name" type="text" value="{{item.name}}" placeholder="Name"/></h1>
     </header>
-
+    
     <nav class="sheet-tabs tabs" data-group="primary">
         <a class="item" data-tab="properties">Properties</a>
         <a class="item" data-tab="description">Description</a>
@@ -11,32 +11,61 @@
 
     <section class="sheet-body">
         <div class="tab" data-group="primary" data-tab="properties">
-            <div class="form-group">
-                <label>Type</label>
-                <select name="system.type" value="{{system.type}}">
-                    {{#select system.type}}
-                    {{#each WEAPON_TYPES as |type id|}}
-                        <option value="{{id}}">{{type.label}}</option>
-                    {{/each}}
-                    {{/select}}
-                </select>
-            </div>
-
-            {{#if (or (eq system.type "hand") (eq system.type "long"))}}
-            <div class="form-group">
-                <label>Two-Handed</label>
-                <input type="checkbox" name="system.isTwoHanded" {{checked system.isTwoHanded}}/>
-            </div>
+            
+            {{#if (eq item.type "weapon")}}
+                <div class="form-group">
+                    <label>Weapon Type</label>
+                    <select name="system.type" value="{{system.type}}">
+                        {{#select system.type}}
+                        {{#each WEAPON_TYPES as |type id|}}
+                            <option value="{{id}}">{{type.label}}</option>
+                        {{/each}}
+                        {{/select}}
+                    </select>
+                </div>
+                {{#if (or (eq system.type "hand") (eq system.type "long"))}}
+                <div class="form-group">
+                    <label>Two-Handed</label>
+                    <input type="checkbox" name="system.isTwoHanded" {{checked system.isTwoHanded}}/>
+                </div>
+                {{/if}}
+                {{#if (eq system.type "throwing")}}
+                <div class="form-group">
+                    <label>In Melee Range</label>
+                    <input type="checkbox" name="system.inMelee" {{checked system.inMelee}}/>
+                </div>
+                {{/if}}
             {{/if}}
 
-            {{#if (eq system.type "throwing")}}
-            <div class="form-group">
-                <label>In Melee Range</label>
-                <input type="checkbox" name="system.inMelee" {{checked system.inMelee}}/>
-            </div>
+            {{#if (eq item.type "armor")}}
+                <div class="form-group">
+                    <label>Armor Type</label>
+                    <select name="system.armorType" value="{{system.armorType}}">
+                        {{#select system.armorType}}
+                        {{#each ARMOR_TYPES as |type id|}}
+                            <option value="{{id}}">{{type.label}} {{#if (eq id "basic")}}(+1){{/if}}{{#if (eq id "plate")}}(+2){{/if}}</option>
+                        {{/each}}
+                        {{/select}}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Equipped</label>
+                    <input type="checkbox" name="system.equipped" {{checked system.equipped}}/>
+                </div>
             {{/if}}
+
+            {{#if (eq item.type "shield")}}
+                <div class="form-group">
+                    <label>Shield (+1 Armor)</label>
+                    <p>This shield provides +1 to armor when equipped.</p>
+                </div>
+                <div class="form-group">
+                    <label>Equipped</label>
+                    <input type="checkbox" name="system.equipped" {{checked system.equipped}}/>
+                </div>
+            {{/if}}
+
         </div>
-
         <div class="tab" data-group="primary" data-tab="description">
             {{editor system.description target="system.description" button=true owner=owner editable=editable}}
         </div>

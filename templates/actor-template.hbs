@@ -1,6 +1,5 @@
 {{! actor-template.hbs }}
 
-
 <form class="{{cssClass}} my-system">
     <header class="sheet-header">
         <div class="title-area">
@@ -32,10 +31,14 @@
         <a class="item" data-tab="advancements">Advancements & Consequences</a>
     </nav>
 
+    {{! Stats & Weapons Tab Content }}
+
     <section class="sheet-body">
         <div class="tab" data-group="primary" data-tab="stats">
-            <h3>Stats</h3>  
-             
+            <h3>Stats & Weapons</h3>  
+
+            {{! Stats }}           
+
             <div class="stats-grid">
          
             {{! Top row stats }}
@@ -49,9 +52,7 @@
                 <span class="equals">=</span>
                 <span class="total-score">{{system.brawnTotal}}</span>
               </div>
-    {{!          <div class="starting-rule">Starting: +2 in one stat</div>       }}
           </div>
-
 
             <div class="stat-box">
               <div class="stat-name">Wit</div>
@@ -87,7 +88,6 @@
                   <div class="optional-rule">Optional Rule</div>
           </div>
 
-
         {{! Bottom row }}
 
             <div class="stat-box">
@@ -99,7 +99,6 @@
                   <span class="equals">=</span>
                   <span class="total-score">{{system.vigourTotal}}</span>
                 </div>
-    {{!          <div class="starting-rule">Starting: 6+Brawn | Max: 5+Brawn+Adv. Qty.</div>       }}
             </div>
 
             <div class="stat-box">
@@ -111,28 +110,26 @@
                   <span class="equals">=</span>
                   <span class="total-score">{{system.gripTotal}}</span>
                 </div>
-
-    {{!          <div class="starting-rule">Starting: 4+Will</div>       }}
             </div>
 
-
-            <div class="stat-box armor">
-              <div class="stat-name">Armour</div>
-              <div class="armor-options">
-                <label><input type="radio" name="armor-type" value="shield"> Shield (+1)</label>
-                <label><input type="radio" name="armor-type" value="basic"> Basic (8)</label>
-                <label><input type="radio" name="armor-type" value="plate"> Plate (9)</label>
-              </div>
-              <div class="starting-rule">Starting: 7+Armor</div>
-    {{!          <div class="optional-rule">Shield, Basic, or Plate</div>       }}
+            <div class="stat-box">
+                <div class="stat-name">Armor</div>
+                <div class="ability-breakdown">
+                    <span class="armor-base">{{system.armor.base}}</span>
+                    <span class="plus">+</span>
+                    <span class="armor-bonus">{{system.armorBonus}}</span>
+                    <span class="equals">=</span>
+                    <span class="total-score">{{system.armorTotal}}</span>
+                </div>
             </div>
           </div>
+      
 
-
-
+           {{!Weapons }}
+           
           <div class="weapons-section">
                 <h2>Weapons</h2>
-                <div class="weapons-list">
+                <div class="weapon-list">
                     <div class="weapon-headers">
                         <div>Name</div>
                         <div>Type</div>
@@ -142,8 +139,7 @@
                         <div>Init</div>
                         <div>Controls</div>
                     </div>
-                    {{#each actor.items as |item|}}
-                        {{#if (eq item.type "weapon")}}
+                    {{#each items.weapon as |item id|}}
                           <div class="weapon-row" data-item-id="{{item._id}}">
                             <div class="weapon-name">
                                 <img src="{{item.img}}" width="24" height="24"/>
@@ -161,18 +157,57 @@
                                 <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
                             </div>
                         </div>
-                        {{/if}}
                     {{/each}}
                 </div>
             </div>
         </div>
 
+
         {{! Equipment Tab Content }}
-        <div class="tab" data-tab="equipment">
+        <div class="tab" data-group="primary" data-tab="equipment">
           <div class="equipment-grid">
             <div class="equipment-section">
-              <h3>Equipment</h3>
-              <!-- Equipment list here -->
+              <h3>Armor</h3>
+              <div class="armor-list">
+                {{#each items.armor as |item id|}}
+                    <div class="equipment-row" data-item-id="{{item._id}}">
+                      <div class="equipment-name">
+                        <img src="{{item.img}}" width="24" height="24"/>
+                        <span>{{item.name}}</span>
+                      </div>
+                      <div class="equipment-type">{{getArmorType item.system.armorType}}</div>
+                      <div class="equipment-equipped">
+                        <input type="checkbox" class="equip-checkbox" data-item-id="{{item._id}}" {{checked item.system.equipped}}/>
+                        <label>Equipped</label>
+                      </div>
+                      <div class="equipment-controls">
+                        <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                        <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+                      </div>
+                    </div>
+                {{/each}}
+              </div>
+
+              <h3>Shields</h3>
+              <div class="shield-list">
+                {{#each items.shield as |item id|}}
+                    <div class="equipment-row" data-item-id="{{item._id}}">
+                      <div class="equipment-name">
+                        <img src="{{item.img}}" width="24" height="24"/>
+                        <span>{{item.name}}</span>
+                      </div>
+                      <div class="equipment-type">Shield (+1)</div>
+                      <div class="equipment-equipped">
+                        <input type="checkbox" class="equip-checkbox" data-item-id="{{item._id}}" {{checked item.system.equipped}}/>
+                        <label>Equipped</label>
+                      </div>
+                      <div class="equipment-controls">
+                        <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                        <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+                      </div>
+                    </div>
+                {{/each}}
+              </div>
             </div>
             <div class="treasure-section">
               <h3>Treasure</h3>
@@ -181,21 +216,20 @@
           </div>
         </div>
 
-
-
         {{! Advancements Tab Content }}
-        <div class="tab" data-tab="advancements">
+        <div class="tab" data-group="primary" data-tab="advancements">
           <div class="advancement-grid">
             <div class="advancement-section">
               <h3>Advancements</h3>
-              <!-- Advancements list here -->
+              <p><em>Character advancements and improvements will be displayed here.</em></p>
+              <!-- Future: Add advancement items here when you create that item type -->
             </div>
             <div class="consequence-section">
               <h3>Consequences</h3>
-              <!-- Consequences list here -->
+              <p><em>Character consequences and injuries will be displayed here.</em></p>
+              <!-- Future: Add consequence items here when you create that item type -->
             </div>
           </div>
         </div>
     </section>
 </form>
-

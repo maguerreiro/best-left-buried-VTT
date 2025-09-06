@@ -1,6 +1,7 @@
 // actor-sheet.js
 
 import { WEAPON_TYPES } from "../module/helpers/weapons.js";
+import { ARMOR_TYPES, SHIELD_TYPES } from "../module/helpers/armor.js";
 
 // Define the sheet class for Actors
 export class MiniActorSheet extends ActorSheet {
@@ -17,7 +18,17 @@ export class MiniActorSheet extends ActorSheet {
   getData(options) {
     const context = super.getData(options);
     context.system = context.actor.system;
+    
+    // Categorize items by type
+    context.items = {
+      weapon: context.actor.items.filter(item => item.type === "weapon"),
+      armor: context.actor.items.filter(item => item.type === "armor"),
+      shield: context.actor.items.filter(item => item.type === "shield"),
+    };
+    
     context.WEAPON_TYPES = WEAPON_TYPES;
+    context.ARMOR_TYPES = ARMOR_TYPES;
+    context.SHIELD_TYPES = SHIELD_TYPES;
     
     // Debug log to check data
     console.log("Actor Items:", this.actor.items);
@@ -90,16 +101,40 @@ export class MiniActorSheet extends ActorSheet {
         ev.target.value = newValue; // Update input to show corrected value if it was negative
     });
 
+    // Handle equipment checkbox changes
+    html.find('.equip-checkbox').change(async (event) => {
+        event.preventDefault();
+        const itemId = event.currentTarget.dataset.itemId;
+        const isEquipped = event.currentTarget.checked;
+        const item = this.actor.items.get(itemId);
+        
+        if (!item) return;
+
+        // For armor, only allow one piece to be equipped at a time
+        if (item.type === "armor" && isEquipped) {
+            // Unequip all other armor first
+            const otherArmor = this.actor.items.filter(i => 
+                i.type === "armor" && 
+                i._id !== itemId && 
+                i.system.equipped
+            );
+            
+            for (let armor of otherArmor) {
+                await armor.update({"system.equipped": false});
+            }
+        }
+
+        // Update the item's equipped status
+        await item.update({"system.equipped": isEquipped});
+        
+        // Force a re-render to update the armor total display
+        this.render(false);
+    });
 
     // Listener: "Roll Attack" button
     html.find(".roll-attack").click(async (event) => {
-
-      // Get the attack value, ensuring it's treated as a string
       const attackValue = String(this.actor.system.attack);
-
-      // Combine the base roll with the actor's attack value
       const formula = `1d20 + ${attackValue}`;
-
       const roll = await new Roll(formula).evaluate({ async: true });
 
       roll.toMessage({
@@ -108,22 +143,15 @@ export class MiniActorSheet extends ActorSheet {
       });
     });
 
-    
     // Listener: Roll an ability check
     html.find(".roll-ability").click(async (event) => {
-
-      // Create a data object that the Roll function can understand
       const rollData = {
         system: this.actor.system
       };
 
-      // gets which ability is being checked
       const button = event.currentTarget;
       const ability = button.dataset.ability;
-      
-      // Combine the base roll with the ability value
       const formula = `1d20 + @system.${ability}`; 
-
       const roll = await new Roll(formula, rollData).evaluate({ async: true });
 
       roll.toMessage({
@@ -132,24 +160,33 @@ export class MiniActorSheet extends ActorSheet {
       });
     });
 
-
     // Listener: Click on an item's name or image to open its sheet
-    html.find(".weapon-name").click((event) => {
+    html.find(".weapon-name, .equipment-name").click((event) => {
       event.preventDefault();
-      const weaponRow = event.currentTarget.closest(".weapon-row");
-      const itemId = weaponRow.dataset.itemId;
+      const itemRow = event.currentTarget.closest("[data-item-id]");
+      const itemId = itemRow.dataset.itemId;
       const item = this.actor.items.get(itemId);
       if (item) {
         item.sheet.render(true);
       }
     });
 
+    // Listener: Click on the edit button to open item sheet
+    html.find(".item-edit").click((event) => {
+      event.preventDefault();
+      const itemRow = event.currentTarget.closest("[data-item-id]");
+      const itemId = itemRow.dataset.itemId;
+      const item = this.actor.items.get(itemId);
+      if (item) {
+        item.sheet.render(true);
+      }
+    });
 
-    // Listener: Click on the delete button to remove a weapon
+    // Listener: Click on the delete button to remove an item
     html.find(".item-delete").click(async (event) => {
       event.preventDefault();
-      const weaponRow = event.currentTarget.closest(".weapon-row");
-      const itemId = weaponRow.dataset.itemId;
+      const itemRow = event.currentTarget.closest("[data-item-id]");
+      const itemId = itemRow.dataset.itemId;
       const item = this.actor.items.get(itemId);
       if (item) {
         await item.delete();
