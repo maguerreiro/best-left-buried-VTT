@@ -1,0 +1,69 @@
+{{! templates/item-v2.hbs - FIXED: Single root element }}
+<div class="item-sheet-container">
+    <header class="sheet-header">
+        <img src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64"/>
+        <h1><input name="name" type="text" value="{{item.name}}" placeholder="Name"/></h1>
+    </header>
+
+    <section class="sheet-body">
+        {{#if (eq item.type "weapon")}}
+            <div class="form-group">
+                <label>Weapon Type</label>
+                <select name="system.weaponType" data-action="updateWeaponType">
+                    {{#select system.weaponType}}
+                    {{#each WEAPON_TYPES as |type id|}}
+                        <option value="{{id}}">{{type.label}}</option>
+                    {{/each}}
+                    {{/select}}
+                </select>
+            </div>
+
+            {{#if (or (eq system.weaponType "hand") (eq system.weaponType "long"))}}
+            <div class="form-group">
+                <label>Two-Handed</label>
+                <input type="checkbox" name="system.isTwoHanded" data-action="toggleTwoHanded" {{checked system.isTwoHanded}}/>
+            </div>
+            {{/if}}
+
+            {{#if (eq system.weaponType "throwing")}}
+            <div class="form-group">
+                <label>In Melee Range</label>
+                <input type="checkbox" name="system.inMelee" data-action="toggleInMelee" {{checked system.inMelee}}/>
+            </div>
+            {{/if}}
+        {{/if}}
+
+        {{#if (eq item.type "armor")}}
+            <div class="form-group">
+                <label>Armor Type</label>
+                <select name="system.armorType" data-action="updateArmorType">
+                    {{#select system.armorType}}
+                    {{#each ARMOR_TYPES as |type id|}}
+                        <option value="{{id}}">{{type.label}} {{#if (eq id "basic")}}(+1){{/if}}{{#if (eq id "plate")}}(+2){{/if}}</option>
+                    {{/each}}
+                    {{/select}}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Equipped</label>
+                <input type="checkbox" name="system.equipped" data-action="toggleEquipped" {{checked system.equipped}}/>
+            </div>
+        {{/if}}
+
+        {{#if (eq item.type "shield")}}
+            <div class="form-group">
+                <label>Shield (+1 Armor)</label>
+                <p>+1 to armor when equipped</p>
+            </div>
+            <div class="form-group">
+                <label>Equipped</label>
+                <input type="checkbox" name="system.equipped" data-action="toggleEquipped" {{checked system.equipped}}/>
+            </div>
+        {{/if}}
+
+        <div class="form-group">
+            <label>Description</label>
+            {{editor system.description target="system.description" button=true owner=owner editable=editable}}
+        </div>
+    </section>
+</div>

@@ -1,0 +1,162 @@
+{
+  "Actor": {
+    "types": ["character"],
+    "templates": {
+
+    "character": {
+
+
+          "xp": {
+            "type": "Number",
+            "default": 0,
+            "min": 0
+          },
+
+          "attack": {
+            "type": "String",
+            "default": "1d6"
+          },
+
+          "brawn": {
+            "base": {
+              "type": "Number",
+              "default": 0
+            },
+
+            "bonus": {
+              "type": "Number", 
+              "default": 0
+            }
+          },
+
+
+          "wit": {
+            "base": {
+              "type": "Number",
+              "default": 0
+            }
+          },
+
+
+          "will": {
+            "base": {
+              "type": "Number",
+              "default": 0
+            }
+          },
+
+
+          "affluence": {
+            "base": {
+              "type": "Number",
+              "default": 10
+            },
+
+            "bonus": {
+              "type": "Number",
+              "default": 0
+            }
+          },
+
+
+          "vigour": {
+            "base": {
+              "type": "Number",
+              "default": 0
+            }
+          },
+
+
+          "grip": {
+            "base": {
+              "type": "Number",
+              "default": 4
+            },
+
+            "bonus": {
+              "type": "Number",
+              "default": 0
+            }
+          },
+
+
+          "health": {
+            "value": {
+              "type": "Number",
+              "default": 10
+            },
+
+            "max": {
+              "type": "Number", 
+              "default": 10
+            }
+          },
+
+          
+          "armor": {
+            "base": {
+              "type": "Number",
+              "default": 7
+            }
+          },
+
+          "advquantity": {
+            "type": "Number",
+            "default": 10,
+            "min": 0
+          }
+    }
+  },
+
+  "Item": {
+    "types": ["weapon", "armor", "shield"],
+    "templates": {
+      "baseItem": {
+        "description": {
+          "type": "String",
+          "default": ""
+        }
+      }
+    },
+
+
+    "weapon": {
+      "templates": ["baseItem"],
+      "type": {
+        "type": "String",
+        "default": "hand"
+      },
+      "isTwoHanded": {
+        "type": "Boolean",
+        "default": false
+      },
+      "inMelee": {
+        "type": "Boolean",
+        "default": false
+      }
+    },
+
+    "armor": {
+      "templates": ["baseItem"],
+      "armorType": {
+        "type": "String",
+        "default": "none"
+      },
+
+      "equipped": {
+        "type": "Boolean",
+        "default": false
+      }
+    },
+
+    "shield": {
+      "templates": ["baseItem"],
+      "equipped": {
+        "type": "Boolean",
+        "default": false
+      }
+    }
+  }
+}
+
+}

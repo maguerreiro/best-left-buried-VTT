@@ -1,0 +1,212 @@
+{{! templates/actor-v2.hbs - V2 with V1 Layout }}
+<div class="sheet-container">
+<header class="sheet-header">
+    <h1>Best Left Buried</h1>
+    <div class="header-right">
+        <div class="character-info">
+            <input type="text" name="name" value="{{actor.name}}" placeholder="Name"/>
+            <input type="text" name="system.archetype" value="{{system.archetype}}" placeholder="Archetype"/>
+        </div>
+        <div class="xp-tracker">
+            <h3>XP Tracker</h3>
+            <div class="xp-controls">
+                <button type="button" data-action="updateXP" data-change="decrease" class="xp-button decrease">
+                    <i class="fas fa-minus"></i>
+                </button>
+                <input type="number" name="system.xp" value="{{system.xp}}" min="0"/>
+                <button type="button" data-action="updateXP" data-change="increase" class="xp-button increase">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</header>
+
+  <nav class="tabs" data-group="primary">
+      <a class="item" data-tab="stats">Stats & Weapons</a>
+      <a class="item" data-tab="equipment">Equipment & Treasure</a>
+      <a class="item" data-tab="advancements">Advancements & Consequences</a>
+  </nav>
+
+  <section class="sheet-body">
+      {{! Stats & Weapons Tab Content }}
+      <div class="tab active" data-group="primary" data-tab="stats">
+          <h2>Stats</h2>
+
+          {{! Stats Grid }}
+          <div class="stats-grid">
+              <div class="stat-box">
+                  <div class="stat-name">Brawn</div>
+                  <div class="ability-breakdown">
+                      <input type="number" name="system.brawn.base" value="{{system.brawn.base}}" data-dtype="Number"/>
+                  </div>
+              </div>
+
+              <div class="stat-box">
+                  <div class="stat-name">Wit</div>
+                  <div class="ability-breakdown">
+                      <input type="number" name="system.wit.base" value="{{system.wit.base}}" data-dtype="Number"/>
+                  </div>
+              </div>
+
+              <div class="stat-box">
+                  <div class="stat-name">Will</div>
+                  <div class="ability-breakdown">
+                      <input type="number" name="system.will.base" value="{{system.will.base}}" data-dtype="Number"/>
+                  </div>
+              </div>
+
+              <div class="stat-box">
+                  <div class="stat-name">Affluence</div>
+                  <div class="ability-breakdown">
+                      <input type="number" name="system.affluence.base" value="{{system.affluence.base}}" data-dtype="Number"/>
+                      <span class="plus">+</span>
+                      <input type="number" name="system.affluence.bonus" value="{{system.affluence.bonus}}" data-dtype="Number"/>
+                      <span class="equals">=</span>
+                      <span class="total-score">{{system.affluenceTotal}}</span>
+                  </div>
+                  <div class="optional-rule">Optional Rule</div>
+              </div>
+
+              <div class="stat-box">
+                  <div class="stat-name">Vigour</div>
+                  <div class="ability-breakdown">
+                      <input type="number" name="system.vigour.current" value="{{system.vigour.current}}" data-dtype="Number" title="Current"/>
+                      <span class="slash">/</span>
+                      <input type="number" name="system.vigour.max" value="{{system.vigour.max}}" data-dtype="Number" title="Max"/>
+                  </div>
+              </div>
+
+              <div class="stat-box">
+                  <div class="stat-name">Grip</div>
+                  <div class="ability-breakdown">
+                      <input type="number" name="system.grip.base" value="{{system.grip.base}}" data-dtype="Number"/>
+                  </div>
+              </div>
+
+              <div class="stat-box">
+                  <div class="stat-name">Armor</div>
+                  <div class="ability-breakdown">
+                      <span class="armor-base">{{system.armor.base}}</span>
+                      <span class="plus">+</span>
+                      <span class="armor-bonus">{{system.armorBonus}}</span>
+                      <span class="equals">=</span>
+                      <span class="total-score">{{system.armorTotal}}</span>
+                  </div>
+              </div>
+          </div>
+
+          {{! Weapons Section }}
+          <div class="weapons-section">
+              <h2>Weapons</h2>
+              <div class="weapon-list">
+                  <div class="weapon-headers">
+                      <div>Name</div>
+                      <div>Type</div>
+                      <div>Range</div>
+                      <div>Attack</div>
+                      <div>Dmg</div>
+                      <div>Init</div>
+                      <div>Controls</div>
+                  </div>
+                  {{#each items.weapon as |item|}}
+                      <div class="weapon-row" data-item-id="{{item._id}}">
+                          <div class="weapon-name" data-action="openItem">
+                              <img src="{{item.img}}" width="24" height="24"/>
+                              <span>{{item.name}}</span>
+                          </div>
+                          <div class="weapon-prop">{{getWeaponProperty item.system.weaponType "label"}}</div>
+                          <div class="weapon-prop">{{getWeaponProperty item.system.weaponType "range"}}</div>
+                          <div class="weapon-prop">{{getWeaponProperty item.system.weaponType "attackStat"}}</div>
+                          <div class="weapon-prop">{{getWeaponDamage item.system.weaponType item.system.isTwoHanded}}</div>
+                          <div class="weapon-prop">{{getWeaponProperty item.system.weaponType "initiative"}}</div>
+                          <div class="weapon-controls">
+                              <button type="button" data-action="rollWeapon" data-weapon-id="{{item._id}}" class="weapon-roll" title="Roll Attack">
+                                  <i class="fas fa-dice-d6"></i>
+                              </button>
+                              <a data-action="deleteItem" class="item-control item-delete" title="Delete Item">
+                                  <i class="fas fa-trash"></i>
+                              </a>
+                          </div>
+                      </div>
+                  {{/each}}
+              </div>
+          </div>
+      </div>
+
+      {{! Equipment Tab Content }}
+      <div class="tab" data-group="primary" data-tab="equipment">
+          <div class="equipment-grid">
+              <div class="equipment-section">
+                  <h3>Armor</h3>
+                  <div class="armor-list">
+                      {{#each items.armor as |item|}}
+                          <div class="equipment-row" data-item-id="{{item._id}}">
+                              <div class="equipment-name" data-action="openItem">
+                                  <img src="{{item.img}}" width="24" height="24"/>
+                                  <span>{{item.name}}</span>
+                              </div>
+                              <div class="equipment-type">{{getArmorType item.system.armorType}}</div>
+                              <div class="equipment-equipped">
+                                  <input type="checkbox" data-action="toggleEquip" data-item-id="{{item._id}}" class="equip-checkbox" {{checked item.system.equipped}}/>
+                                  <label>Equipped</label>
+                              </div>
+                              <div class="equipment-controls">
+                                  <a data-action="openItem" class="item-control item-edit" title="Edit Item">
+                                      <i class="fas fa-edit"></i>
+                                  </a>
+                                  <a data-action="deleteItem" class="item-control item-delete" title="Delete Item">
+                                      <i class="fas fa-trash"></i>
+                                  </a>
+                              </div>
+                          </div>
+                      {{/each}}
+                  </div>
+
+                  <h3>Shields</h3>
+                  <div class="shield-list">
+                      {{#each items.shield as |item|}}
+                          <div class="equipment-row" data-item-id="{{item._id}}">
+                              <div class="equipment-name" data-action="openItem">
+                                  <img src="{{item.img}}" width="24" height="24"/>
+                                  <span>{{item.name}}</span>
+                              </div>
+                              <div class="equipment-type">Shield (+1)</div>
+                              <div class="equipment-equipped">
+                                  <input type="checkbox" data-action="toggleEquip" data-item-id="{{item._id}}" class="equip-checkbox" {{checked item.system.equipped}}/>
+                                  <label>Equipped</label>
+                              </div>
+                              <div class="equipment-controls">
+                                  <a data-action="openItem" class="item-control item-edit" title="Edit Item">
+                                      <i class="fas fa-edit"></i>
+                                  </a>
+                                  <a data-action="deleteItem" class="item-control item-delete" title="Delete Item">
+                                      <i class="fas fa-trash"></i>
+                                  </a>
+                              </div>
+                          </div>
+                      {{/each}}
+                  </div>
+              </div>
+              <div class="treasure-section">
+                  <h3>Treasure</h3>
+                  <p><em>Treasure and valuables will be displayed here.</em></p>
+              </div>
+          </div>
+      </div>
+
+      {{! Advancements Tab Content }}
+      <div class="tab" data-group="primary" data-tab="advancements">
+          <div class="advancement-grid">
+              <div class="advancement-section">
+                  <h3>Advancements</h3>
+                  <p><em>Character advancements and improvements will be displayed here.</em></p>
+              </div>
+              <div class="consequence-section">
+                  <h3>Consequences</h3>
+                  <p><em>Character consequences and injuries will be displayed here.</em></p>
+              </div>
+          </div>
+      </div>
+  </section>
+</div>

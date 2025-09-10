@@ -1,0 +1,682 @@
+/* ========================================
+   BEST LEFT BURIED FOUNDRY VTT SYSTEM CSS
+   ======================================== */
+
+/* ========================================
+   1. CHARACTER SHEET HEADER & LAYOUT
+   ======================================== */
+
+/* Main sheet header with title and XP tracker */
+/* Main header grid for two columns */
+.best-left-buried .sheet-header,
+.sheet-header {
+    display: grid;
+    /* First column for the title, second column takes the remaining space */
+    grid-template-columns: auto 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.sheet-header h1,
+.best-left-buried .sheet-header h1 {
+    font-size: 5em;
+    margin: 0;
+    color: #333;
+}
+
+/* Container for the name/archetype and XP tracker */
+.header-right {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    /* This pushes the entire container to the right */
+    justify-content: flex-end;
+}
+
+/* Stack the name and archetype inputs vertically */
+.character-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* XP Tracker - styled box on right side of header */
+.best-left-buried .xp-tracker,
+.xp-tracker {
+    width: 120px;
+    height: 85px;
+    padding: 10px;
+    border: 2px solid black;
+    background: white;
+    position: relative;
+}
+
+.best-left-buried .xp-tracker h3,
+.xp-tracker h3 {
+    text-align: center;
+    margin-bottom: 10px;
+    font-family: "Blackletter", serif;
+    font-size: 1.2em;
+    
+}
+
+/* XP controls - buttons and input field */
+.best-left-buried .xp-controls,
+.xp-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.best-left-buried .xp-controls .xp-button,
+.xp-controls .xp-button {
+    width: 20px !important;
+    height: 20px !important;
+    min-width: 20px !important;
+    min-height: 20px !important;
+    max-width: 20px !important;
+    max-height: 20px !important;
+    flex: 0 0 20px !important;
+    border: 1px solid black !important;
+    background: white !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: grid !important;
+    place-items: center !important;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+    box-sizing: border-box !important;
+}
+
+.best-left-buried .xp-controls .xp-button:active,
+.xp-controls .xp-button:active {
+    background: #ddd !important;
+    transform: translateY(1px);
+}
+
+.best-left-buried .xp-controls input[type="number"],
+.xp-controls input[type="number"] {
+    width: 30px;
+    text-align: center;
+    border: 1px solid black;
+    padding: 2px;
+}
+
+/* ========================================
+   2. TAB NAVIGATION SYSTEM
+   ======================================== */
+
+/* Tab navigation bar */
+.best-left-buried .tabs,
+.tabs {
+    display: flex;
+    border-bottom: 2px solid black;
+    margin-bottom: 20px;
+}
+
+/* Individual tab buttons */
+.best-left-buried .tabs .item,
+.tabs .item {
+    padding: 10px 20px;
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
+    border: 2px solid black;
+    border-bottom: none;
+    margin-right: 5px;
+    background: white;
+}
+
+.best-left-buried .tabs .item:hover,
+.tabs .item:hover {
+    background-color: #e9e9e9;
+    color: #333;
+}
+
+.best-left-buried .tabs .item.active,
+.tabs .item.active {
+    background: #e0e0e0;
+    position: relative;
+    bottom: -2px;
+    color: #333;
+    border-bottom-color: #e0e0e0;
+    font-weight: bold;
+}
+
+/* Tab content areas */
+.best-left-buried .tab,
+.tab {
+    display: none;
+    min-height: 200px;
+    position: relative;
+}
+
+.best-left-buried .tab.active,
+.tab.active {
+    display: block;
+}
+
+/* ========================================
+   3. CHARACTER STATS GRID
+   ======================================== */
+
+/* Section title styling */ 
+.best-left-buried .sheet-body h2 {
+    border-bottom: 2px solid rgba(122, 9, 9, 0.384);
+    padding-bottom: 5px;
+}
+
+/* Main stats grid - 4 columns for character attributes */
+.best-left-buried .stats-grid,
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+/* Individual stat boxes with decorative corners */
+.best-left-buried .stat-box,
+.stat-box {
+    border: 2px solid black;
+    padding: 15px;
+    text-align: center;
+    position: relative;
+    background: white;
+}
+
+/* Decorative corner elements for stat boxes */
+.best-left-buried .stat-box::before,
+.best-left-buried .stat-box::after,
+.stat-box::before,
+.stat-box::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 2px solid black;
+}
+
+.best-left-buried .stat-box::before,
+.stat-box::before {
+    top: -5px;
+    right: -5px;
+    border-left: none;
+    border-bottom: none;
+}
+
+.best-left-buried .stat-box::after,
+.stat-box::after {
+    bottom: -5px;
+    left: -5px;
+    border-right: none;
+    border-top: none;
+}
+
+/* Stat names with special font */
+.best-left-buried .stat-name,
+.stat-name {
+    font-family: "Blackletter", serif;
+    font-size: 1.8em;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+/* Math breakdown display (base + bonus = total) */
+.best-left-buried .ability-breakdown,
+.ability-breakdown {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+}
+
+.best-left-buried .ability-breakdown .plus, 
+.best-left-buried .ability-breakdown .equals,
+.ability-breakdown .plus, 
+.ability-breakdown .equals {
+    font-weight: bold;
+    color: #666;
+    font-size: 1.2em;
+}
+
+/* Final calculated scores */
+.best-left-buried .total-score,
+.total-score {
+    text-align: center;
+    align-items: center;
+    font-weight: bold;
+    color: #333;
+    font-size: 1.5em;
+}
+
+/* Rules and flavor text */
+.best-left-buried .optional-rule,
+.optional-rule {
+    font-style: italic;
+    color: #8b7355;
+    font-size: 0.75em;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 6px;
+    text-shadow: 0 1px 1px rgba(255,255,255,0.8);
+}
+
+/* Armor calculation display */
+.best-left-buried .armor-base,
+.best-left-buried .armor-bonus,
+.armor-base,
+.armor-bonus {
+    color: #333;
+    font-weight: bold;
+}
+
+/* ========================================
+   4. WEAPONS SECTION
+   ======================================== */
+
+/* Container for weapons list */
+.best-left-buried .weapons-section,
+.weapons-section {
+    margin-top: 20px;
+}
+
+/* Header row for weapon table */
+.best-left-buried .weapon-headers,
+.weapon-headers {
+    background: #e0e0e0;
+    border-bottom: 2px solid black;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 0.5fr 0.5fr 80px;
+    padding: 8px 5px;
+    font-weight: bold;
+    text-align: center;
+    gap: 5px;
+}
+
+/* Individual weapon rows */
+.best-left-buried .weapon-row,
+.weapon-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 0.5fr 0.5fr 80px;
+    padding: 8px 5px;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    gap: 5px;
+}
+
+.best-left-buried .weapon-row:hover,
+.weapon-row:hover {
+    background-color: rgba(245, 245, 245, 0.6);
+}
+
+/* Weapon name and icon */
+.best-left-buried .weapon-name,
+.weapon-name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.best-left-buried .weapon-name img,
+.weapon-name img {
+    flex: 0 0 24px;
+}
+
+.best-left-buried .weapon-name:hover,
+.weapon-name:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+}
+
+.best-left-buried .weapon-name:hover span,
+.weapon-name:hover span {
+    text-decoration: underline;
+}
+
+/* Weapon property cells */
+.best-left-buried .weapon-prop,
+.weapon-prop {
+    text-align: center;
+    padding: 0 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Weapon control buttons (roll, delete) */
+.best-left-buried .weapon-controls,
+.weapon-controls {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* Roll attack button */
+.best-left-buried .weapon-roll,
+.weapon-roll {
+    background: none !important;
+    border: none !important;
+    color: #666;
+    cursor: pointer;
+    padding: 0 !important;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 24px;
+}
+
+.best-left-buried .weapon-roll:hover,
+.weapon-roll:hover {
+    color: #000;
+    text-shadow: 0 0 8px red;
+    background: none !important;
+    border: none !important;
+}
+
+.best-left-buried .weapon-roll i,
+.weapon-roll i {
+    font-size: 16px;
+    line-height: 1;
+}
+
+/* ========================================
+   5. EQUIPMENT TAB
+   ======================================== */
+
+/* Equipment tab grid layout */
+.best-left-buried .equipment-grid,
+.equipment-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+    height: 100%;
+}
+
+/* Equipment and treasure sections with decorative borders */
+.best-left-buried .equipment-section,
+.best-left-buried .treasure-section,
+.equipment-section,
+.treasure-section {
+    padding: 15px;
+    border: 2px solid black;
+    background: white;
+    position: relative;
+}
+
+/* Decorative corners for equipment sections */
+.best-left-buried .equipment-section::before,
+.best-left-buried .equipment-section::after,
+.best-left-buried .treasure-section::before,
+.best-left-buried .treasure-section::after,
+.equipment-section::before,
+.equipment-section::after,
+.treasure-section::before,
+.treasure-section::after {
+    content: '';
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    border: 2px solid black;
+}
+
+.best-left-buried .equipment-section::before,
+.best-left-buried .treasure-section::before,
+.equipment-section::before,
+.treasure-section::before {
+    top: -5px;
+    right: -5px;
+    border-left: none;
+    border-bottom: none;
+}
+
+.best-left-buried .equipment-section::after,
+.best-left-buried .treasure-section::after,
+.equipment-section::after,
+.treasure-section::after {
+    bottom: -5px;
+    left: -5px;
+    border-right: none;
+    border-top: none;
+}
+
+/* Armor and shield list containers */
+.best-left-buried .armor-list,
+.best-left-buried .shield-list,
+.armor-list,
+.shield-list {
+    margin-bottom: 20px;
+}
+
+/* Equipment row layout */
+.best-left-buried .equipment-row,
+.equipment-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 80px;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+}
+
+.best-left-buried .equipment-row:hover,
+.equipment-row:hover {
+    background-color: #f5f5f5;
+}
+
+/* Equipment name and icon */
+.best-left-buried .equipment-name,
+.equipment-name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.best-left-buried .equipment-name:hover,
+.equipment-name:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+}
+
+.best-left-buried .equipment-name img,
+.equipment-name img {
+    flex: 0 0 24px;
+}
+
+/* Equipment type labels */
+.best-left-buried .equipment-type,
+.equipment-type {
+    text-align: center;
+    font-style: italic;
+    color: #666;
+}
+
+/* Equipment equipped checkbox */
+.best-left-buried .equipment-equipped,
+.equipment-equipped {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    justify-content: center;
+}
+
+.best-left-buried .equipment-equipped input[type="checkbox"],
+.equipment-equipped input[type="checkbox"] {
+    margin: 0;
+}
+
+.best-left-buried .equipment-equipped label,
+.equipment-equipped label {
+    font-size: 0.9em;
+    cursor: pointer;
+}
+
+/* Equipment control buttons */
+.best-left-buried .equipment-controls,
+.equipment-controls {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.best-left-buried .equipment-controls .item-control,
+.equipment-controls .item-control {
+    cursor: pointer;
+    color: #666;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.best-left-buried .equipment-controls .item-control:hover,
+.equipment-controls .item-control:hover {
+    color: #333;
+}
+
+.best-left-buried .equipment-controls .item-delete:hover,
+.equipment-controls .item-delete:hover {
+    color: #ff0000;
+}
+
+/* ========================================
+   6. ADVANCEMENT TAB
+   ======================================== */
+
+/* Advancement tab grid layout */
+.best-left-buried .advancement-grid,
+.advancement-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    height: 100%;
+}
+
+/* Advancement and consequence sections */
+.best-left-buried .advancement-section,
+.best-left-buried .consequence-section,
+.advancement-section,
+.consequence-section {
+    padding: 15px;
+    border: 2px solid black;
+    background: white;
+    position: relative;
+}
+
+/* Decorative corners for advancement sections */
+.best-left-buried .advancement-section::before,
+.best-left-buried .advancement-section::after,
+.best-left-buried .consequence-section::before,
+.best-left-buried .consequence-section::after,
+.advancement-section::before,
+.advancement-section::after,
+.consequence-section::before,
+.consequence-section::after {
+    content: '';
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    border: 2px solid black;
+}
+
+.best-left-buried .advancement-section::before,
+.best-left-buried .consequence-section::before,
+.advancement-section::before,
+.consequence-section::before {
+    top: -5px;
+    right: -5px;
+    border-left: none;
+    border-bottom: none;
+}
+
+.best-left-buried .advancement-section::after,
+.best-left-buried .consequence-section::after,
+.advancement-section::after,
+.consequence-section::after {
+    bottom: -5px;
+    left: -5px;
+    border-right: none;
+    border-top: none;
+}
+
+/* ========================================
+   7. FORM STYLING
+   ======================================== */
+
+/* Form container */
+.best-left-buried .sheet-container,
+.sheet-container {
+    padding: 10px;
+}
+
+.best-left-buried form.sheet-container,
+form.sheet-container {
+    background: white;
+}
+
+/* ========================================
+   8. GENERAL ELEMENTS
+   ======================================== */
+
+/* General button styling */
+.best-left-buried button,
+button {
+    padding: 2px 8px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.best-left-buried button:hover,
+button:hover {
+    border-color: #999;
+    background: #f5f5f5;
+}
+
+/* Delete buttons and actions */
+.best-left-buried .item-delete,
+.item-delete {
+    color: #666;
+    cursor: pointer;
+}
+
+.best-left-buried .item-delete:hover,
+.item-delete:hover {
+    color: #ff0000;
+}
+
+/* Input styling */
+.best-left-buried input[type="text"],
+.best-left-buried input[type="number"],
+.best-left-buried select,
+input[type="text"],
+input[type="number"],
+select {
+    border: 1px solid #ccc;
+    padding: 4px 8px;
+    border-radius: 2px;
+}
+
+.best-left-buried input[type="text"]:focus,
+.best-left-buried input[type="number"]:focus,
+.best-left-buried select:focus,
+input[type="text"]:focus,
+input[type="number"]:focus,
+select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}

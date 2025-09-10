@@ -1,0 +1,44 @@
+{
+  "id": "best-left-buried",
+  "title": "Best Left Buried",
+  "description": "Best Left Buried system (Foundry V13 compatible).",
+  "version": "0.2.0",
+  
+  "url": "https://github.com/maguerreiro/best-left-buried-VTT",
+  "manifest": "https://raw.githubusercontent.com/maguerreiro/best-left-buried-VTT/main/system.json",
+  "download": "https://github.com/maguerreiro/best-left-buried-VTT/archive/refs/heads/main.zip",
+
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13",
+    "maximum": "13"
+  },
+
+  "authors": [
+    { "name": "MG" }
+  ],
+
+  "documentTypes": {
+    "Actor": {
+      "character": {}
+    },
+    "Item": {
+      "weapon": {},
+      "armor": {},
+      "shield": {}
+    }
+  },
+
+  "scripts": [],
+  "esmodules": ["module/main.js"],
+  "styles": ["styles/system.css"],
+  "packs": [],
+
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ]
+}
