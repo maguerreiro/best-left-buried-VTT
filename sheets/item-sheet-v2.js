@@ -11,7 +11,11 @@ export class BLBItemSheetV2 extends foundry.applications.api.HandlebarsApplicati
   static DEFAULT_OPTIONS = {
     classes: ["best-left-buried", "sheet", "item"],
     position: { width: 500, height: 400 },
-    window: { title: "Best Left Buried Item" },
+    window: { 
+      title: "Best Left Buried Item",
+      resizable: true,
+      minimizable: true
+    },
     form: {
       handler: BLBItemSheetV2.#onFormSubmit,
       submitOnChange: true
@@ -50,6 +54,8 @@ export class BLBItemSheetV2 extends foundry.applications.api.HandlebarsApplicati
       SHIELD_TYPES
     };
   }
+
+
 
   /* -------------------------------------------- */
   /*  Event Handlers                             */

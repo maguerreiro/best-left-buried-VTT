@@ -1,4 +1,4 @@
-// sheets/actor-sheet-v2.js - FIXED ApplicationV2 Actor Sheet
+// sheets/actor-sheet-v2.js - FIXED Tab Management
 
 import { WEAPON_TYPES } from "../module/helpers/weapons.js";
 import { ARMOR_TYPES, SHIELD_TYPES } from "../module/helpers/armor.js";
@@ -11,7 +11,11 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
   static DEFAULT_OPTIONS = {
     classes: ["best-left-buried", "sheet", "actor"],
     position: { width: 1000, height: 900 },
-    window: { title: "Best Left Buried Character" },
+    window: { 
+      title: "Best Left Buried Character", 
+      resizable: true, 
+      minimizable: true 
+    },
     form: {
       handler: BLBActorSheetV2.#onFormSubmit,
       submitOnChange: true
@@ -32,6 +36,16 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
       template: "systems/best-left-buried/templates/actor-v2.hbs"
     }
   };
+
+  /* -------------------------------------------- */
+  /*  Tab Management                              */
+  /* -------------------------------------------- */
+
+  /** Track the active tab per instance */
+  constructor(...args) {
+    super(...args);
+    this.activeTab = "stats";
+  }
 
   /* -------------------------------------------- */
   /*  Rendering                                   */
@@ -56,13 +70,53 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
       SHIELD_TYPES,
       
       // Items
-      items: this._prepareItems(doc.items)
+      items: this._prepareItems(doc.items),
+      
+      // Tab state
+      activeTab: this.activeTab
     };
     
     // Add armor calculations
     this._prepareArmor(context);
     
     return context;
+  }
+
+  /** @override */
+  async _onRender(context, options) {
+    await super._onRender(context, options);
+    
+    // Ensure correct tab is active after render
+    this._activateTab(this.activeTab);
+  }
+
+  /**
+   * Activate a specific tab
+   */
+  _activateTab(tabName) {
+    if (!this.element) return;
+    
+    // Update tab navigation
+    const tabs = this.element.querySelectorAll('.tabs .item');
+    tabs.forEach(tab => {
+      if (tab.dataset.tab === tabName) {
+        tab.classList.add('active');
+      } else {
+        tab.classList.remove('active');
+      }
+    });
+    
+    // Update tab content
+    const tabContents = this.element.querySelectorAll('.tab[data-tab]');
+    tabContents.forEach(content => {
+      if (content.dataset.tab === tabName) {
+        content.classList.add('active');
+        content.style.display = 'block';
+      } else {
+        content.classList.remove('active');
+        content.style.display = 'none';
+      }
+    });
   }
 
   /**
@@ -84,8 +138,8 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     // Sort weapons by type, then name
     organized.weapon.sort((a, b) => {
       const typeOrder = ["hand", "heavy", "light", "long", "ranged", "throwing"];
-      const aIndex = typeOrder.indexOf(a.system.type || "hand");
-      const bIndex = typeOrder.indexOf(b.system.type || "hand");
+      const aIndex = typeOrder.indexOf(a.system.weaponType || "hand");
+      const bIndex = typeOrder.indexOf(b.system.weaponType || "hand");
       
       if (aIndex !== bIndex) return aIndex - bIndex;
       return a.name.localeCompare(b.name);
@@ -197,17 +251,21 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
    * Handle item deletion
    */
   static async #onDeleteItem(event, target) {
+    // Save scroll positions before deletion
+    this._saveScrollPositions();
+    
     const itemId = target.closest("[data-item-id]")?.dataset.itemId;
     const item = this.document.items.get(itemId);
     if (item) await item.delete();
   }
 
   /**
-   * Handle tab switching
+   * Handle tab switching via action system
    */
   static async #onSwitchTab(event, target) {
     const tabName = target.dataset.tab;
-    this._switchToTab(tabName);
+    this.activeTab = tabName;
+    this._activateTab(tabName);
   }
 
   /**
@@ -233,5 +291,4 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     
     await item.update({ "system.equipped": isEquipped });
   }
-  
 }

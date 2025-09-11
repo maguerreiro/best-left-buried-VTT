@@ -1,4 +1,4 @@
-{{! templates/item-v2.hbs - FIXED: Single root element }}
+{{! templates/item-v2.hbs - FIXED: Proper select helper usage }}
 <div class="item-sheet-container">
     <header class="sheet-header">
         <img src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64"/>
@@ -10,11 +10,9 @@
             <div class="form-group">
                 <label>Weapon Type</label>
                 <select name="system.weaponType" data-action="updateWeaponType">
-                    {{#select system.weaponType}}
                     {{#each WEAPON_TYPES as |type id|}}
-                        <option value="{{id}}">{{type.label}}</option>
+                        <option value="{{id}}" {{#if (eq ../system.weaponType id)}}selected{{/if}}>{{type.label}}</option>
                     {{/each}}
-                    {{/select}}
                 </select>
             </div>
 
@@ -37,11 +35,9 @@
             <div class="form-group">
                 <label>Armor Type</label>
                 <select name="system.armorType" data-action="updateArmorType">
-                    {{#select system.armorType}}
                     {{#each ARMOR_TYPES as |type id|}}
-                        <option value="{{id}}">{{type.label}} {{#if (eq id "basic")}}(+1){{/if}}{{#if (eq id "plate")}}(+2){{/if}}</option>
+                        <option value="{{id}}" {{#if (eq ../system.armorType id)}}selected{{/if}}>{{type.label}} {{#if (eq id "basic")}}(+1){{/if}}{{#if (eq id "plate")}}(+2){{/if}}</option>
                     {{/each}}
-                    {{/select}}
                 </select>
             </div>
             <div class="form-group">
