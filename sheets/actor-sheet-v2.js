@@ -1,4 +1,4 @@
-// sheets/actor-sheet-v2.js - FIXED Tab Management
+// sheets/actor-sheet-v2.js - COMPLETE FIXED VERSION
 
 import { WEAPON_TYPES } from "../module/helpers/weapons.js";
 import { ARMOR_TYPES, SHIELD_TYPES } from "../module/helpers/armor.js";
@@ -41,10 +41,11 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
   /*  Tab Management                              */
   /* -------------------------------------------- */
 
-  /** Track the active tab per instance */
+  /** Track the active tab and scroll position per instance */
   constructor(...args) {
     super(...args);
     this.activeTab = "stats";
+    this.scrollPosition = 0;
   }
 
   /* -------------------------------------------- */
@@ -88,6 +89,51 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     
     // Ensure correct tab is active after render
     this._activateTab(this.activeTab);
+    
+    // Restore scroll position after render with multiple attempts
+    if (this.scrollPosition > 0) {
+      console.log("Attempting to restore scroll position:", this.scrollPosition);
+      
+      // Try multiple times with different delays to ensure it works
+      const restoreScroll = () => {
+        const container = this.element.querySelector('.sheet-container');
+        if (container && container.scrollTop !== this.scrollPosition) {
+          container.scrollTop = this.scrollPosition;
+          console.log("Restored scroll to:", this.scrollPosition);
+        }
+      };
+      
+      // Try immediately
+      restoreScroll();
+      
+      // Try after a short delay
+      setTimeout(restoreScroll, 25);
+      
+      // Try after a longer delay
+      setTimeout(restoreScroll, 100);
+      
+      // Try one more time to be sure
+      setTimeout(restoreScroll, 200);
+    }
+  }
+
+  /** @override */
+  _onClose(options) {
+    // Save scroll position before closing
+    this._saveScrollPosition();
+    return super._onClose(options);
+  }
+
+  /**
+   * Save the current scroll position
+   */
+  _saveScrollPosition() {
+    if (this.element) {
+      const container = this.element.querySelector('.sheet-container');
+      if (container) {
+        this.scrollPosition = container.scrollTop;
+      }
+    }
   }
 
   /**
@@ -248,15 +294,25 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
   }
 
   /**
-   * Handle item deletion
+   * Handle item deletion with confirmation and scroll preservation
    */
   static async #onDeleteItem(event, target) {
-    // Save scroll positions before deletion
-    this._saveScrollPositions();
+    // Save all scroll positions before deletion
+    this._saveAllScrollPositions();
     
     const itemId = target.closest("[data-item-id]")?.dataset.itemId;
     const item = this.document.items.get(itemId);
-    if (item) await item.delete();
+    if (item) {
+      const confirmed = await Dialog.confirm({
+        title: "Delete Item",
+        content: `<p>Are you sure you want to delete <strong>${item.name}</strong>?</p>`,
+        defaultYes: false
+      });
+      
+      if (confirmed) {
+        await item.delete();
+      }
+    }
   }
 
   /**
@@ -269,9 +325,12 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
   }
 
   /**
-   * Handle equipment toggle
+   * Handle equipment toggle with scroll preservation
    */
   static async #onToggleEquip(event, target) {
+    // Save scroll position before any updates
+    this._saveScrollPosition();
+    
     const itemId = target.dataset.itemId;
     const item = this.document.items.get(itemId);
     if (!item) return;
