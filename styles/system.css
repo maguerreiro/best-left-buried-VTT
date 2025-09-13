@@ -630,6 +630,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    align-items: center;
 }
 
 /* Weapon control buttons (roll, delete) */
@@ -638,6 +639,7 @@
     display: flex;
     justify-content: center;
     gap: 8px;
+    align-items: center;
 }
 
 /* Roll attack button */

@@ -118,7 +118,7 @@
                             <div class="weapon-prop">{{getWeaponProperty item.system.weaponType "label"}}</div>
                             <div class="weapon-prop">{{getWeaponProperty item.system.weaponType "range"}}</div>
                             <div class="weapon-prop">{{getWeaponProperty item.system.weaponType "attackStat"}}</div>
-                            <div class="weapon-prop">{{getWeaponDamage item.system.weaponType item.system.isTwoHanded}}</div>
+                            <div class="weapon-prop">{{getWeaponDamage item.system.weaponType item.system.isTwoHanded item.system.inMelee}}</div>
                             <div class="weapon-prop">{{getWeaponProperty item.system.weaponType "initiative"}}</div>
                             <div class="weapon-controls">
                                 <button type="button" data-action="rollWeapon" data-weapon-id="{{item._id}}" class="weapon-roll" title="Roll Attack">

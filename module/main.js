@@ -87,15 +87,21 @@ Hooks.once("init", () => {
     return result || '';
   });
 
-  Handlebars.registerHelper('getWeaponDamage', function(weaponType, isTwoHanded) {
+  Handlebars.registerHelper('getWeaponDamage', function(weaponType, isTwoHanded, inMelee) {
     const weaponData = WEAPON_TYPES[weaponType];
     if (!weaponData) return 0;
     let damage = weaponData.damageMod || 0;
+    if (inMelee && weaponData.meleePenalty) {
+      damage += -1;
+    }
     if (isTwoHanded && weaponData.twoHandedBonus) {
       damage += 1;
     }
+
     return damage >= 0 ? `+${damage}` : `${damage}`;
   });
+
+
 
   Handlebars.registerHelper('getArmorType', function(armorType) {
     const armorData = ARMOR_TYPES[armorType];
