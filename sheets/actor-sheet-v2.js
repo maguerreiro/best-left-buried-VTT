@@ -1,4 +1,4 @@
-// sheets/actor-sheet-v2.js - COMPLETE FIXED VERSION
+// sheets/actor-sheet-v2.js - COMPLETE FIXED VERSION - No Re-render Approach
 
 import { WEAPON_TYPES } from "../module/helpers/weapons.js";
 import { ARMOR_TYPES, SHIELD_TYPES } from "../module/helpers/armor.js";
@@ -41,11 +41,10 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
   /*  Tab Management                              */
   /* -------------------------------------------- */
 
-  /** Track the active tab and scroll position per instance */
+  /** Track the active tab per instance */
   constructor(...args) {
     super(...args);
     this.activeTab = "stats";
-    this.scrollPosition = 0;
   }
 
   /* -------------------------------------------- */
@@ -89,51 +88,6 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     
     // Ensure correct tab is active after render
     this._activateTab(this.activeTab);
-    
-    // Restore scroll position after render with multiple attempts
-    if (this.scrollPosition > 0) {
-      console.log("Attempting to restore scroll position:", this.scrollPosition);
-      
-      // Try multiple times with different delays to ensure it works
-      const restoreScroll = () => {
-        const container = this.element.querySelector('.sheet-container');
-        if (container && container.scrollTop !== this.scrollPosition) {
-          container.scrollTop = this.scrollPosition;
-          console.log("Restored scroll to:", this.scrollPosition);
-        }
-      };
-      
-      // Try immediately
-      restoreScroll();
-      
-      // Try after a short delay
-      setTimeout(restoreScroll, 25);
-      
-      // Try after a longer delay
-      setTimeout(restoreScroll, 100);
-      
-      // Try one more time to be sure
-      setTimeout(restoreScroll, 200);
-    }
-  }
-
-  /** @override */
-  _onClose(options) {
-    // Save scroll position before closing
-    this._saveScrollPosition();
-    return super._onClose(options);
-  }
-
-  /**
-   * Save the current scroll position
-   */
-  _saveScrollPosition() {
-    if (this.element) {
-      const container = this.element.querySelector('.sheet-container');
-      if (container) {
-        this.scrollPosition = container.scrollTop;
-      }
-    }
   }
 
   /**
@@ -226,6 +180,40 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     context.system.armorTotal = armorTotal;
   }
 
+  /**
+   * Manually update armor display without re-rendering the entire sheet
+   */
+  _updateArmorDisplay() {
+    const armorBonusEl = this.element.querySelector('.armor-bonus');
+    const armorTotalEl = this.element.querySelector('.armor-total .total-score');
+    
+    if (!armorBonusEl || !armorTotalEl) return;
+    
+    let armorBonus = 0;
+    const armorBase = this.document.system.armor?.base || 7;
+    
+    // Calculate bonus from equipped items
+    const equippedArmor = this.document.items.filter(item => 
+      item.type === "armor" && item.system.equipped
+    );
+    const equippedShields = this.document.items.filter(item => 
+      item.type === "shield" && item.system.equipped
+    );
+    
+    for (const armor of equippedArmor) {
+      if (armor.system.armorType === "basic") armorBonus += 1;
+      else if (armor.system.armorType === "plate") armorBonus += 2;
+    }
+    
+    for (const shield of equippedShields) {
+      armorBonus += 1;
+    }
+    
+    // Update the display elements
+    armorBonusEl.textContent = armorBonus;
+    armorTotalEl.textContent = armorBase + armorBonus;
+  }
+
   /* -------------------------------------------- */
   /*  Event Handlers                             */
   /* -------------------------------------------- */
@@ -294,25 +282,108 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
   }
 
   /**
-   * Handle item deletion with confirmation and scroll preservation
+   * Handle item deletion - Simple working version with scroll preservation
    */
   static async #onDeleteItem(event, target) {
-    // Save all scroll positions before deletion
-    this._saveAllScrollPositions();
+    // Save current scroll positions
+    const scrollPositions = this._saveCurrentScrollPositions();
     
     const itemId = target.closest("[data-item-id]")?.dataset.itemId;
     const item = this.document.items.get(itemId);
-    if (item) {
-      const confirmed = await Dialog.confirm({
-        title: "Delete Item",
-        content: `<p>Are you sure you want to delete <strong>${item.name}</strong>?</p>`,
-        defaultYes: false
-      });
+    if (!item) return;
+    
+    const confirmed = await Dialog.confirm({
+      title: "Delete Item",
+      content: `<p>Are you sure you want to delete <strong>${item.name}</strong>?</p>`,
+      defaultYes: false
+    });
+    
+    if (confirmed) {
+      await item.delete();
       
-      if (confirmed) {
-        await item.delete();
-      }
+      // Restore scroll positions after the re-render
+      setTimeout(() => {
+        this._restoreScrollPositions(scrollPositions);
+      }, 100);
     }
+  }
+
+  /**
+   * Save current scroll positions
+   */
+  _saveCurrentScrollPositions() {
+    if (!this.element) return {};
+    
+    const positions = {};
+    
+    // Save main container scroll
+    const mainContainer = this.element.querySelector('.sheet-container');
+    if (mainContainer) {
+      positions.main = mainContainer.scrollTop;
+    }
+    
+    // Save individual list scroll positions
+    const armorList = this.element.querySelector('.armor-list');
+    if (armorList) {
+      positions.armorList = armorList.scrollTop;
+    }
+    
+    const weaponList = this.element.querySelector('.weapon-list');
+    if (weaponList) {
+      positions.weaponList = weaponList.scrollTop;
+    }
+    
+    const shieldList = this.element.querySelector('.shield-list');
+    if (shieldList) {
+      positions.shieldList = shieldList.scrollTop;
+    }
+    
+    return positions;
+  }
+
+  /**
+   * Restore scroll positions
+   */
+  _restoreScrollPositions(positions) {
+    if (!this.element || !positions) return;
+    
+    // Restore main container
+    const mainContainer = this.element.querySelector('.sheet-container');
+    if (mainContainer && positions.main > 0) {
+      mainContainer.scrollTop = positions.main;
+    }
+    
+    // Restore individual lists
+    const armorList = this.element.querySelector('.armor-list');
+    if (armorList && positions.armorList > 0) {
+      armorList.scrollTop = positions.armorList;
+    }
+    
+    const weaponList = this.element.querySelector('.weapon-list');
+    if (weaponList && positions.weaponList > 0) {
+      weaponList.scrollTop = positions.weaponList;
+    }
+    
+    const shieldList = this.element.querySelector('.shield-list');
+    if (shieldList && positions.shieldList > 0) {
+      shieldList.scrollTop = positions.shieldList;
+    }
+  }
+
+  /** @override */
+  async _onDrop(event) {
+    // Save scroll positions before drop
+    const scrollPositions = this._saveCurrentScrollPositions();
+    
+    // Call the parent drop handler
+    const result = await super._onDrop(event);
+    
+    // Restore scroll positions after drop
+    setTimeout(() => {
+      this._restoreScrollPositions(scrollPositions);
+    }, 100);
+    
+    return result;
   }
 
   /**
@@ -325,29 +396,62 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
   }
 
   /**
-   * Handle equipment toggle with scroll preservation
+   * Handle equipment toggle - Bypass ApplicationV2 re-render entirely
    */
   static async #onToggleEquip(event, target) {
-    // Save scroll position before any updates
-    this._saveScrollPosition();
+    event.preventDefault(); // Prevent form submission
+    event.stopPropagation(); // Stop event bubbling
+    
+    console.log("Equipment toggle triggered");
     
     const itemId = target.dataset.itemId;
     const item = this.document.items.get(itemId);
-    if (!item) return;
-    
-    const isEquipped = target.checked;
-    
-    // Handle mutual exclusion
-    if ((item.type === "armor" || item.type === "shield") && isEquipped) {
-      const others = this.document.items.filter(i => 
-        i.type === item.type && i.id !== itemId && i.system.equipped
-      );
-      
-      for (const other of others) {
-        await other.update({ "system.equipped": false });
-      }
+    if (!item) {
+      console.error("Item not found:", itemId);
+      return;
     }
     
-    await item.update({ "system.equipped": isEquipped });
+    const isEquipped = target.checked;
+    console.log(`Toggling ${item.name} to ${isEquipped ? 'equipped' : 'unequipped'}`);
+    
+    try {
+      // Update the item directly without triggering sheet re-render
+      await item.update({ "system.equipped": isEquipped }, { render: false });
+      console.log("Item updated successfully");
+      
+      // Handle mutual exclusion manually
+      if ((item.type === "armor" || item.type === "shield") && isEquipped) {
+        const others = this.document.items.filter(i => 
+          i.type === item.type && i.id !== itemId && i.system.equipped
+        );
+        
+        console.log(`Found ${others.length} other ${item.type} items to unequip`);
+        
+        for (const other of others) {
+          await other.update({ "system.equipped": false }, { render: false });
+          console.log(`Unequipped ${other.name}`);
+          
+          // Update the UI checkbox directly
+          const otherCheckbox = this.element.querySelector(`input[data-item-id="${other.id}"]`);
+          if (otherCheckbox) {
+            otherCheckbox.checked = false;
+            console.log(`Updated checkbox for ${other.name}`);
+          } else {
+            console.warn(`Could not find checkbox for ${other.name}`);
+          }
+        }
+      }
+      
+      // Update armor display manually
+      this._updateArmorDisplay();
+      
+      // Ensure the current checkbox state is visually correct
+      target.checked = isEquipped;
+      
+    } catch (error) {
+      console.error("Error in equipment toggle:", error);
+      // Revert checkbox state if there was an error
+      target.checked = !isEquipped;
+    }
   }
 }
