@@ -2,7 +2,7 @@
   "id": "best-left-buried",
   "title": "Best Left Buried",
   "description": "Best Left Buried system (Foundry V13 compatible).",
-  "version": "0.2.0",
+  "version": "0.2.1",
   
   "url": "https://github.com/maguerreiro/best-left-buried-VTT",
   "manifest": "https://raw.githubusercontent.com/maguerreiro/best-left-buried-VTT/main/system.json",
@@ -11,7 +11,7 @@
   "compatibility": {
     "minimum": "13",
     "verified": "13",
-    "maximum": "13"
+    "maximum": "16"
   },
 
   "authors": [
