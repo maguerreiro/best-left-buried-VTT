@@ -285,26 +285,27 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
    * Handle item deletion - Simple working version with scroll preservation
    */
   static async #onDeleteItem(event, target) {
-    // Save current scroll positions
-    const scrollPositions = this._saveCurrentScrollPositions();
-    
     const itemId = target.closest("[data-item-id]")?.dataset.itemId;
     const item = this.document.items.get(itemId);
     if (!item) return;
     
-    const confirmed = await Dialog.confirm({
-      title: "Delete Item",
+    // Use V2 DialogV2 instead of deprecated Dialog.confirm
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: "Delete Item" },
       content: `<p>Are you sure you want to delete <strong>${item.name}</strong>?</p>`,
-      defaultYes: false
+      modal: true,
+      rejectClose: false
     });
     
     if (confirmed) {
-      await item.delete();
+      // Remove the item from UI first
+      const itemRow = target.closest("[data-item-id]");
+      if (itemRow) {
+        itemRow.remove();
+      }
       
-      // Restore scroll positions after the re-render
-      setTimeout(() => {
-        this._restoreScrollPositions(scrollPositions);
-      }, 100);
+      // Delete from database without re-render
+      await item.delete({ render: false });
     }
   }
 
@@ -372,19 +373,89 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
 
   /** @override */
   async _onDrop(event) {
-    // Save scroll positions before drop
-    const scrollPositions = this._saveCurrentScrollPositions();
+    // Save scroll positions
+    const mainContainer = this.element.querySelector('.sheet-container');
+    const armorList = this.element.querySelector('.armor-list');
+    const weaponList = this.element.querySelector('.weapon-list');
+    const shieldList = this.element.querySelector('.shield-list');
     
-    // Call the parent drop handler
-    const result = await super._onDrop(event);
+    const scrollPositions = {
+      main: mainContainer ? mainContainer.scrollTop : 0,
+      armor: armorList ? armorList.scrollTop : 0,
+      weapon: weaponList ? weaponList.scrollTop : 0,
+      shield: shieldList ? shieldList.scrollTop : 0
+    };
     
-    // Restore scroll positions after drop
-    setTimeout(() => {
-      this._restoreScrollPositions(scrollPositions);
-    }, 100);
+    console.log("Saved scroll positions:", scrollPositions);
     
-    return result;
+    // Set up observer to catch DOM changes and immediately restore scroll
+    const observer = new MutationObserver(() => {
+      const container = this.element?.querySelector('.sheet-container');
+      const newArmorList = this.element?.querySelector('.armor-list');
+      const newWeaponList = this.element?.querySelector('.weapon-list');
+      const newShieldList = this.element?.querySelector('.shield-list');
+      
+      if (container && scrollPositions.main > 0) {
+        container.scrollTop = scrollPositions.main;
+      }
+      if (newArmorList && scrollPositions.armor > 0) {
+        newArmorList.scrollTop = scrollPositions.armor;
+      }
+      if (newWeaponList && scrollPositions.weapon > 0) {
+        newWeaponList.scrollTop = scrollPositions.weapon;
+      }
+      if (newShieldList && scrollPositions.shield > 0) {
+        newShieldList.scrollTop = scrollPositions.shield;
+      }
+      
+      console.log("Observer restored scroll positions");
+    });
+    
+    // Start observing changes to the sheet element
+    observer.observe(this.element, {
+      childList: true,
+      subtree: true,
+      attributes: false
+    });
+    
+    try {
+      const result = await super._onDrop(event);
+      
+      // Stop observing after a delay
+      setTimeout(() => {
+        observer.disconnect();
+        console.log("Observer disconnected");
+      }, 200);
+      
+      return result;
+    } catch (error) {
+      observer.disconnect();
+      throw error;
+    }
   }
+
+  async _renderItemList(type) {
+  // Re-prepare full items data for template use
+  const context = await this._prepareContext();
+  // Render the full actor sheet to HTML (or just the list portion)
+  // For better performance, render only the item list snippet (if available)
+  
+  // Here we can re-render the whole actor sheet, but ideally just the item list
+  const html = await foundry.applications.handlebars.renderTemplate(
+    "systems/best-left-buried/templates/actor-v2.hbs",
+    context
+  );
+  
+  // Extract the relevant item list container from the rendered html
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, "text/html");
+  const newList = doc.querySelector(`.${type}-list`);
+  if (!newList) return;
+
+  // Replace the existing item list container with the new one
+  const container = this.element.querySelector(`.${type}-list`);
+  if (container) container.replaceWith(newList);
+}
 
   /**
    * Handle tab switching via action system

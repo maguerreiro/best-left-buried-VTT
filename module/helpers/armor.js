@@ -2,11 +2,11 @@
 
 export const ARMOR_TYPES = {
     basic: {
-        label: "Basic Armor",
+        label: "Basic armor (+1)",
         bonus: 1
     },
     plate: {
-        label: "Plate Armor", 
+        label: "Plate armor (+2)", 
         bonus: 2
     }
 };

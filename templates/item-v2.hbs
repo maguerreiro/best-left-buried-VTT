@@ -36,7 +36,7 @@
                 <label>Armor Type</label>
                 <select name="system.armorType" data-action="updateArmorType">
                     {{#each ARMOR_TYPES as |type id|}}
-                        <option value="{{id}}" {{#if (eq ../system.armorType id)}}selected{{/if}}>{{type.label}} {{#if (eq id "basic")}}(+1){{/if}}{{#if (eq id "plate")}}(+2){{/if}}</option>
+                        <option value="{{id}}" {{#if (eq ../system.armorType id)}}selected{{/if}}>{{type.label}}</option>
                     {{/each}}
                 </select>
             </div>
