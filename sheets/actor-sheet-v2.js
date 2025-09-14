@@ -399,8 +399,8 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
    * Handle equipment toggle - Bypass ApplicationV2 re-render entirely
    */
   static async #onToggleEquip(event, target) {
-    event.preventDefault(); // Prevent form submission
-    event.stopPropagation(); // Stop event bubbling
+    event.preventDefault();
+    event.stopPropagation();
     
     console.log("Equipment toggle triggered");
     
@@ -415,7 +415,6 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     console.log(`Toggling ${item.name} to ${isEquipped ? 'equipped' : 'unequipped'}`);
     
     try {
-      // Update the item directly without triggering sheet re-render
       await item.update({ "system.equipped": isEquipped }, { render: false });
       console.log("Item updated successfully");
       
@@ -431,26 +430,67 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
           await other.update({ "system.equipped": false }, { render: false });
           console.log(`Unequipped ${other.name}`);
           
-          // Update the UI checkbox directly
           const otherCheckbox = this.element.querySelector(`input[data-item-id="${other.id}"]`);
           if (otherCheckbox) {
             otherCheckbox.checked = false;
             console.log(`Updated checkbox for ${other.name}`);
-          } else {
-            console.warn(`Could not find checkbox for ${other.name}`);
           }
         }
       }
       
-      // Update armor display manually
-      this._updateArmorDisplay();
+      // Update armor display with simple selectors
+      console.log("Updating armor display");
+      const armorBonusEl = this.element.querySelector('.armor-bonus');
       
-      // Ensure the current checkbox state is visually correct
+      // Find the armor stat box manually
+      let armorTotalEl = null;
+      const statBoxes = this.element.querySelectorAll('.stat-box');
+      for (const box of statBoxes) {
+        const statName = box.querySelector('.stat-name');
+        if (statName && statName.textContent.trim() === 'Armor') {
+          armorTotalEl = box.querySelector('.total-score');
+          break;
+        }
+      }
+      
+      if (armorBonusEl && armorTotalEl) {
+        console.log("Found armor display elements");
+        let armorBonus = 0;
+        const armorBase = this.document.system.armor?.base || 7;
+        
+        const equippedArmor = this.document.items.filter(item => 
+          item.type === "armor" && item.system.equipped
+        );
+        const equippedShields = this.document.items.filter(item => 
+          item.type === "shield" && item.system.equipped
+        );
+        
+        console.log(`Found equipped: ${equippedArmor.length} armor, ${equippedShields.length} shields`);
+        
+        for (const armor of equippedArmor) {
+          if (armor.system.armorType === "basic") armorBonus += 1;
+          else if (armor.system.armorType === "plate") armorBonus += 2;
+          console.log(`${armor.name} (${armor.system.armorType}) adds ${armor.system.armorType === "basic" ? 1 : 2}`);
+        }
+        
+        for (const shield of equippedShields) {
+          armorBonus += 1;
+          console.log(`${shield.name} adds 1`);
+        }
+        
+        armorBonusEl.textContent = armorBonus;
+        armorTotalEl.textContent = armorBase + armorBonus;
+        console.log(`Armor updated: base=${armorBase}, bonus=${armorBonus}, total=${armorBase + armorBonus}`);
+      } else {
+        console.warn("Could not find armor display elements");
+        console.log("armorBonusEl found:", !!armorBonusEl);
+        console.log("armorTotalEl found:", !!armorTotalEl);
+      }
+      
       target.checked = isEquipped;
       
     } catch (error) {
       console.error("Error in equipment toggle:", error);
-      // Revert checkbox state if there was an error
       target.checked = !isEquipped;
     }
   }
