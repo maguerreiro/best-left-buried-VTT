@@ -98,7 +98,7 @@
 
             {{! Weapons Section }}
             <div class="weapons-section">
-                <h2>Weapons</h2>
+                <h2>Actions</h2>
                     <div class="weapon-headers">
                         <div>Name</div>
                         <div>Type</div>
@@ -108,29 +108,7 @@
                         <div>Init</div>
                         <div>Controls</div>
                     </div>
-                <div class="weapon-list">
-                    {{#each items.weapon as |item|}}
-                        <div class="weapon-row" data-item-id="{{item._id}}">
-                            <div class="weapon-name" data-action="openItem">
-                                <img src="{{item.img}}" width="24" height="24"/>
-                                <span>{{item.name}}</span>
-                            </div>
-                            <div class="weapon-prop">{{getWeaponProperty item.system.weaponType "label"}}</div>
-                            <div class="weapon-prop">{{getWeaponProperty item.system.weaponType "range"}}</div>
-                            <div class="weapon-prop">{{getWeaponProperty item.system.weaponType "attackStat"}}</div>
-                            <div class="weapon-prop">{{getWeaponDamage item.system.weaponType item.system.isTwoHanded item.system.inMelee}}</div>
-                            <div class="weapon-prop">{{getWeaponProperty item.system.weaponType "initiative"}}</div>
-                            <div class="weapon-controls">
-                                <button type="button" data-action="rollWeapon" data-weapon-id="{{item._id}}" class="weapon-roll" title="Roll Attack">
-                                    <i class="fas fa-dice-d6"></i>
-                                </button>
-                                <a data-action="deleteItem" class="item-control item-delete" title="Delete Item">
-                                    <i class="fas fa-trash"></i>
-                                </a>
-                            </div>
-                        </div>
-                    {{/each}}
-                </div>
+
             </div>
         </div>
 
@@ -192,7 +170,30 @@
                     <h3>Treasure</h3>
                     <p><em>Treasure and valuables will be displayed here.</em></p>
                 </div>
-            </div>
+                            <div class="weapon-list">
+                    {{#each items.weapon as |item|}}
+                        <div class="weapon-row" data-item-id="{{item._id}}">
+                            <div class="weapon-name" data-action="openItem">
+                                <img src="{{item.img}}" width="24" height="24"/>
+                                <span>{{item.name}}</span>
+                            </div>
+                            <div class="weapon-prop">{{getWeaponProperty item.system.weaponType "label"}}</div>
+                            <div class="weapon-prop">{{getWeaponProperty item.system.weaponType "range"}}</div>
+                            <div class="weapon-prop">{{getWeaponProperty item.system.weaponType "attackStat"}}</div>
+                            <div class="weapon-prop">{{getWeaponDamage item.system.weaponType item.system.isTwoHanded item.system.inMelee}}</div>
+                            <div class="weapon-prop">{{getWeaponProperty item.system.weaponType "initiative"}}</div>
+                            <div class="weapon-controls">
+                                <button type="button" data-action="rollWeapon" data-weapon-id="{{item._id}}" class="weapon-roll" title="Roll Attack">
+                                    <i class="fas fa-dice-d6"></i>
+                                </button>
+                                <a data-action="deleteItem" class="item-control item-delete" title="Delete Item">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                        </div>
+                    {{/each}}
+                </div>
+                </div>
         </div>
 
         {{! Advancements Tab Content }}
