@@ -100,16 +100,26 @@
             }
           },
 
+          "race": {
+            "type": "String",
+            "default": ""
+          },
+
+          "archetype": {
+            "type": "String",
+            "default": ""
+          },
+
           "advquantity": {
             "type": "Number",
             "default": 10,
             "min": 0
           }
-    }
-  },
+        }
+      },
 
   "Item": {
-    "types": ["weapon", "armor", "shield"],
+    "types": ["weapon", "armor", "shield", "advancement", "treasure"],
     "templates": {
       "baseItem": {
         "description": {
@@ -131,6 +141,11 @@
         "default": false
       },
       "inMelee": {
+        "type": "Boolean",
+        "default": false
+      },
+
+      "equipped": {
         "type": "Boolean",
         "default": false
       }
@@ -155,8 +170,40 @@
         "type": "Boolean",
         "default": false
       }
+    },
+
+    "advancement": {
+      "templates": ["baseItem"],
+      "rollFormula": {
+        "type": "String",
+        "default": "1d20"
+      },
+      "usesAttribute": {
+        "type": "String",
+        "default": "none"
+      },
+      "advancementType": {
+        "type": "String",
+        "default": "ability"
+      },
+      "equipped": {
+        "type": "Boolean",
+        "default": true
+      }
+    },
+
+    "loot": {
+      "templates": ["baseItem"],
+      "value": {
+        "type": "Number",
+        "default": 0
+      },
+
+      "lootType": {
+        "type": "String",
+        "default": "misc"
+      }
     }
   }
 }
-
 }

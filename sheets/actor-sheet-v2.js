@@ -2,6 +2,7 @@
 
 import { WEAPON_TYPES } from "../module/helpers/weapons.js";
 import { ARMOR_TYPES, SHIELD_TYPES } from "../module/helpers/armor.js";
+import { ADVANCEMENT_TYPES, LOOT_TYPES } from "../module/helpers/new_items.js";
 
 export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.sheets.ActorSheetV2
@@ -23,6 +24,7 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     actions: {
       updateXP: BLBActorSheetV2.#onUpdateXP,
       rollWeapon: BLBActorSheetV2.#onRollWeapon,
+      rollAdvancement: BLBActorSheetV2.#onRollAdvancement,
       openItem: BLBActorSheetV2.#onOpenItem,
       deleteItem: BLBActorSheetV2.#onDeleteItem,
       toggleEquip: BLBActorSheetV2.#onToggleEquip,
@@ -68,10 +70,13 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
       WEAPON_TYPES,
       ARMOR_TYPES,
       SHIELD_TYPES,
-      
+      ADVANCEMENT_TYPES,
+      LOOT_TYPES,
+
       // Items
       items: this._prepareItems(doc.items),
-      
+      actions: this._prepareActions(doc.items),
+
       // Tab state
       activeTab: this.activeTab
     };
@@ -88,6 +93,82 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     
     // Ensure correct tab is active after render
     this._activateTab(this.activeTab);
+    
+    // Try to move tabs external - but don't break if it fails
+    setTimeout(() => {
+      this._tryMoveTabsExternal();
+    }, 300);
+  }
+
+  /**
+   * Attempt to move tabs outside window - fail safely
+   */
+  _tryMoveTabsExternal() {
+    try {
+      const tabs = this.element?.querySelector('.sheet-tabs');
+      if (!tabs) return;
+      
+      const windowApp = this.element.closest('.window-app');
+      if (!windowApp) return;
+      
+      const rect = windowApp.getBoundingClientRect();
+      
+      // Clone tabs instead of moving to avoid breaking functionality
+      const tabsClone = tabs.cloneNode(true);
+      document.body.appendChild(tabsClone);
+      
+      // Position the clone outside
+      tabsClone.style.position = 'fixed';
+      tabsClone.style.top = (rect.top + rect.height / 2 - 15) + 'px';
+      tabsClone.style.left = (rect.right + 10) + 'px';
+      tabsClone.style.zIndex = '10000';
+      
+      // Hide original tabs
+      tabs.style.display = 'none';
+      
+      // Make clone functional
+      const cloneButtons = tabsClone.querySelectorAll('.tab-button');
+      cloneButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+          e.preventDefault();
+          const tabName = button.dataset.tab;
+          this.activeTab = tabName;
+          this._activateTab(tabName);
+          
+          // Update both original and clone active states
+          this._updateTabStates(tabName);
+        });
+      });
+      
+      this._externalTabs = tabsClone;
+    } catch (error) {
+      console.log('External tabs not available, using internal tabs');
+    }
+  }
+
+  /**
+   * Update active states on both tab sets
+   */
+  _updateTabStates(activeTabName) {
+    // Update original tabs
+    const originalTabs = this.element?.querySelectorAll('.tab-button');
+    originalTabs?.forEach(tab => {
+      if (tab.dataset.tab === activeTabName) {
+        tab.classList.add('active');
+      } else {
+        tab.classList.remove('active');
+      }
+    });
+
+    // Update external tabs
+    const externalTabs = this._externalTabs?.querySelectorAll('.tab-button');
+    externalTabs?.forEach(tab => {
+      if (tab.dataset.tab === activeTabName) {
+        tab.classList.add('active');
+      } else {
+        tab.classList.remove('active');
+      }
+    });
   }
 
   /**
@@ -117,6 +198,19 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
         content.style.display = 'none';
       }
     });
+
+    // Update external tab states if they exist
+    this._updateTabStates(tabName);
+  }
+
+  /**
+   * Clean up external tabs
+   */
+  async close(options = {}) {
+    if (this._externalTabs) {
+      this._externalTabs.remove();
+    }
+    return super.close(options);
   }
 
   /**
@@ -126,7 +220,9 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     const organized = {
       weapon: [],
       armor: [],
-      shield: []
+      shield: [],
+      advancement: [],
+      loot: []
     };
     
     for (const item of items) {
@@ -150,6 +246,26 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     organized.shield.sort((a, b) => a.name.localeCompare(b.name));
     
     return organized;
+  }
+
+  // List equipped weapons and advancements for quick access
+    _prepareActions(items) {
+    const actions = {
+      weapons: [],
+      advancements: []
+    };
+    
+    // Get equipped weapons
+    actions.weapons = items.filter(item => 
+      item.type === "weapon" && item.system.equipped
+    );
+    
+    // Get equipped advancements (abilities)
+    actions.advancements = items.filter(item => 
+      item.type === "advancement" && item.system.equipped
+    );
+    
+    return actions;
   }
 
   /**
@@ -272,6 +388,28 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     });
   }
 
+  static async #onRollAdvancement(event, target) {
+    const advancementId = target.dataset.advancementId;
+    const advancement = this.document.items.get(advancementId);
+    
+    if (!advancement) return;
+    
+    let rollFormula = advancement.system.rollFormula || "1d20";
+    
+    // Add attribute modifier if specified
+    if (advancement.system.usesAttribute !== "none") {
+      const attrValue = this.document.system[advancement.system.usesAttribute + "Total"] || 
+                       this.document.system[advancement.system.usesAttribute]?.base || 0;
+      rollFormula += ` + ${attrValue}`;
+    }
+    
+    const roll = await new Roll(rollFormula).evaluate();
+    roll.toMessage({
+      speaker: ChatMessage.getSpeaker({ actor: this.document }),
+      flavor: `${advancement.name} Roll`
+    });
+  }
+
   /**
    * Handle item opening
    */
@@ -310,163 +448,6 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
   }
 
   /**
-   * Save current scroll positions
-   */
-  _saveCurrentScrollPositions() {
-    if (!this.element) return {};
-    
-    const positions = {};
-    
-    // Save main container scroll
-    const mainContainer = this.element.querySelector('.sheet-container');
-    if (mainContainer) {
-      positions.main = mainContainer.scrollTop;
-    }
-    
-    // Save individual list scroll positions
-    const armorList = this.element.querySelector('.armor-list');
-    if (armorList) {
-      positions.armorList = armorList.scrollTop;
-    }
-    
-    const weaponList = this.element.querySelector('.weapon-list');
-    if (weaponList) {
-      positions.weaponList = weaponList.scrollTop;
-    }
-    
-    const shieldList = this.element.querySelector('.shield-list');
-    if (shieldList) {
-      positions.shieldList = shieldList.scrollTop;
-    }
-    
-    return positions;
-  }
-
-  /**
-   * Restore scroll positions
-   */
-  _restoreScrollPositions(positions) {
-    if (!this.element || !positions) return;
-    
-    // Restore main container
-    const mainContainer = this.element.querySelector('.sheet-container');
-    if (mainContainer && positions.main > 0) {
-      mainContainer.scrollTop = positions.main;
-    }
-    
-    // Restore individual lists
-    const armorList = this.element.querySelector('.armor-list');
-    if (armorList && positions.armorList > 0) {
-      armorList.scrollTop = positions.armorList;
-    }
-    
-    const weaponList = this.element.querySelector('.weapon-list');
-    if (weaponList && positions.weaponList > 0) {
-      weaponList.scrollTop = positions.weaponList;
-    }
-    
-    const shieldList = this.element.querySelector('.shield-list');
-    if (shieldList && positions.shieldList > 0) {
-      shieldList.scrollTop = positions.shieldList;
-    }
-  }
-
-  /** @override */
-  async _onDrop(event) {
-    // Save scroll positions
-    const mainContainer = this.element.querySelector('.sheet-container');
-    const armorList = this.element.querySelector('.armor-list');
-    const weaponList = this.element.querySelector('.weapon-list');
-    const shieldList = this.element.querySelector('.shield-list');
-    
-    const scrollPositions = {
-      main: mainContainer ? mainContainer.scrollTop : 0,
-      armor: armorList ? armorList.scrollTop : 0,
-      weapon: weaponList ? weaponList.scrollTop : 0,
-      shield: shieldList ? shieldList.scrollTop : 0
-    };
-    
-    console.log("Saved scroll positions:", scrollPositions);
-    
-    // Set up observer to catch DOM changes and immediately restore scroll
-    const observer = new MutationObserver(() => {
-      const container = this.element?.querySelector('.sheet-container');
-      const newArmorList = this.element?.querySelector('.armor-list');
-      const newWeaponList = this.element?.querySelector('.weapon-list');
-      const newShieldList = this.element?.querySelector('.shield-list');
-      
-      if (container && scrollPositions.main > 0) {
-        container.scrollTop = scrollPositions.main;
-      }
-      if (newArmorList && scrollPositions.armor > 0) {
-        newArmorList.scrollTop = scrollPositions.armor;
-      }
-      if (newWeaponList && scrollPositions.weapon > 0) {
-        newWeaponList.scrollTop = scrollPositions.weapon;
-      }
-      if (newShieldList && scrollPositions.shield > 0) {
-        newShieldList.scrollTop = scrollPositions.shield;
-      }
-      
-      console.log("Observer restored scroll positions");
-    });
-    
-    // Start observing changes to the sheet element
-    observer.observe(this.element, {
-      childList: true,
-      subtree: true,
-      attributes: false
-    });
-    
-    try {
-      const result = await super._onDrop(event);
-      
-      // Stop observing after a delay
-      setTimeout(() => {
-        observer.disconnect();
-        console.log("Observer disconnected");
-      }, 200);
-      
-      return result;
-    } catch (error) {
-      observer.disconnect();
-      throw error;
-    }
-  }
-
-  async _renderItemList(type) {
-  // Re-prepare full items data for template use
-  const context = await this._prepareContext();
-  // Render the full actor sheet to HTML (or just the list portion)
-  // For better performance, render only the item list snippet (if available)
-  
-  // Here we can re-render the whole actor sheet, but ideally just the item list
-  const html = await foundry.applications.handlebars.renderTemplate(
-    "systems/best-left-buried/templates/actor-v2.hbs",
-    context
-  );
-  
-  // Extract the relevant item list container from the rendered html
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(html, "text/html");
-  const newList = doc.querySelector(`.${type}-list`);
-  if (!newList) return;
-
-  // Replace the existing item list container with the new one
-  const container = this.element.querySelector(`.${type}-list`);
-  if (container) container.replaceWith(newList);
-}
-
-  /**
-   * Handle tab switching via action system
-   */
-  static async #onSwitchTab(event, target) {
-    const tabName = target.dataset.tab;
-    this.activeTab = tabName;
-    this._activateTab(tabName);
-  }
-
-  /**
    * Handle equipment toggle - Bypass ApplicationV2 re-render entirely
    */
   static async #onToggleEquip(event, target) {
@@ -486,7 +467,7 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     console.log(`Toggling ${item.name} to ${isEquipped ? 'equipped' : 'unequipped'}`);
     
     try {
-      await item.update({ "system.equipped": isEquipped }, { render: false });
+      await item.update({ "system.equipped": isEquipped }, { render: true });
       console.log("Item updated successfully");
       
       // Handle mutual exclusion manually
@@ -565,4 +546,71 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
       target.checked = !isEquipped;
     }
   }
+
+  /**
+   * Handle tab switching via action system
+   */
+  static async #onSwitchTab(event, target) {
+    const tabName = target.dataset.tab;
+    this.activeTab = tabName;
+    this._activateTab(tabName);
+  }
+
+  /** @override */
+  async _onDrop(event) {
+    const scrollPositions = {
+      main: this.element.querySelector('.sheet-container')?.scrollTop || 0,
+      armor: this.element.querySelector('.armor-list')?.scrollTop || 0,
+      weapon: this.element.querySelector('.weapon-list')?.scrollTop || 0,
+      shield: this.element.querySelector('.shield-list')?.scrollTop || 0,
+      advancement: this.element.querySelector('.advancement-list')?.scrollTop || 0,
+      loot: this.element.querySelector('.loot-list')?.scrollTop || 0
+    };
+    
+    const observer = new MutationObserver(() => {
+      const container = this.element?.querySelector('.sheet-container');
+      if (container && scrollPositions.main > 0) {
+        container.scrollTop = scrollPositions.main;
+      }
+    });
+    
+    observer.observe(this.element, {
+      childList: true,
+      subtree: true,
+      attributes: false
+    });
+    
+    try {
+      const result = await super._onDrop(event);
+      setTimeout(() => observer.disconnect(), 200);
+      return result;
+    } catch (error) {
+      observer.disconnect();
+      throw error;
+    }
+  }
+
+  async _renderItemList(type) {
+  // Re-prepare full items data for template use
+  const context = await this._prepareContext();
+  // Render the full actor sheet to HTML (or just the list portion)
+  // For better performance, render only the item list snippet (if available)
+  
+  // Here we can re-render the whole actor sheet, but ideally just the item list
+  const html = await foundry.applications.handlebars.renderTemplate(
+    "systems/best-left-buried/templates/actor-v2.hbs",
+    context
+  );
+  
+  // Extract the relevant item list container from the rendered html
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, "text/html");
+  const newList = doc.querySelector(`.${type}-list`);
+  if (!newList) return;
+
+  // Replace the existing item list container with the new one
+  const container = this.element.querySelector(`.${type}-list`);
+  if (container) container.replaceWith(newList);
+}
+
 }

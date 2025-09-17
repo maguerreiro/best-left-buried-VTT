@@ -1,26 +1,19 @@
 // module/main.js - DEBUG VERSION
 
 import { BLBActorData } from "./actor.js";
-import { BLBWeaponData, BLBArmorData, BLBShieldData } from "./items.js";
+import { BLBWeaponData, BLBArmorData, BLBShieldData, BLBAdvancementData, BLBLootData } from "./items.js";
 import { WEAPON_TYPES } from "./helpers/weapons.js";
 import { ARMOR_TYPES, SHIELD_TYPES } from "./helpers/armor.js";
+import { ADVANCEMENT_TYPES, LOOT_TYPES } from "./helpers/new_items.js";
+
 
 class BLBActor extends Actor {}
 
 Hooks.once("init", () => {
   console.log("=== BEST LEFT BURIED DEBUG START ===");
   
-  // Check if data models loaded correctly
-  console.log("Data models loaded:", {
-    BLBActorData: !!BLBActorData,
-    BLBWeaponData: !!BLBWeaponData, 
-    BLBArmorData: !!BLBArmorData,
-    BLBShieldData: !!BLBShieldData
-  });
-
   // Register document class
   CONFIG.Actor.documentClass = BLBActor;
-  console.log("Actor document class registered");
 
   // Initialize and register data models
   CONFIG.Actor.dataModels = CONFIG.Actor.dataModels || {};
@@ -30,36 +23,9 @@ Hooks.once("init", () => {
   CONFIG.Item.dataModels.weapon = BLBWeaponData;
   CONFIG.Item.dataModels.armor = BLBArmorData;
   CONFIG.Item.dataModels.shield = BLBShieldData;
+  CONFIG.Item.dataModels.advancement = BLBAdvancementData;
+  CONFIG.Item.dataModels.loot = BLBLootData;
 
-  console.log("Data models after registration:", {
-    Actor: Object.keys(CONFIG.Actor.dataModels),
-    Item: Object.keys(CONFIG.Item.dataModels)
-  });
-
-  // Test data model instantiation
-  try {
-    console.log("Testing weapon data model...");
-    const testWeapon = new BLBWeaponData({});
-    console.log("Weapon model test passed:", testWeapon);
-  } catch (error) {
-    console.error("Weapon model test failed:", error);
-  }
-
-  try {
-    console.log("Testing armor data model...");
-    const testArmor = new BLBArmorData({});
-    console.log("Armor model test passed:", testArmor);
-  } catch (error) {
-    console.error("Armor model test failed:", error);
-  }
-
-  try {
-    console.log("Testing shield data model...");
-    const testShield = new BLBShieldData({});
-    console.log("Shield model test passed:", testShield);
-  } catch (error) {
-    console.error("Shield model test failed:", error);
-  }
 
   // Register Handlebars helpers
   Handlebars.registerHelper('select', function(selected, options) {
@@ -113,6 +79,16 @@ Hooks.once("init", () => {
     return shieldData ? shieldData.label : shieldType;
   });
 
+  Handlebars.registerHelper('getAdvancementType', function(advancementType) {
+    const advData = ADVANCEMENT_TYPES[advancementType];
+    return advData ? advData.label : advancementType;
+  });
+
+  Handlebars.registerHelper('getLootType', function(lootType) {
+    const lootData = LOOT_TYPES[lootType];
+    return lootData ? lootData.label : lootType;
+  });
+
   Handlebars.registerHelper('eq', function(a, b) {
     return a === b;
   });
@@ -121,20 +97,8 @@ Hooks.once("init", () => {
     return a || b;
   });
 
-  console.log("Handlebars helpers registered");
-  console.log("=== BEST LEFT BURIED DEBUG COMPLETE ===");
 });
 
-// Hook to debug item creation
-Hooks.on("preCreateItem", (document, data, options, userId) => {
-  console.log("=== ITEM CREATION DEBUG ===");
-  console.log("Document:", document);
-  console.log("Data:", data);
-  console.log("Document type:", data.type);
-  console.log("Available data models:", Object.keys(CONFIG.Item.dataModels || {}));
-  console.log("Model for this type:", CONFIG.Item.dataModels?.[data.type]);
-  console.log("=== END ITEM CREATION DEBUG ===");
-});
 
 Hooks.once("ready", async () => {
   console.log("=== REGISTERING SHEETS ===");
@@ -150,7 +114,7 @@ Hooks.once("ready", async () => {
     });
     
     foundry.applications.apps.DocumentSheetConfig.registerSheet(Item, "best-left-buried", BLBItemSheetV2, {
-      types: ["weapon", "armor", "shield"],
+      types: ["weapon", "armor", "shield", "advancement", "loot"], // Add new types here
       makeDefault: true,
       label: "Best Left Buried Item Sheet V2"
     });

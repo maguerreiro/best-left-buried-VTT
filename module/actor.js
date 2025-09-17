@@ -7,12 +7,22 @@ export class BLBActorData extends foundry.abstract.TypeDataModel {
     
     // Define the schema for the 'system' object on the character.
     return {
+
+      // Character portrait
+      portrait: new fields.StringField({
+        required: false,
+        initial: ""
+      }),
+      
+
+      // Basic attack dice
       attack: new fields.StringField({
         required: true,
         initial: "1d6",
       }),
 
 
+      // Main stats
       brawn: new fields.SchemaField({
         base: new fields.NumberField({
           required: true,
@@ -89,7 +99,8 @@ export class BLBActorData extends foundry.abstract.TypeDataModel {
         }),
       }),
 
-
+      
+      // Sub-stats with different styling
       vigour: new fields.SchemaField({
         current: new fields.NumberField({
           required: true,
@@ -134,10 +145,22 @@ export class BLBActorData extends foundry.abstract.TypeDataModel {
       }),
 
 
+      // Character progression
       xp: new fields.NumberField({
         required: true,
         initial: 0,
         min: 0
+      }),
+
+            // Race and archetype
+      race: new fields.StringField({
+        required: false,
+        initial: ""
+      }),
+
+      archetype: new fields.StringField({
+        required: false,
+        initial: ""
       }),
 
       advquantity: new fields.SchemaField({

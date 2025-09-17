@@ -2,6 +2,7 @@
 
 import { WEAPON_TYPES } from "../module/helpers/weapons.js";
 import { ARMOR_TYPES, SHIELD_TYPES } from "../module/helpers/armor.js";
+import { ADVANCEMENT_TYPES, LOOT_TYPES } from "../module/helpers/new_items.js";
 
 export class BLBItemSheetV2 extends foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.sheets.ItemSheetV2
@@ -10,7 +11,7 @@ export class BLBItemSheetV2 extends foundry.applications.api.HandlebarsApplicati
   /** @override */
   static DEFAULT_OPTIONS = {
     classes: ["best-left-buried", "sheet", "item"],
-    position: { width: 500, height: 400 },
+    position: { width: 520, height: 480 },
     window: { 
       title: "Best Left Buried Item",
       resizable: true,
@@ -23,6 +24,8 @@ export class BLBItemSheetV2 extends foundry.applications.api.HandlebarsApplicati
     actions: {
       updateWeaponType: BLBItemSheetV2.#onUpdateWeaponType,
       updateArmorType: BLBItemSheetV2.#onUpdateArmorType,
+      updateAdvancementType: BLBItemSheetV2.#onUpdateAdvancementType,
+      updateLootType: BLBItemSheetV2.#onUpdateLootType,
       toggleEquipped: BLBItemSheetV2.#onToggleEquipped,
       toggleTwoHanded: BLBItemSheetV2.#onToggleTwoHanded,
       toggleInMelee: BLBItemSheetV2.#onToggleInMelee
@@ -51,7 +54,9 @@ export class BLBItemSheetV2 extends foundry.applications.api.HandlebarsApplicati
       system: doc.system,
       WEAPON_TYPES,
       ARMOR_TYPES,
-      SHIELD_TYPES
+      SHIELD_TYPES,
+      ADVANCEMENT_TYPES,
+      LOOT_TYPES
     };
   }
 
@@ -88,6 +93,20 @@ export class BLBItemSheetV2 extends foundry.applications.api.HandlebarsApplicati
     const newArmorType = target.value;
     await this.document.update({
       "system.armorType": newArmorType
+    });
+  }
+
+  static async #onUpdateAdvancementType(event, target) {
+    const newAdvancementType = target.value;
+    await this.document.update({
+      "system.advancementType": newAdvancementType
+    });
+  }
+
+  static async #onUpdateLootType(event, target) {
+    const newLootType = target.value;
+    await this.document.update({
+      "system.lootType": newLootType
     });
   }
 

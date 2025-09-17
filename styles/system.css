@@ -1,22 +1,63 @@
 /* ========================================
-   BEST LEFT BURIED FOUNDRY VTT SYSTEM CSS
+   BEST LEFT BURIED FOUNDRY VTT SYSTEM CSS - PDF STYLE
    ======================================== */
 
-
-   /* ========================================
-   SCROLLING FIXES FOR APPLICATIONV2
+/* ========================================
+   FONTS AND TYPOGRAPHY
    ======================================== */
 
-/* Main application window scrolling */
-.best-left-buried.application {
-    overflow: hidden;
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&display=swap');
+
+.best-left-buried {
+    font-family: 'Cinzel', serif;
+}
+
+.best-left-buried .stat-name,
+.best-left-buried h1, .best-left-buried h2, .best-left-buried h3 {
+    font-family: 'Cinzel', serif;
+}
+
+/* Use Cinzel instead of Blackletter if Blackletter is not available */
+@font-face {
+    font-family: "Blackletter";
+    src: local('Cinzel'), local('Cinzel-Regular');
+}
+
+/* ========================================
+   APPLICATION LAYOUT - PDF STYLE WITH RIGHT TABS
+   ======================================== */
+
+form.best-left-buried.sheet.actor {
     display: flex;
     flex-direction: column;
 }
 
-/* Sheet container should be scrollable */
+.best-left-buried.application {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background: #f5f5f5;
+}
+
+.best-left-buried .sheet-layout {
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
+
+.best-left-buried .sheet-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    border: 3px solid #2c2c2c;
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    margin: 10px;
+    position: relative; /* Important for tab positioning */
+}
+
 .best-left-buried .sheet-container {
-    padding: 10px;
+    padding: 15px;
     overflow-y: auto;
     overflow-x: hidden;
     flex: 1;
@@ -24,25 +65,221 @@
     box-sizing: border-box;
 }
 
+/* ========================================
+   INTERNAL TAB SYSTEM - GUARANTEED VISIBLE
+   ======================================== */
 
-.best-left-buried form.sheet-container {
+/* Normal application behavior */
+.best-left-buried.application {
+    overflow: hidden;
+}
+
+.best-left-buried .sheet-layout {
+    position: relative;
+}
+
+/* Position tabs inside the window content area */
+.best-left-buried .sheet-tabs {
+    position: absolute;
+    top: 50%;
+    right: -100px; /* Well inside the window boundary */
+    transform: translateY(-50%) rotate(90deg);
+    transform-origin: center center;
+    width: 140px;
+    height: 25px;
+    z-index: 1000;
+}
+
+.best-left-buried .sheet-tabs .tabs {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    gap: 2px;
+}
+
+/* Clean, professional tab styling */
+.best-left-buried .sheet-tabs .tab-button {
+    height: 22px;
+    padding: 1px 4px;
+    line-height: 20px;
+    background: #ffffff;
+    border: 1px solid #2c2c2c;
+    border-radius: 3px;
+    font-size: 8px;
+    color: #2c2c2c;
+    text-decoration: none;
+    cursor: pointer;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+    min-width: 35px;
+    flex: 1;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Active tab */
+.best-left-buried .sheet-tabs .tab-button.active {
+    background: #2c2c2c;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Hover effect */
+.best-left-buried .sheet-tabs .tab-button:hover:not(.active) {
+    background: #f5f5f5;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.15);
+}
+
+/* Simple abbreviated text */
+.best-left-buried .sheet-tabs .tab-button[data-tab="stats"] span::after {
+    content: "Stats";
+}
+
+.best-left-buried .sheet-tabs .tab-button[data-tab="equipment"] span::after {
+    content: "Items";  
+}
+
+.best-left-buried .sheet-tabs .tab-button[data-tab="advancements"] span::after {
+    content: "Adv";
+}
+
+/* Hide original span content and show ::after content */
+.best-left-buried .sheet-tabs .tab-button span {
+    font-size: 0;
+}
+
+.best-left-buried .sheet-tabs .tab-button span::after {
+    font-size: 7px;
+    font-weight: inherit;
+    color: inherit;
+}
+
+/* Ensure proper scrolling for sheet content */
+.best-left-buried .sheet-container {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.best-left-buried .sheet-body {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* ========================================
+   CHARACTER HEADER WITH PORTRAIT
+   ======================================== */
+
+.best-left-buried .character-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 15px;
+    border-bottom: 3px solid #2c2c2c;
+    background: #fafafa;
+    margin: -15px -15px 20px -15px;
+}
+
+.best-left-buried .portrait-section {
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+    flex: 1;
+}
+
+.best-left-buried .character-portrait {
+    width: 120px;
+    height: 150px;
+    object-fit: cover;
+    border: 3px solid #2c2c2c;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    cursor: pointer;
+}
+
+.best-left-buried .character-info {
     display: flex;
     flex-direction: column;
-    min-height: 100%;
-}
-
-/* Sheet body should allow scrolling */
-.best-left-buried .sheet-body {
+    gap: 8px;
     flex: 1;
-    overflow: visible;
-    padding-right: 5px; /* Space for scrollbar */
-    height: auto;
 }
 
-/* Tab content should be scrollable */
+.best-left-buried .character-name {
+    font-size: 1.8em;
+    font-weight: bold;
+    font-family: "Blackletter", serif;
+    border: 2px solid #2c2c2c;
+    padding: 8px;
+    background: white;
+}
+
+.best-left-buried .race-input,
+.best-left-buried .archetype-input {
+    font-size: 1.2em;
+    border: 2px solid #2c2c2c;
+    padding: 6px;
+    background: white;
+}
+
+.best-left-buried .xp-tracker {
+    width: 120px;
+    height: 90px;
+    padding: 10px;
+    border: 3px solid #2c2c2c;
+    background: white;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+.best-left-buried .xp-tracker h3 {
+    text-align: center;
+    margin-bottom: 10px;
+    font-family: "Blackletter", serif;
+    font-size: 1.3em;
+    color: #2c2c2c;
+}
+
+.best-left-buried .xp-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.best-left-buried .xp-button {
+    width: 24px !important;
+    height: 24px !important;
+    border: 2px solid #2c2c2c !important;
+    background: white !important;
+    color: #2c2c2c;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.best-left-buried .xp-button:hover {
+    background: #f0f0f0 !important;
+}
+
+.best-left-buried .xp-value {
+    width: 40px;
+    text-align: center;
+    border: 2px solid #2c2c2c;
+    padding: 2px;
+    font-weight: bold;
+}
+
+/* ========================================
+   TAB CONTENT
+   ======================================== */
+
 .best-left-buried .tab {
-    overflow: visible;
-    padding-right: 5px; /* Space for scrollbar */
     display: none;
 }
 
@@ -50,699 +287,281 @@
     display: block;
 }
 
-.best-left-buried .sheet-header-section {
-  flex-shrink: 0;
-  border-bottom: 1px solid #ccc;
-}
-
-.best-left-buried .sheet-header {
-  position: relative; 
-  padding: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-
-/* Tab navigation should stay fixed */
-.best-left-buried .tabs {
-    position: relative; 
-    display: flex;
-    top: 0;
-    z-index: 9;
-    margin-bottom: 10px;
-}
-
-/* Custom scrollbar styling */
-.best-left-buried .sheet-container::-webkit-scrollbar,
-.best-left-buried .sheet-body::-webkit-scrollbar,
-.best-left-buried .tab::-webkit-scrollbar {
-    width: 8px;
-}
-
-.best-left-buried .sheet-container::-webkit-scrollbar-track,
-.best-left-buried .sheet-body::-webkit-scrollbar-track,
-.best-left-buried .tab::-webkit-scrollbar-track {
-    border-radius: 4px;
-}
-
-.best-left-buried .sheet-container::-webkit-scrollbar-thumb,
-.best-left-buried .sheet-body::-webkit-scrollbar-thumb,
-.best-left-buried .tab::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 4px;
-}
-
-.best-left-buried .sheet-container::-webkit-scrollbar-thumb:hover,
-.best-left-buried .sheet-body::-webkit-scrollbar-thumb:hover,
-.best-left-buried .tab::-webkit-scrollbar-thumb:hover {
-    background: #555;
-}
-
-/* Scrollbar styling */
-.best-left-buried .sheet-container,
-.best-left-buried .sheet-body,
-.best-left-buried .tab {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(122, 9, 9, 0.384);
-}
-
-/* Ensure content sections can scroll properly */
-.best-left-buried .weapons-section,
-.best-left-buried .equipment-grid,
-.best-left-buried .advancement-grid {
-    overflow: visible;
-}
-
-/* Make weapon and equipment lists scrollable if they get too long */
-.best-left-buried .weapon-list,
-.best-left-buried .armor-list,
-.best-left-buried .shield-list {
-    max-height: 400px;
-    overflow: visible;
-    overflow-y: auto;
-    overflow-x: hidden;
-    border: 1px solid #ddd;
-}
-
-.best-left-buried .weapon-list::-webkit-scrollbar,
-.best-left-buried .armor-list::-webkit-scrollbar,
-.best-left-buried .shield-list::-webkit-scrollbar {
-    width: 6px;
-}
-
-.best-left-buried .weapon-list::-webkit-scrollbar-thumb,
-.best-left-buried .armor-list::-webkit-scrollbar-thumb,
-.best-left-buried .shield-list::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 3px;
-}
-
-/* Item sheet scrolling */
-.best-left-buried.sheet.item .sheet-container {
-    overflow-y: auto;
-    overflow-x: hidden;
-    max-height: calc(100vh - 100px);
-}
-
-
-/* Ensure equipment sections don't overflow */
-.best-left-buried .equipment-section,
-.best-left-buried .treasure-section,
-.best-left-buried .advancement-section,
-.best-left-buried .consequence-section {
-    overflow: visible;
-    min-height: 200px;
-}
-
-/* Make stats grid responsive and scrollable */
-.best-left-buried .stats-grid {
-    overflow: visible;
-}
-
-/* Prevent horizontal scrolling on small elements */
-.best-left-buried input,
-.best-left-buried select,
-.best-left-buried textarea {
-    max-width: 100%;
-    box-sizing: border-box;
-}
-
-/* Optional: Add smooth scrolling behavior */
-.best-left-buried .sheet-container,
-.best-left-buried .weapon-list,
-.best-left-buried .armor-list,
-.best-left-buried .shield-list {
-    scroll-behavior: smooth; /* Use 'smooth' if you want animated scrolling, 'auto' for instant */
-}
-
-
 /* ========================================
-   1. CHARACTER SHEET HEADER & LAYOUT
+   STATS SECTION - MAIN AND SUB STATS
    ======================================== */
 
-/* Main sheet header with title and XP tracker */
-/* Main header grid for two columns */
-.best-left-buried .sheet-header,
-.sheet-header {
-    display: grid;
-    /* First column for the title, second column takes the remaining space */
-    grid-template-columns: auto 1fr;
-    gap: 10px;
-    margin-bottom: 10px;
-    align-items: center;
-    border-bottom: none !important;
-}
-
-.sheet-header h1,
-.best-left-buried .sheet-header h1 {
-    font-size: 5em;
-    margin: 0;
-    color: #333;
-    border-bottom: none !important;
-}
-
-/* Container for the name/archetype and XP tracker */
-.header-right {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    /* This pushes the entire container to the right */
-    justify-content: flex-end;
-}
-
-/* Stack the name and archetype inputs vertically */
-.character-info {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-/* XP Tracker - styled box on right side of header */
-.best-left-buried .xp-tracker,
-.xp-tracker {
-    width: 120px;
-    height: 85px;
-    padding: 10px;
-    border: 2px solid black;
-    background: white;
-    position: relative;
-}
-
-.best-left-buried .xp-tracker h3,
-.xp-tracker h3 {
-    text-align: center;
-    margin-bottom: 10px;
+.best-left-buried .stats-section h2 {
     font-family: "Blackletter", serif;
-    font-size: 1.2em;
-    
-}
-
-/* XP controls - buttons and input field */
-.best-left-buried .xp-controls,
-.xp-controls {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
-
-.best-left-buried .xp-controls .xp-button,
-.xp-controls .xp-button {
-    width: 20px !important;
-    height: 20px !important;
-    min-width: 20px !important;
-    min-height: 20px !important;
-    max-width: 20px !important;
-    max-height: 20px !important;
-    flex: 0 0 20px !important;
-    border: 1px solid black !important;
-    background: white !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    display: grid !important;
-    place-items: center !important;
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: bold;
-    font-family: Arial, sans-serif;
-    box-sizing: border-box !important;
-}
-
-.best-left-buried .xp-controls .xp-button:active,
-.xp-controls .xp-button:active {
-    background: #ddd !important;
-    transform: translateY(1px);
-}
-
-.best-left-buried .xp-controls input[type="number"],
-.xp-controls input[type="number"] {
-    width: 30px;
-    text-align: center;
-    border: 1px solid black;
-    padding: 2px;
-}
-
-/* ========================================
-   2. TAB NAVIGATION SYSTEM
-   ======================================== */
-
-/* Tab navigation bar - NO BOTTOM BORDER */
-.best-left-buried .tabs,
-.tabs {
-    display: flex;
-    border-bottom: none !important;
-    margin-bottom: 0px; /* Remove margin to connect with content */
-}
-
-/* Individual tab buttons */
-.best-left-buried .tabs .item,
-.tabs .item {
-    padding: 10px 10px;
-    cursor: pointer;
-    text-decoration: none;
-    color: black;
-    border: 2px solid black;
-    border-bottom: none; /* Remove bottom border from individual tabs */
-    margin-right: 5px;
-    background: white;
-    text-shadow: none !important;
-}
-
-.best-left-buried .tabs .item:hover,
-.tabs .item:hover {
-    background-color: #e9e9e9;
-    color: #333;
-}
-
-.best-left-buried .tabs .item.active,
-.tabs .item.active {
-    background: #e0e0e0;
-    position: relative;
-    bottom: -2px;
-    color: #333;
-    font-weight: bold;
-}
-
-/* Tab content areas */
-.best-left-buried .tab,
-.tab {
-    display: none;
-    min-height: 200px;
-    position: relative;
-    border-top: 2px solid black; /* Single line across all content */
-    padding-top: 15px;
-    margin-top: 0px; /* No gap between tabs and content */
-}
-
-.best-left-buried .tabs,
-.tabs {
-    display: flex;
-    border: none !important;
-    border-bottom: none !important;
-    border-top: none !important;
-    margin-bottom: 0px;
-    background: transparent !important;
-}
-
-.best-left-buried .tab.active,
-.tab.active {
-    display: block;
-}
-
-
-
-/* ========================================
-   3. CHARACTER STATS GRID
-   ======================================== */
-
-/* Section title styling */ 
-.best-left-buried .sheet-body h2 {
-    border-bottom: 2px solid rgba(122, 9, 9, 0.384);
+    font-size: 2.2em;
+    color: #2c2c2c;
+    border-bottom: 3px solid #2c2c2c;
     padding-bottom: 5px;
+    margin-bottom: 20px;
 }
 
-/* Main stats grid - 4 columns for character attributes */
-.best-left-buried .stats-grid,
-.stats-grid {
+.best-left-buried .main-stats-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 15px;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
-/* Individual stat boxes with decorative corners */
-.best-left-buried .stat-box,
-.stat-box {
-    border: 2px solid black;
-    padding: 10px;
+.best-left-buried .sub-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.best-left-buried .stat-box {
+    border: 3px solid #2c2c2c;
+    padding: 15px;
     text-align: center;
     position: relative;
     background: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-/* Decorative corner elements for stat boxes */
-.best-left-buried .stat-box::before,
-.best-left-buried .stat-box::after,
-.stat-box::before,
-.stat-box::after {
+.best-left-buried .stat-box.main-stat {
+    min-height: 120px;
+}
+
+.best-left-buried .stat-box.sub-stat {
+    min-height: 100px;
+    background: #f8f8f8;
+    border-style: dashed;
+}
+
+/* Decorative corners for main stats */
+.best-left-buried .stat-box.main-stat::before,
+.best-left-buried .stat-box.main-stat::after {
     content: '';
     position: absolute;
     width: 20px;
     height: 20px;
-    border: 2px solid black;
+    border: 3px solid #2c2c2c;
 }
 
-.best-left-buried .stat-box::before,
-.stat-box::before {
-    top: -5px;
-    right: -5px;
+.best-left-buried .stat-box.main-stat::before {
+    top: -8px;
+    right: -8px;
     border-left: none;
     border-bottom: none;
+    background: white;
 }
 
-.best-left-buried .stat-box::after,
-.stat-box::after {
-    bottom: -5px;
-    left: -5px;
+.best-left-buried .stat-box.main-stat::after {
+    bottom: -8px;
+    left: -8px;
     border-right: none;
     border-top: none;
+    background: white;
 }
 
-/* Stat names with special font */
-.best-left-buried .stat-name,
-.stat-name {
+.best-left-buried .stat-name {
     font-family: "Blackletter", serif;
-    font-size: 1.8em;
-    margin-bottom: 15px;
+    font-size: 1.6em;
+    margin-bottom: 12px;
     text-transform: uppercase;
+    color: #2c2c2c;
 }
 
-/* Math breakdown display (base + bonus = total) */
-.best-left-buried .ability-breakdown,
-.ability-breakdown {
+.best-left-buried .stat-box.sub-stat .stat-name {
+    font-size: 1.3em;
+    color: #555;
+}
+
+.best-left-buried .ability-breakdown {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.25rem;
+    gap: 0.4rem;
 }
 
-.best-left-buried .ability-breakdown .plus, 
-.best-left-buried .ability-breakdown .equals,
-.ability-breakdown .plus, 
-.ability-breakdown .equals {
-    font-weight: bold;
-    color: #666;
-    font-size: 1.2em;
-}
-
-/* Final calculated scores */
-.best-left-buried .total-score,
-.total-score {
-    text-align: center;
-    align-items: center;
-    font-weight: bold;
-    color: #333;
-    font-size: 1.5em;
-}
-
-/* Rules and flavor text */
-.best-left-buried .optional-rule,
-.optional-rule {
-    font-style: italic;
-    color: #8b7355;
-    font-size: 0.75em;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-top: 6px;
-    text-shadow: 0 1px 1px rgba(255,255,255,0.8);
-}
-
-/* Armor calculation display */
-.best-left-buried .armor-base,
-.best-left-buried .armor-bonus,
-.armor-base,
-.armor-bonus {
-    color: #333;
-    font-weight: bold;
-}
-
-
-/* ========================================
-   SMALLER ABILITY INPUT BOXES
-   ======================================== */
-
-/* Target all input fields in stat boxes */
-.best-left-buried .stat-box input[type="number"],
-.stat-box input[type="number"] {
+.best-left-buried .stat-box input[type="number"] {
     width: 50px !important;
-    max-width: 50px !important;
-    min-width: 40px !important;
     text-align: center;
-    padding: 4px 2px !important;
+    padding: 6px 4px !important;
     font-size: 1.1em;
     font-weight: bold;
-    border: 1px solid #333;
-    background: #e2e2e2;
+    border: 2px solid #2c2c2c;
+    background: white;
     box-sizing: border-box;
 }
 
-/* Even smaller for bonus fields if needed */
-.best-left-buried .stat-box .ability-breakdown input[type="number"]:not(:first-child),
-.stat-box .ability-breakdown input[type="number"]:not(:first-child) {
-    width: 40px !important;
-    max-width: 40px !important;
-    min-width: 35px !important;
-    font-size: 1em;
-}
-
-/* XP input field - also make it smaller for consistency */
-.best-left-buried .xp-controls input[type="number"],
-.xp-controls input[type="number"] {
-    width: 35px !important;
-    max-width: 35px !important;
-    text-align: center;
-    border: 1px solid black;
-    padding: 2px !important;
-    font-size: 0.9em;
-    font-weight: bold;
-}
-
-/* Vigour current/max inputs - smaller since they're side by side */
-.best-left-buried .stat-box input[name*="vigour"],
-.stat-box input[name*="vigour"] {
+.best-left-buried .stat-box.sub-stat input[type="number"] {
     width: 45px !important;
-    max-width: 45px !important;
+    background: #f5f5f5;
 }
 
-/* Make sure the ability breakdown still looks good with smaller inputs */
-.best-left-buried .ability-breakdown,
-.ability-breakdown {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.4rem; /* Slightly larger gap to compensate for smaller inputs */
-}
-
-/* Style the math symbols to be proportional */
-.best-left-buried .ability-breakdown .plus, 
+.best-left-buried .ability-breakdown .plus,
 .best-left-buried .ability-breakdown .equals,
-.best-left-buried .ability-breakdown .slash,
-.ability-breakdown .plus, 
-.ability-breakdown .equals,
-.ability-breakdown .slash {
+.best-left-buried .ability-breakdown .slash {
     font-weight: bold;
-    color: #666;
+    color: #2c2c2c;
     font-size: 1.3em;
     min-width: 15px;
     text-align: center;
 }
 
-/* Responsive adjustments for very small screens */
-@media (max-width: 600px) {
-    .best-left-buried .stat-box input[type="number"],
-    .stat-box input[type="number"] {
-        width: 40px !important;
-        max-width: 40px !important;
-        font-size: 1em;
-    }
-    
-    .best-left-buried .stat-box .ability-breakdown input[type="number"]:not(:first-child),
-    .stat-box .ability-breakdown input[type="number"]:not(:first-child) {
-        width: 35px !important;
-        max-width: 35px !important;
-    }
-}
-
-
-/* ========================================
-   4. WEAPONS SECTION
-   ======================================== */
-
-/* Container for weapons list */
-.best-left-buried .weapons-section,
-.weapons-section {
-    margin-top: 20px;
-}
-
-/* Header row for weapon table */
-.best-left-buried .weapon-headers,
-.weapon-headers {
-    background: #e0e0e0;
-    border-bottom: 2px solid black;
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr 0.5fr 0.5fr 80px;
-    padding: 8px 5px;
+.best-left-buried .total-score {
     font-weight: bold;
-    text-align: center;
-    gap: 5px;
+    color: #2c2c2c;
+    font-size: 1.4em;
+    min-width: 30px;
 }
 
-/* Individual weapon rows */
-.best-left-buried .weapon-row,
-.weapon-row {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr 0.5fr 0.5fr 80px;
-    padding: 8px 5px;
-    align-items: center;
-    border-bottom: 1px solid #eee;
-    gap: 5px;
-}
-
-.best-left-buried .weapon-row:hover,
-.weapon-row:hover {
-    background-color: rgba(245, 245, 245, 0.6);
-}
-
-/* Weapon name and icon */
-.best-left-buried .weapon-name,
-.weapon-name {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    text-align: left;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.best-left-buried .weapon-name img,
-.weapon-name img {
-    flex: 0 0 24px;
-}
-
-.best-left-buried .weapon-name:hover,
-.weapon-name:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-    text-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
-}
-
-.best-left-buried .weapon-name:hover span,
-.weapon-name:hover span {
-    text-decoration: underline;
-}
-
-/* Weapon property cells */
-.best-left-buried .weapon-prop,
-.weapon-prop {
-    text-align: center;
-    padding: 0 5px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    align-items: center;
-}
-
-/* Weapon control buttons (roll, delete) */
-.best-left-buried .weapon-controls,
-.weapon-controls {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    align-items: center;
-}
-
-/* Roll attack button */
-.best-left-buried .weapon-roll,
-.weapon-roll {
-    background: none !important;
-    border: none !important;
+.best-left-buried .optional-rule {
+    font-style: italic;
     color: #666;
-    cursor: pointer;
-    padding: 0 !important;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex: 0 0 24px;
+    font-size: 0.75em;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 8px;
 }
 
-.best-left-buried .weapon-roll:hover,
-.weapon-roll:hover {
-    color: #000;
-    text-shadow: 0 0 8px red;
-    background: none !important;
-    border: none !important;
-}
-
-.best-left-buried .weapon-roll i,
-.weapon-roll i {
-    font-size: 16px;
-    line-height: 1;
+.best-left-buried .armor-base,
+.best-left-buried .armor-bonus {
+    color: #2c2c2c;
+    font-weight: bold;
+    font-size: 1.1em;
 }
 
 /* ========================================
-   5. EQUIPMENT TAB
+   ACTIONS SECTION
    ======================================== */
 
-/* Equipment tab grid layout */
-.best-left-buried .equipment-grid,
-.equipment-grid {
+.best-left-buried .actions-section h2 {
+    font-family: "Blackletter", serif;
+    font-size: 2.2em;
+    color: #2c2c2c;
+    border-bottom: 3px solid #2c2c2c;
+    padding-bottom: 5px;
+    margin-bottom: 20px;
+}
+
+.best-left-buried .action-category {
+    margin-bottom: 25px;
+}
+
+.best-left-buried .action-category h3 {
+    font-family: "Blackletter", serif;
+    font-size: 1.5em;
+    color: #2c2c2c;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 3px;
+}
+
+.best-left-buried .actions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.best-left-buried .action-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border: 2px solid #2c2c2c;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.best-left-buried .action-item:hover {
+    background: #f8f8f8;
+}
+
+.best-left-buried .action-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+}
+
+.best-left-buried .action-icon {
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+    border: 1px solid #ccc;
+}
+
+.best-left-buried .action-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.best-left-buried .action-name {
+    font-weight: bold;
+    color: #2c2c2c;
+    font-size: 1.1em;
+}
+
+.best-left-buried .action-stats {
+    font-size: 0.9em;
+    color: #666;
+    font-style: italic;
+}
+
+.best-left-buried .action-roll {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #2c2c2c !important;
+    background: white !important;
+    color: #2c2c2c;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2em;
+}
+
+.best-left-buried .action-roll:hover {
+    background: #f0f0f0 !important;
+    transform: scale(1.05);
+}
+
+/* ========================================
+   EQUIPMENT SECTION
+   ======================================== */
+
+.best-left-buried .equipment-grid {
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 20px;
     height: 100%;
 }
 
-/* Equipment and treasure sections with decorative borders */
+.best-left-buried .equipment-column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
 .best-left-buried .equipment-section,
-.best-left-buried .treasure-section,
-.equipment-section,
-.treasure-section {
+.best-left-buried .loot-section {
     padding: 15px;
-    border: 2px solid black;
+    border: 3px solid #2c2c2c;
     background: white;
-    position: relative;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-/* Decorative corners for equipment sections */
-.best-left-buried .equipment-section::before,
-.best-left-buried .equipment-section::after,
-.best-left-buried .treasure-section::before,
-.best-left-buried .treasure-section::after,
-.equipment-section::before,
-.equipment-section::after,
-.treasure-section::before,
-.treasure-section::after {
-    content: '';
-    position: absolute;
-    width: 15px;
-    height: 15px;
-    border: 2px solid black;
+.best-left-buried .equipment-section h3,
+.best-left-buried .loot-section h3 {
+    font-family: "Blackletter", serif;
+    font-size: 1.5em;
+    color: #2c2c2c;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #2c2c2c;
+    padding-bottom: 5px;
 }
 
-.best-left-buried .equipment-section::before,
-.best-left-buried .treasure-section::before,
-.equipment-section::before,
-.treasure-section::before {
-    top: -5px;
-    right: -5px;
-    border-left: none;
-    border-bottom: none;
-}
-
-.best-left-buried .equipment-section::after,
-.best-left-buried .treasure-section::after,
-.equipment-section::after,
-.treasure-section::after {
-    bottom: -5px;
-    left: -5px;
-    border-right: none;
-    border-top: none;
-}
-
-/* Armor and shield list containers */
-.best-left-buried .armor-list,
-.best-left-buried .shield-list,
-.armor-list,
-.shield-list {
-    margin-bottom: 20px;
-}
-
-/* Equipment row layout */
 .best-left-buried .equipment-row,
-.equipment-row {
+.best-left-buried .loot-row {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr 80px;
     align-items: center;
@@ -752,13 +571,12 @@
 }
 
 .best-left-buried .equipment-row:hover,
-.equipment-row:hover {
-    background-color: #f5f5f5;
+.best-left-buried .loot-row:hover {
+    background-color: #f8f8f8;
 }
 
-/* Equipment name and icon */
 .best-left-buried .equipment-name,
-.equipment-name {
+.best-left-buried .loot-name {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -767,54 +585,45 @@
 }
 
 .best-left-buried .equipment-name:hover,
-.equipment-name:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-    text-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+.best-left-buried .loot-name:hover {
+    color: #2c2c2c;
+    font-weight: bold;
 }
 
-.best-left-buried .equipment-name img,
-.equipment-name img {
-    flex: 0 0 24px;
-}
-
-/* Equipment type labels */
 .best-left-buried .equipment-type,
-.equipment-type {
+.best-left-buried .loot-type,
+.best-left-buried .loot-value {
     text-align: center;
     font-style: italic;
     color: #666;
 }
 
-/* Equipment equipped checkbox */
-.best-left-buried .equipment-equipped,
-.equipment-equipped {
+.best-left-buried .equipment-equipped {
     display: flex;
     align-items: center;
     gap: 5px;
     justify-content: center;
 }
 
-.best-left-buried .equipment-equipped input[type="checkbox"],
-.equipment-equipped input[type="checkbox"] {
+.best-left-buried .equipment-equipped input[type="checkbox"] {
     margin: 0;
+    transform: scale(1.2);
 }
 
-.best-left-buried .equipment-equipped label,
-.equipment-equipped label {
+.best-left-buried .equipment-equipped label {
     font-size: 0.9em;
     cursor: pointer;
+    color: #2c2c2c;
 }
 
-/* Equipment control buttons */
 .best-left-buried .equipment-controls,
-.equipment-controls {
+.best-left-buried .loot-controls {
     display: flex;
     justify-content: center;
     gap: 8px;
 }
 
-.best-left-buried .equipment-controls .item-control,
-.equipment-controls .item-control {
+.best-left-buried .item-control {
     cursor: pointer;
     color: #666;
     width: 24px;
@@ -822,138 +631,398 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: color 0.2s ease;
 }
 
-.best-left-buried .equipment-controls .item-control:hover,
-.equipment-controls .item-control:hover {
-    color: #333;
+.best-left-buried .item-control:hover {
+    color: #2c2c2c;
 }
 
-.best-left-buried .equipment-controls .item-delete:hover,
-.equipment-controls .item-delete:hover {
+.best-left-buried .item-delete:hover {
     color: #ff0000;
 }
 
-/* ========================================
-   6. ADVANCEMENT TAB
-   ======================================== */
-
-/* Advancement tab grid layout */
-.best-left-buried .advancement-grid,
-.advancement-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    height: 100%;
-}
-
-/* Advancement and consequence sections */
-.best-left-buried .advancement-section,
-.best-left-buried .consequence-section,
-.advancement-section,
-.consequence-section {
-    padding: 15px;
-    border: 2px solid black;
-    background: white;
-    position: relative;
-}
-
-/* Decorative corners for advancement sections */
-.best-left-buried .advancement-section::before,
-.best-left-buried .advancement-section::after,
-.best-left-buried .consequence-section::before,
-.best-left-buried .consequence-section::after,
-.advancement-section::before,
-.advancement-section::after,
-.consequence-section::before,
-.consequence-section::after {
-    content: '';
-    position: absolute;
-    width: 15px;
-    height: 15px;
-    border: 2px solid black;
-}
-
-.best-left-buried .advancement-section::before,
-.best-left-buried .consequence-section::before,
-.advancement-section::before,
-.consequence-section::before {
-    top: -5px;
-    right: -5px;
-    border-left: none;
-    border-bottom: none;
-}
-
-.best-left-buried .advancement-section::after,
-.best-left-buried .consequence-section::after,
-.advancement-section::after,
-.consequence-section::after {
-    bottom: -5px;
-    left: -5px;
-    border-right: none;
-    border-top: none;
-}
-
-/* ========================================
-   7. FORM STYLING
-   ======================================== */
-
-/* Form container */
-.best-left-buried .sheet-container,
-.sheet-container {
-    padding: 10px;
-}
-
-/* ========================================
-   8. GENERAL ELEMENTS
-   ======================================== */
-
-/* General button styling */
-.best-left-buried button,
-button {
-    padding: 2px 8px;
-    border: 1px solid #ccc;
+/* Equipment lists with scrolling */
+.best-left-buried .weapon-list,
+.best-left-buried .armor-list,
+.best-left-buried .shield-list,
+.best-left-buried .loot-list,
+.best-left-buried .advancement-list {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
     border-radius: 3px;
+}
+
+/* ========================================
+   ADVANCEMENT SECTION
+   ======================================== */
+
+.best-left-buried .advancement-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+.best-left-buried .advancement-section {
+    padding: 15px;
+    border: 3px solid #2c2c2c;
+    background: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.best-left-buried .advancement-section h3 {
+    font-family: "Blackletter", serif;
+    font-size: 1.5em;
+    color: #2c2c2c;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #2c2c2c;
+    padding-bottom: 5px;
+}
+
+.best-left-buried .advancement-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 80px;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+}
+
+.best-left-buried .advancement-row:hover {
+    background-color: #f8f8f8;
+}
+
+.best-left-buried .advancement-name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     cursor: pointer;
+    transition: all 0.2s ease;
 }
 
-.best-left-buried button:hover,
-button:hover {
-    border-color: #999;
-    background: #131212;
+.best-left-buried .advancement-name:hover {
+    color: #2c2c2c;
+    font-weight: bold;
 }
 
-/* Delete buttons and actions */
-.best-left-buried .item-delete,
-.item-delete {
+.best-left-buried .advancement-type {
+    text-align: center;
+    font-style: italic;
     color: #666;
+}
+
+.best-left-buried .advancement-equipped {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    justify-content: center;
+}
+
+.best-left-buried .advancement-equipped input[type="checkbox"] {
+    margin: 0;
+    transform: scale(1.2);
+}
+
+.best-left-buried .advancement-equipped label {
+    font-size: 0.9em;
     cursor: pointer;
+    color: #2c2c2c;
 }
 
-.best-left-buried .item-delete:hover,
-.item-delete:hover {
-    color: #ff0000;
+.best-left-buried .advancement-controls {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
 }
 
-/* Input styling */
+/* ========================================
+   SCROLLBAR STYLING
+   ======================================== */
+
+.best-left-buried .sheet-container::-webkit-scrollbar,
+.best-left-buried .weapon-list::-webkit-scrollbar,
+.best-left-buried .armor-list::-webkit-scrollbar,
+.best-left-buried .shield-list::-webkit-scrollbar,
+.best-left-buried .loot-list::-webkit-scrollbar,
+.best-left-buried .advancement-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.best-left-buried .sheet-container::-webkit-scrollbar-track,
+.best-left-buried .weapon-list::-webkit-scrollbar-track,
+.best-left-buried .armor-list::-webkit-scrollbar-track,
+.best-left-buried .shield-list::-webkit-scrollbar-track,
+.best-left-buried .loot-list::-webkit-scrollbar-track,
+.best-left-buried .advancement-list::-webkit-scrollbar-track {
+    border-radius: 4px;
+    background: #f1f1f1;
+}
+
+.best-left-buried .sheet-container::-webkit-scrollbar-thumb,
+.best-left-buried .weapon-list::-webkit-scrollbar-thumb,
+.best-left-buried .armor-list::-webkit-scrollbar-thumb,
+.best-left-buried .shield-list::-webkit-scrollbar-thumb,
+.best-left-buried .loot-list::-webkit-scrollbar-thumb,
+.best-left-buried .advancement-list::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.best-left-buried .sheet-container::-webkit-scrollbar-thumb:hover,
+.best-left-buried .weapon-list::-webkit-scrollbar-thumb:hover,
+.best-left-buried .armor-list::-webkit-scrollbar-thumb:hover,
+.best-left-buried .shield-list::-webkit-scrollbar-thumb:hover,
+.best-left-buried .loot-list::-webkit-scrollbar-thumb:hover,
+.best-left-buried .advancement-list::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* ========================================
+   GENERAL FORM ELEMENTS
+   ======================================== */
+
 .best-left-buried input[type="text"],
 .best-left-buried input[type="number"],
 .best-left-buried select,
-input[type="text"],
-input[type="number"],
-select {
-    border: 1px solid #ccc;
+.best-left-buried textarea {
+    border: 2px solid #2c2c2c;
     padding: 4px 8px;
     border-radius: 2px;
+    background: white;
+    font-family: inherit;
 }
 
 .best-left-buried input[type="text"]:focus,
 .best-left-buried input[type="number"]:focus,
 .best-left-buried select:focus,
-input[type="text"]:focus,
-input[type="number"]:focus,
-select:focus {
+.best-left-buried textarea:focus {
     outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.25);
+}
+
+.best-left-buried button {
+    padding: 6px 12px;
+    border: 2px solid #2c2c2c;
+    background: white;
+    color: #2c2c2c;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: bold;
+}
+
+.best-left-buried button:hover {
+    background: #f0f0f0;
+}
+
+/* ========================================
+   ITEM SHEET STYLING
+   ======================================== */
+
+.best-left-buried.sheet.item {
+    background: white;
+}
+
+.best-left-buried.sheet.item .sheet-container {
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: calc(100vh - 100px);
+    padding: 15px;
+}
+
+.best-left-buried.sheet.item .sheet-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 3px solid #2c2c2c;
+}
+
+.best-left-buried.sheet.item .sheet-header img {
+    border: 2px solid #2c2c2c;
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}
+
+.best-left-buried.sheet.item .sheet-header h1 {
+    flex: 1;
+    margin: 0;
+}
+
+.best-left-buried.sheet.item .sheet-header input {
+    font-size: 1.5em;
+    font-weight: bold;
+    font-family: "Blackletter", serif;
+    width: 100%;
+    border: 2px solid #2c2c2c;
+    padding: 8px;
+    background: white;
+}
+
+.best-left-buried.sheet.item .form-group {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background: #fafafa;
+}
+
+.best-left-buried.sheet.item .form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #2c2c2c;
+    font-family: "Blackletter", serif;
+    font-size: 1.1em;
+}
+
+.best-left-buried.sheet.item .form-group select,
+.best-left-buried.sheet.item .form-group input[type="text"],
+.best-left-buried.sheet.item .form-group input[type="number"] {
+    width: 100%;
+    max-width: 300px;
+    padding: 6px;
+    border: 2px solid #2c2c2c;
+    background: white;
+}
+
+.best-left-buried.sheet.item .form-group input[type="checkbox"] {
+    transform: scale(1.3);
+    margin-right: 8px;
+}
+
+.best-left-buried.sheet.item .form-group small {
+    display: block;
+    margin-top: 5px;
+    color: #666;
+    font-style: italic;
+    font-size: 0.9em;
+}
+
+.best-left-buried.sheet.item .form-group span {
+    color: #555;
+    font-size: 0.95em;
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+
+@media (max-width: 1024px) {
+    .best-left-buried .sheet-tabs {
+        position: static;
+        transform: none;
+        width: 100%;
+        height: auto;
+        top: auto;
+        right: auto;
+        border-top: 3px solid #2c2c2c;
+        padding: 10px 0;
+        flex-direction: row;
+        justify-content: center;
+    }
+    
+    .best-left-buried .sheet-tabs .item {
+        transform: none;
+        border: 2px solid #2c2c2c;
+        border-bottom: none;
+        border-radius: 8px 8px 0 0;
+        margin: 0 2px;
+        padding: 8px 12px;
+        font-size: 0.9em;
+    }
+    
+    .best-left-buried .main-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .best-left-buried .sub-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .best-left-buried .equipment-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .best-left-buried .character-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .best-left-buried .portrait-section {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .best-left-buried .character-portrait {
+        width: 100px;
+        height: 120px;
+    }
+    
+    .best-left-buried .main-stats-grid,
+    .best-left-buried .sub-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    
+    .best-left-buried .stat-box {
+        padding: 10px;
+        min-height: auto;
+    }
+    
+    .best-left-buried .stat-name {
+        font-size: 1.3em;
+        margin-bottom: 8px;
+    }
+    
+    .best-left-buried .equipment-row,
+    .best-left-buried .loot-row,
+    .best-left-buried .advancement-row {
+        grid-template-columns: 1fr;
+        gap: 5px;
+        text-align: center;
+    }
+    
+    .best-left-buried .equipment-name,
+    .best-left-buried .loot-name,
+    .best-left-buried .advancement-name {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 600px) {
+    .best-left-buried .main-stats-grid,
+    .best-left-buried .sub-stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .best-left-buried .sheet-tabs .item span {
+        display: none;
+    }
+    
+    .best-left-buried .sheet-tabs .item {
+        padding: 10px;
+        justify-content: center;
+    }
+    
+    .best-left-buried .actions-section h2,
+    .best-left-buried .stats-section h2 {
+        font-size: 1.8em;
+    }
+    
+    .best-left-buried .action-item {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    
+    .best-left-buried .action-info {
+        justify-content: center;
+    }
 }
