@@ -24,7 +24,7 @@
 }
 
 /* ========================================
-   APPLICATION LAYOUT - PDF STYLE WITH RIGHT TABS
+   APPLICATION LAYOUT - PDF STYLE WITH EXTERNAL TABS
    ======================================== */
 
 form.best-left-buried.sheet.actor {
@@ -53,7 +53,7 @@ form.best-left-buried.sheet.actor {
     border: 3px solid #2c2c2c;
     box-shadow: 0 0 20px rgba(0,0,0,0.3);
     margin: 10px;
-    position: relative; /* Important for tab positioning */
+    position: relative;
 }
 
 .best-left-buried .sheet-container {
@@ -66,32 +66,37 @@ form.best-left-buried.sheet.actor {
 }
 
 /* ========================================
-   INTERNAL TAB SYSTEM - GUARANTEED VISIBLE
+   INTERNAL TAB SYSTEM - HIDE ONLY INTERNAL ONES
    ======================================== */
 
-/* Normal application behavior */
-.best-left-buried.application {
-    overflow: hidden;
+/* Hide only the internal tabs that are inside the sheet */
+.best-left-buried.application .sheet-tabs {
+    display: none;
 }
 
-.best-left-buried .sheet-layout {
-    position: relative;
+/* ========================================
+   EXTERNAL TABS SYSTEM - ADD THIS TO YOUR EXISTING CSS
+   ======================================== */
+
+/* Hide only the internal tabs that are inside the sheet */
+.best-left-buried.application .sheet-tabs {
+    display: none;
 }
 
-/* Position tabs inside the window content area */
-.best-left-buried .sheet-tabs {
-    position: absolute;
-    top: 50%;
-    right: -100px; /* Well inside the window boundary */
-    transform: translateY(-50%) rotate(90deg);
+/* External tabs container - positioned outside the window */
+.blb-external-tabs {
+    position: fixed !important;
+    z-index: 10001 !important;
+    pointer-events: auto !important;
+    transform: rotate(90deg);
     transform-origin: center center;
-    width: 140px;
-    height: 25px;
-    z-index: 1000;
+    width: 140px;                      /* Tab container width - adjust as needed */
+    height: 25px;                      /* Tab container height - adjust as needed */
+    overflow: visible !important;
 }
 
-.best-left-buried .sheet-tabs .tabs {
-    display: flex;
+.blb-external-tabs .sheet-tabs {
+    display: flex !important;
     flex-direction: row;
     justify-content: space-between;
     width: 100%;
@@ -99,77 +104,76 @@ form.best-left-buried.sheet.actor {
     margin: 0;
     padding: 0;
     gap: 2px;
+    background: none;
+    border: none;
+    overflow: visible;
 }
 
-/* Clean, professional tab styling */
-.best-left-buried .sheet-tabs .tab-button {
-    height: 22px;
-    padding: 1px 4px;
-    line-height: 20px;
-    background: #ffffff;
-    border: 1px solid #2c2c2c;
-    border-radius: 3px;
-    font-size: 8px;
-    color: #2c2c2c;
-    text-decoration: none;
-    cursor: pointer;
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.15s ease;
-    min-width: 35px;
-    flex: 1;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+/* Clean, professional external tab styling */
+.blb-external-tabs .sheet-tabs .item {
+    height: 22px !important;
+    padding: 1px 4px !important;
+    line-height: 20px !important;
+    background: #ffffff !important;
+    border: 1px solid #2c2c2c !important;
+    border-radius: 3px !important;
+    font-size: 8px !important;
+    color: #2c2c2c !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.15s ease !important;
+    min-width: 35px !important;
+    flex: 1 !important;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1) !important;
+    font-family: 'Cinzel', serif !important;
+    font-weight: normal !important;
 }
 
-/* Active tab */
-.best-left-buried .sheet-tabs .tab-button.active {
-    background: #2c2c2c;
-    color: white;
-    font-weight: bold;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+/* Active external tab */
+.blb-external-tabs .sheet-tabs .item.active {
+    background: #2c2c2c !important;
+    color: white !important;
+    font-weight: bold !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
 }
 
-/* Hover effect */
-.best-left-buried .sheet-tabs .tab-button:hover:not(.active) {
-    background: #f5f5f5;
-    box-shadow: 0 2px 3px rgba(0,0,0,0.15);
+/* Hover effect for external tabs */
+.blb-external-tabs .sheet-tabs .item:hover:not(.active) {
+    background: #f5f5f5 !important;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.15) !important;
 }
 
-/* Simple abbreviated text */
-.best-left-buried .sheet-tabs .tab-button[data-tab="stats"] span::after {
-    content: "Stats";
-}
-
-.best-left-buried .sheet-tabs .tab-button[data-tab="equipment"] span::after {
-    content: "Items";  
-}
-
-.best-left-buried .sheet-tabs .tab-button[data-tab="advancements"] span::after {
-    content: "Adv";
-}
-
-/* Hide original span content and show ::after content */
-.best-left-buried .sheet-tabs .tab-button span {
-    font-size: 0;
-}
-
-.best-left-buried .sheet-tabs .tab-button span::after {
-    font-size: 7px;
-    font-weight: inherit;
-    color: inherit;
-}
-
-/* Ensure proper scrolling for sheet content */
-.best-left-buried .sheet-container {
-    overflow-y: auto;
-    overflow-x: hidden;
-}
-
-.best-left-buried .sheet-body {
-    overflow-y: auto;
-    overflow-x: hidden;
+/* Responsive: Hide external tabs on smaller screens, show internal ones */
+@media (max-width: 1024px) {
+    .blb-external-tabs {
+        display: none !important;
+    }
+    
+    .best-left-buried.application .sheet-tabs {
+        display: flex !important;
+        position: static;
+        transform: none;
+        width: 100%;
+        height: auto;
+        border-top: 3px solid #2c2c2c;
+        padding: 10px 0;
+        flex-direction: row;
+        justify-content: center;
+    }
+    
+    .best-left-buried.application .sheet-tabs .item {
+        transform: none;
+        border: 2px solid #2c2c2c;
+        border-bottom: none;
+        border-radius: 8px 8px 0 0;
+        margin: 0 2px;
+        padding: 8px 12px;
+        font-size: 0.9em;
+    }
 }
 
 /* ========================================
@@ -911,7 +915,12 @@ form.best-left-buried.sheet.actor {
    ======================================== */
 
 @media (max-width: 1024px) {
+    .blb-external-tabs {
+        display: none !important;
+    }
+    
     .best-left-buried .sheet-tabs {
+        display: flex !important;
         position: static;
         transform: none;
         width: 100%;

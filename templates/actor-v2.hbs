@@ -1,6 +1,18 @@
 {{! templates/actor-v2.hbs - PDF-Style Layout with Right-Side Tabs }}
 <div class="sheet-layout">
     {{! Left side - main character sheet }}
+
+    
+                        {{! The Tab Navigation }}
+            <nav class="sheet-tabs" data-group="primary">
+                <a class="item" data-tab="abilities">Abilities</a>
+                <a class="item" data-tab="equipment">Equipment</a>
+                <a class="item" data-tab="advancements">Advancements</a>
+                <a class="item" data-tab="effects">Effects</a>
+                <a class="item" data-tab="spells">Spells</a>
+            </nav>
+
+            
     <div class="sheet-main">
         <div class="sheet-container">
             {{! Character Header with Portrait }}
@@ -300,22 +312,5 @@
                 </div>
             </section>
         </div>
-    
-
-    {{! Right side - tab navigation }}
-    <div class="sheet-tabs">
-        <nav class="tabs" data-group="primary">
-            <a class="tab-button {{#if (eq activeTab 'stats')}}active{{/if}}" data-action="switchTab" data-tab="stats">
-                <span>Stats & Actions</span>
-            </a>
-            <a class="tab-button {{#if (eq activeTab 'equipment')}}active{{/if}}" data-action="switchTab" data-tab="equipment">
-                <span>Equipment</span>
-            </a>
-            <a class="tab-button {{#if (eq activeTab 'advancements')}}active{{/if}}" data-action="switchTab" data-tab="advancements">
-                <span>Advancements</span>
-            </a>
-        </nav>
     </div>
-</div>
-
 </div>

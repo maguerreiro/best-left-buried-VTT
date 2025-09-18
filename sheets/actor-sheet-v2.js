@@ -1,4 +1,4 @@
-// sheets/actor-sheet-v2.js - COMPLETE FIXED VERSION - No Re-render Approach
+// sheets/actor-sheet-v2.js - Cleaned and Optimized External Tabs
 
 import { WEAPON_TYPES } from "../module/helpers/weapons.js";
 import { ARMOR_TYPES, SHIELD_TYPES } from "../module/helpers/armor.js";
@@ -14,7 +14,7 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     position: { width: 1000, height: 900 },
     window: { 
       title: "Best Left Buried Character", 
-      resizable: true, 
+      resizable: true,
       minimizable: true 
     },
     form: {
@@ -27,8 +27,7 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
       rollAdvancement: BLBActorSheetV2.#onRollAdvancement,
       openItem: BLBActorSheetV2.#onOpenItem,
       deleteItem: BLBActorSheetV2.#onDeleteItem,
-      toggleEquip: BLBActorSheetV2.#onToggleEquip,
-      switchTab: BLBActorSheetV2.#onSwitchTab
+      toggleEquip: BLBActorSheetV2.#onToggleEquip
     }
   };
 
@@ -39,14 +38,11 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     }
   };
 
-  /* -------------------------------------------- */
-  /*  Tab Management                              */
-  /* -------------------------------------------- */
-
-  /** Track the active tab per instance */
   constructor(...args) {
     super(...args);
     this.activeTab = "stats";
+    this._externalTabs = null;
+    this._animationFrame = null;
   }
 
   /* -------------------------------------------- */
@@ -59,7 +55,6 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     const src = doc.toObject();
     const rollData = doc.getRollData();
     
-    // Basic context
     const context = {
       actor: doc,
       source: src,
@@ -81,113 +76,134 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
       activeTab: this.activeTab
     };
     
-    // Add armor calculations
     this._prepareArmor(context);
-    
     return context;
   }
 
   /** @override */
   async _onRender(context, options) {
     await super._onRender(context, options);
-    
-    // Ensure correct tab is active after render
     this._activateTab(this.activeTab);
     
-    // Try to move tabs external - but don't break if it fails
-    setTimeout(() => {
-      this._tryMoveTabsExternal();
-    }, 300);
+    // Create external tabs after a brief delay for DOM stabilization
+    setTimeout(() => this._createExternalTabs(), 100);
   }
 
+  /* -------------------------------------------- */
+  /*  External Tabs System                        */
+  /* -------------------------------------------- */
+
   /**
-   * Attempt to move tabs outside window - fail safely
+   * Create external tabs positioned outside the window
    */
-  _tryMoveTabsExternal() {
-    try {
-      const tabs = this.element?.querySelector('.sheet-tabs');
-      if (!tabs) return;
+  _createExternalTabs() {
+    this._cleanupExternalTabs();
+
+    const windowElement = this.element;
+    if (!windowElement) return;
+
+    // Create tabs container
+    const tabsContainer = document.createElement('div');
+    tabsContainer.className = 'blb-external-tabs';
+    
+    // Create navigation
+    const tabsNav = document.createElement('nav');
+    tabsNav.className = 'sheet-tabs tabs';
+    tabsNav.setAttribute('data-group', 'primary');
+
+    // Tab definitions
+    const tabs = [
+      { id: 'stats', label: 'Stats' },
+      { id: 'equipment', label: 'Items' },
+      { id: 'advancements', label: 'Adv' }
+    ];
+
+    // Create tab buttons
+    tabs.forEach(tab => {
+      const tabButton = document.createElement('a');
+      tabButton.className = `item ${this.activeTab === tab.id ? 'active' : ''}`;
+      tabButton.dataset.tab = tab.id;
+      tabButton.textContent = tab.label;
       
-      const windowApp = this.element.closest('.window-app');
-      if (!windowApp) return;
-      
-      const rect = windowApp.getBoundingClientRect();
-      
-      // Clone tabs instead of moving to avoid breaking functionality
-      const tabsClone = tabs.cloneNode(true);
-      document.body.appendChild(tabsClone);
-      
-      // Position the clone outside
-      tabsClone.style.position = 'fixed';
-      tabsClone.style.top = (rect.top + rect.height / 2 - 15) + 'px';
-      tabsClone.style.left = (rect.right + 10) + 'px';
-      tabsClone.style.zIndex = '10000';
-      
-      // Hide original tabs
-      tabs.style.display = 'none';
-      
-      // Make clone functional
-      const cloneButtons = tabsClone.querySelectorAll('.tab-button');
-      cloneButtons.forEach(button => {
-        button.addEventListener('click', (e) => {
-          e.preventDefault();
-          const tabName = button.dataset.tab;
-          this.activeTab = tabName;
-          this._activateTab(tabName);
-          
-          // Update both original and clone active states
-          this._updateTabStates(tabName);
-        });
+      tabButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this._switchToTab(tab.id);
       });
-      
-      this._externalTabs = tabsClone;
-    } catch (error) {
-      console.log('External tabs not available, using internal tabs');
-    }
+
+      tabsNav.appendChild(tabButton);
+    });
+
+    tabsContainer.appendChild(tabsNav);
+    
+    // Position and add to DOM
+    this._positionExternalTabs(tabsContainer, windowElement);
+    document.body.appendChild(tabsContainer);
+    this._externalTabs = tabsContainer;
+
+    // Start smooth position tracking
+    this._startPositionTracking(windowElement);
   }
 
   /**
-   * Update active states on both tab sets
+   * Position external tabs outside the window
    */
-  _updateTabStates(activeTabName) {
-    // Update original tabs
-    const originalTabs = this.element?.querySelectorAll('.tab-button');
-    originalTabs?.forEach(tab => {
-      if (tab.dataset.tab === activeTabName) {
-        tab.classList.add('active');
-      } else {
-        tab.classList.remove('active');
-      }
-    });
+  _positionExternalTabs(tabsContainer, windowElement) {
+    const rect = windowElement.getBoundingClientRect();
+    const tabsX = rect.right + 15; // Adjust this for horizontal offset
+    const tabsY = rect.top + (rect.height / 2); // Adjust this for vertical position
 
-    // Update external tabs
-    const externalTabs = this._externalTabs?.querySelectorAll('.tab-button');
-    externalTabs?.forEach(tab => {
-      if (tab.dataset.tab === activeTabName) {
-        tab.classList.add('active');
-      } else {
-        tab.classList.remove('active');
-      }
-    });
+    tabsContainer.style.position = 'fixed';
+    tabsContainer.style.left = `${tabsX}px`;
+    tabsContainer.style.top = `${tabsY}px`;
+    tabsContainer.style.zIndex = '10001';
   }
 
   /**
-   * Activate a specific tab
+   * Start smooth position tracking using requestAnimationFrame
+   */
+  _startPositionTracking(windowElement) {
+    let lastX = 0, lastY = 0;
+    
+    const updatePosition = () => {
+      if (!this._externalTabs || !windowElement || !document.body.contains(windowElement)) {
+        this._cleanupExternalTabs();
+        return;
+      }
+
+      const rect = windowElement.getBoundingClientRect();
+      const newX = rect.right + 15;
+      const newY = rect.top + (rect.height / 2);
+
+      // Only update if position actually changed (reduces flicker)
+      if (newX !== lastX || newY !== lastY) {
+        this._externalTabs.style.left = `${newX}px`;
+        this._externalTabs.style.top = `${newY}px`;
+        lastX = newX;
+        lastY = newY;
+      }
+
+      this._animationFrame = requestAnimationFrame(updatePosition);
+    };
+
+    this._animationFrame = requestAnimationFrame(updatePosition);
+  }
+
+  /**
+   * Switch to a specific tab
+   */
+  _switchToTab(tabId) {
+    this.activeTab = tabId;
+    this._activateTab(tabId);
+    this._updateExternalTabStates();
+  }
+
+  /**
+   * Activate tab content in the sheet
    */
   _activateTab(tabName) {
     if (!this.element) return;
     
-    // Update tab navigation
-    const tabs = this.element.querySelectorAll('.tabs .item');
-    tabs.forEach(tab => {
-      if (tab.dataset.tab === tabName) {
-        tab.classList.add('active');
-      } else {
-        tab.classList.remove('active');
-      }
-    });
-    
-    // Update tab content
     const tabContents = this.element.querySelectorAll('.tab[data-tab]');
     tabContents.forEach(content => {
       if (content.dataset.tab === tabName) {
@@ -198,24 +214,51 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
         content.style.display = 'none';
       }
     });
-
-    // Update external tab states if they exist
-    this._updateTabStates(tabName);
   }
 
   /**
-   * Clean up external tabs
+   * Update external tab visual states
    */
-  async close(options = {}) {
-    if (this._externalTabs) {
+  _updateExternalTabStates() {
+    if (!this._externalTabs) return;
+
+    const tabButtons = this._externalTabs.querySelectorAll('.item');
+    tabButtons.forEach(button => {
+      if (button.dataset.tab === this.activeTab) {
+        button.classList.add('active');
+      } else {
+        button.classList.remove('active');
+      }
+    });
+  }
+
+  /**
+   * Cleanup external tabs and animations
+   */
+  _cleanupExternalTabs() {
+    if (this._externalTabs && document.body.contains(this._externalTabs)) {
       this._externalTabs.remove();
     }
+    this._externalTabs = null;
+
+    if (this._animationFrame) {
+      cancelAnimationFrame(this._animationFrame);
+      this._animationFrame = null;
+    }
+  }
+
+  /**
+   * Override close to cleanup external tabs
+   */
+  async close(options = {}) {
+    this._cleanupExternalTabs();
     return super.close(options);
   }
 
-  /**
-   * Organize items for display
-   */
+  /* -------------------------------------------- */
+  /*  Data Preparation                            */
+  /* -------------------------------------------- */
+
   _prepareItems(items) {
     const organized = {
       weapon: [],
@@ -231,7 +274,7 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
       }
     }
     
-    // Sort weapons by type, then name
+    // Sort weapons by type
     organized.weapon.sort((a, b) => {
       const typeOrder = ["hand", "heavy", "light", "long", "ranged", "throwing"];
       const aIndex = typeOrder.indexOf(a.system.weaponType || "hand");
@@ -241,26 +284,22 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
       return a.name.localeCompare(b.name);
     });
     
-    // Sort armor and shields by name
     organized.armor.sort((a, b) => a.name.localeCompare(b.name));
     organized.shield.sort((a, b) => a.name.localeCompare(b.name));
     
     return organized;
   }
 
-  // List equipped weapons and advancements for quick access
-    _prepareActions(items) {
+  _prepareActions(items) {
     const actions = {
       weapons: [],
       advancements: []
     };
     
-    // Get equipped weapons
     actions.weapons = items.filter(item => 
       item.type === "weapon" && item.system.equipped
     );
     
-    // Get equipped advancements (abilities)
     actions.advancements = items.filter(item => 
       item.type === "advancement" && item.system.equipped
     );
@@ -268,15 +307,11 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     return actions;
   }
 
-  /**
-   * Calculate armor totals
-   */
   _prepareArmor(context) {
     const system = context.system;
     let armorBonus = 0;
     let armorTotal = system.armor?.base || 7;
     
-    // Add equipped armor bonuses
     for (const armor of context.items.armor) {
       if (armor.system.equipped) {
         if (armor.system.armorType === "basic") armorBonus += 1;
@@ -284,67 +319,25 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
       }
     }
     
-    // Add equipped shield bonuses
     for (const shield of context.items.shield) {
       if (shield.system.equipped) armorBonus += 1;
     }
     
     armorTotal += armorBonus;
     
-    // Add to context
     context.system.armorBonus = armorBonus;
     context.system.armorTotal = armorTotal;
   }
 
-  /**
-   * Manually update armor display without re-rendering the entire sheet
-   */
-  _updateArmorDisplay() {
-    const armorBonusEl = this.element.querySelector('.armor-bonus');
-    const armorTotalEl = this.element.querySelector('.armor-total .total-score');
-    
-    if (!armorBonusEl || !armorTotalEl) return;
-    
-    let armorBonus = 0;
-    const armorBase = this.document.system.armor?.base || 7;
-    
-    // Calculate bonus from equipped items
-    const equippedArmor = this.document.items.filter(item => 
-      item.type === "armor" && item.system.equipped
-    );
-    const equippedShields = this.document.items.filter(item => 
-      item.type === "shield" && item.system.equipped
-    );
-    
-    for (const armor of equippedArmor) {
-      if (armor.system.armorType === "basic") armorBonus += 1;
-      else if (armor.system.armorType === "plate") armorBonus += 2;
-    }
-    
-    for (const shield of equippedShields) {
-      armorBonus += 1;
-    }
-    
-    // Update the display elements
-    armorBonusEl.textContent = armorBonus;
-    armorTotalEl.textContent = armorBase + armorBonus;
-  }
-
   /* -------------------------------------------- */
-  /*  Event Handlers                             */
+  /*  Event Handlers                              */
   /* -------------------------------------------- */
 
-  /**
-   * Handle form submission
-   */
   static async #onFormSubmit(event, form, formData) {
     const updateData = foundry.utils.expandObject(formData.object);
     await this.document.update(updateData);
   }
 
-  /**
-   * Handle XP update
-   */
   static async #onUpdateXP(event, target) {
     const change = target.dataset.change === "increase" ? 1 : -1;
     const currentXP = this.document.system.xp || 0;
@@ -353,9 +346,6 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     await this.document.update({ "system.xp": newXP });
   }
 
-  /**
-   * Handle weapon rolling
-   */
   static async #onRollWeapon(event, target) {
     const weaponId = target.dataset.weaponId;
     const weapon = this.document.items.get(weaponId);
@@ -370,14 +360,12 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     const attackStat = weaponData.attackStat;
     const attackValue = this.document.system[attackStat + "Total"] || this.document.system[attackStat]?.base || 0;
     
-    // Simple attack roll for now
     const roll = await new Roll(`1d20 + ${attackValue}`).evaluate();
     roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this.document }),
       flavor: `${weapon.name} Attack Roll`
     });
     
-    // Damage roll
     let damage = weaponData.damageMod || 0;
     if (weapon.system.isTwoHanded && weaponData.twoHandedBonus) damage += 1;
     
@@ -396,7 +384,6 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     
     let rollFormula = advancement.system.rollFormula || "1d20";
     
-    // Add attribute modifier if specified
     if (advancement.system.usesAttribute !== "none") {
       const attrValue = this.document.system[advancement.system.usesAttribute + "Total"] || 
                        this.document.system[advancement.system.usesAttribute]?.base || 0;
@@ -410,24 +397,17 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     });
   }
 
-  /**
-   * Handle item opening
-   */
   static async #onOpenItem(event, target) {
     const itemId = target.closest("[data-item-id]")?.dataset.itemId;
     const item = this.document.items.get(itemId);
     if (item) item.sheet.render(true);
   }
 
-  /**
-   * Handle item deletion - Simple working version with scroll preservation
-   */
   static async #onDeleteItem(event, target) {
     const itemId = target.closest("[data-item-id]")?.dataset.itemId;
     const item = this.document.items.get(itemId);
     if (!item) return;
     
-    // Use V2 DialogV2 instead of deprecated Dialog.confirm
     const confirmed = await foundry.applications.api.DialogV2.confirm({
       window: { title: "Delete Item" },
       content: `<p>Are you sure you want to delete <strong>${item.name}</strong>?</p>`,
@@ -436,109 +416,43 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     });
     
     if (confirmed) {
-      // Remove the item from UI first
       const itemRow = target.closest("[data-item-id]");
-      if (itemRow) {
-        itemRow.remove();
-      }
-      
-      // Delete from database without re-render
+      if (itemRow) itemRow.remove();
       await item.delete({ render: false });
     }
   }
 
-  /**
-   * Handle equipment toggle - Bypass ApplicationV2 re-render entirely
-   */
   static async #onToggleEquip(event, target) {
     event.preventDefault();
     event.stopPropagation();
     
-    console.log("Equipment toggle triggered");
-    
     const itemId = target.dataset.itemId;
     const item = this.document.items.get(itemId);
-    if (!item) {
-      console.error("Item not found:", itemId);
-      return;
-    }
+    if (!item) return;
     
     const isEquipped = target.checked;
-    console.log(`Toggling ${item.name} to ${isEquipped ? 'equipped' : 'unequipped'}`);
     
     try {
       await item.update({ "system.equipped": isEquipped }, { render: true });
-      console.log("Item updated successfully");
       
-      // Handle mutual exclusion manually
+      // Handle exclusive equipment (armor/shields)
       if ((item.type === "armor" || item.type === "shield") && isEquipped) {
         const others = this.document.items.filter(i => 
           i.type === item.type && i.id !== itemId && i.system.equipped
         );
         
-        console.log(`Found ${others.length} other ${item.type} items to unequip`);
-        
         for (const other of others) {
           await other.update({ "system.equipped": false }, { render: false });
-          console.log(`Unequipped ${other.name}`);
           
           const otherCheckbox = this.element.querySelector(`input[data-item-id="${other.id}"]`);
           if (otherCheckbox) {
             otherCheckbox.checked = false;
-            console.log(`Updated checkbox for ${other.name}`);
           }
         }
       }
       
-      // Update armor display with simple selectors
-      console.log("Updating armor display");
-      const armorBonusEl = this.element.querySelector('.armor-bonus');
-      
-      // Find the armor stat box manually
-      let armorTotalEl = null;
-      const statBoxes = this.element.querySelectorAll('.stat-box');
-      for (const box of statBoxes) {
-        const statName = box.querySelector('.stat-name');
-        if (statName && statName.textContent.trim() === 'Armor') {
-          armorTotalEl = box.querySelector('.total-score');
-          break;
-        }
-      }
-      
-      if (armorBonusEl && armorTotalEl) {
-        console.log("Found armor display elements");
-        let armorBonus = 0;
-        const armorBase = this.document.system.armor?.base || 7;
-        
-        const equippedArmor = this.document.items.filter(item => 
-          item.type === "armor" && item.system.equipped
-        );
-        const equippedShields = this.document.items.filter(item => 
-          item.type === "shield" && item.system.equipped
-        );
-        
-        console.log(`Found equipped: ${equippedArmor.length} armor, ${equippedShields.length} shields`);
-        
-        for (const armor of equippedArmor) {
-          if (armor.system.armorType === "basic") armorBonus += 1;
-          else if (armor.system.armorType === "plate") armorBonus += 2;
-          console.log(`${armor.name} (${armor.system.armorType}) adds ${armor.system.armorType === "basic" ? 1 : 2}`);
-        }
-        
-        for (const shield of equippedShields) {
-          armorBonus += 1;
-          console.log(`${shield.name} adds 1`);
-        }
-        
-        armorBonusEl.textContent = armorBonus;
-        armorTotalEl.textContent = armorBase + armorBonus;
-        console.log(`Armor updated: base=${armorBase}, bonus=${armorBonus}, total=${armorBase + armorBonus}`);
-      } else {
-        console.warn("Could not find armor display elements");
-        console.log("armorBonusEl found:", !!armorBonusEl);
-        console.log("armorTotalEl found:", !!armorTotalEl);
-      }
-      
+      // Update armor display
+      this._updateArmorDisplay();
       target.checked = isEquipped;
       
     } catch (error) {
@@ -547,70 +461,41 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     }
   }
 
-  /**
-   * Handle tab switching via action system
-   */
-  static async #onSwitchTab(event, target) {
-    const tabName = target.dataset.tab;
-    this.activeTab = tabName;
-    this._activateTab(tabName);
-  }
-
-  /** @override */
-  async _onDrop(event) {
-    const scrollPositions = {
-      main: this.element.querySelector('.sheet-container')?.scrollTop || 0,
-      armor: this.element.querySelector('.armor-list')?.scrollTop || 0,
-      weapon: this.element.querySelector('.weapon-list')?.scrollTop || 0,
-      shield: this.element.querySelector('.shield-list')?.scrollTop || 0,
-      advancement: this.element.querySelector('.advancement-list')?.scrollTop || 0,
-      loot: this.element.querySelector('.loot-list')?.scrollTop || 0
-    };
+  _updateArmorDisplay() {
+    const armorBonusEl = this.element?.querySelector('.armor-bonus');
+    let armorTotalEl = null;
     
-    const observer = new MutationObserver(() => {
-      const container = this.element?.querySelector('.sheet-container');
-      if (container && scrollPositions.main > 0) {
-        container.scrollTop = scrollPositions.main;
+    const statBoxes = this.element?.querySelectorAll('.stat-box') || [];
+    for (const box of statBoxes) {
+      const statName = box.querySelector('.stat-name');
+      if (statName && statName.textContent.trim() === 'Armor') {
+        armorTotalEl = box.querySelector('.total-score');
+        break;
       }
-    });
+    }
     
-    observer.observe(this.element, {
-      childList: true,
-      subtree: true,
-      attributes: false
-    });
-    
-    try {
-      const result = await super._onDrop(event);
-      setTimeout(() => observer.disconnect(), 200);
-      return result;
-    } catch (error) {
-      observer.disconnect();
-      throw error;
+    if (armorBonusEl && armorTotalEl) {
+      let armorBonus = 0;
+      const armorBase = this.document.system.armor?.base || 7;
+      
+      const equippedArmor = this.document.items.filter(item => 
+        item.type === "armor" && item.system.equipped
+      );
+      const equippedShields = this.document.items.filter(item => 
+        item.type === "shield" && item.system.equipped
+      );
+      
+      for (const armor of equippedArmor) {
+        if (armor.system.armorType === "basic") armorBonus += 1;
+        else if (armor.system.armorType === "plate") armorBonus += 2;
+      }
+      
+      for (const shield of equippedShields) {
+        armorBonus += 1;
+      }
+      
+      armorBonusEl.textContent = armorBonus;
+      armorTotalEl.textContent = armorBase + armorBonus;
     }
   }
-
-  async _renderItemList(type) {
-  // Re-prepare full items data for template use
-  const context = await this._prepareContext();
-  // Render the full actor sheet to HTML (or just the list portion)
-  // For better performance, render only the item list snippet (if available)
-  
-  // Here we can re-render the whole actor sheet, but ideally just the item list
-  const html = await foundry.applications.handlebars.renderTemplate(
-    "systems/best-left-buried/templates/actor-v2.hbs",
-    context
-  );
-  
-  // Extract the relevant item list container from the rendered html
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(html, "text/html");
-  const newList = doc.querySelector(`.${type}-list`);
-  if (!newList) return;
-
-  // Replace the existing item list container with the new one
-  const container = this.element.querySelector(`.${type}-list`);
-  if (container) container.replaceWith(newList);
-}
-
 }
