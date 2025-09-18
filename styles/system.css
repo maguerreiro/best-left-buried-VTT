@@ -57,12 +57,12 @@ form.best-left-buried.sheet.actor {
 }
 
 .best-left-buried .sheet-container {
-    padding: 15px;
-    overflow-y: auto;
-    overflow-x: hidden;
+    padding: 5px;
     flex: 1;
     height: 100%;
     box-sizing: border-box;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 /* ========================================
@@ -90,34 +90,36 @@ form.best-left-buried.sheet.actor {
     pointer-events: auto !important;
     transform: rotate(90deg);
     transform-origin: center center;
-    width: 140px;                      /* Tab container width - adjust as needed */
-    height: 25px;                      /* Tab container height - adjust as needed */
-    overflow: visible !important;
+    width: auto;                      /* Tab container width - adjust as needed */
+    height: auto;                      /* Tab container height - adjust as needed */
+    overflow-x: visible !important;
+    overflow-y: hidden !important;
 }
 
 .blb-external-tabs .sheet-tabs {
     display: flex !important;
     flex-direction: row;
     justify-content: space-between;
-    width: 100%;
-    height: 100%;
+    width: auto;
+    height: auto;
     margin: 0;
     padding: 0;
     gap: 2px;
     background: none;
     border: none;
-    overflow: visible;
+    overflow-x: visible;
+    overflow-y: hidden !important;
 }
 
 /* Clean, professional external tab styling */
 .blb-external-tabs .sheet-tabs .item {
-    height: 22px !important;
+    height: 30px !important;
     padding: 1px 4px !important;
     line-height: 20px !important;
     background: #ffffff !important;
     border: 1px solid #2c2c2c !important;
     border-radius: 3px !important;
-    font-size: 8px !important;
+    font-size: 16px !important;
     color: #2c2c2c !important;
     text-decoration: none !important;
     cursor: pointer !important;
@@ -126,11 +128,12 @@ form.best-left-buried.sheet.actor {
     align-items: center !important;
     justify-content: center !important;
     transition: all 0.15s ease !important;
-    min-width: 35px !important;
-    flex: 1 !important;
+    min-width: 25px !important;
+    max-width: 250px !important;
+    flex: none !important;
     box-shadow: 0 1px 2px rgba(0,0,0,0.1) !important;
-    font-family: 'Cinzel', serif !important;
     font-weight: normal !important;
+    text-shadow: none !important;
 }
 
 /* Active external tab */
@@ -138,14 +141,8 @@ form.best-left-buried.sheet.actor {
     background: #2c2c2c !important;
     color: white !important;
     font-weight: bold !important;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
 }
 
-/* Hover effect for external tabs */
-.blb-external-tabs .sheet-tabs .item:hover:not(.active) {
-    background: #f5f5f5 !important;
-    box-shadow: 0 2px 3px rgba(0,0,0,0.15) !important;
-}
 
 /* Responsive: Hide external tabs on smaller screens, show internal ones */
 @media (max-width: 1024px) {
@@ -644,18 +641,6 @@ form.best-left-buried.sheet.actor {
 
 .best-left-buried .item-delete:hover {
     color: #ff0000;
-}
-
-/* Equipment lists with scrolling */
-.best-left-buried .weapon-list,
-.best-left-buried .armor-list,
-.best-left-buried .shield-list,
-.best-left-buried .loot-list,
-.best-left-buried .advancement-list {
-    max-height: 300px;
-    overflow-y: auto;
-    border: 1px solid #ddd;
-    border-radius: 3px;
 }
 
 /* ========================================

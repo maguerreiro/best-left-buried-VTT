@@ -11,7 +11,7 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
   /** @override */
   static DEFAULT_OPTIONS = {
     classes: ["best-left-buried", "sheet", "actor"],
-    position: { width: 1000, height: 900 },
+    position: { width: 700, height: 800 },
     window: { 
       title: "Best Left Buried Character", 
       resizable: true,
@@ -114,8 +114,8 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     // Tab definitions
     const tabs = [
       { id: 'stats', label: 'Stats' },
-      { id: 'equipment', label: 'Items' },
-      { id: 'advancements', label: 'Adv' }
+      { id: 'equipment', label: 'Equipment' },
+      { id: 'advancements', label: 'Empty' }
     ];
 
     // Create tab buttons
@@ -148,46 +148,61 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
   /**
    * Position external tabs outside the window
    */
-  _positionExternalTabs(tabsContainer, windowElement) {
-    const rect = windowElement.getBoundingClientRect();
-    const tabsX = rect.right + 15; // Adjust this for horizontal offset
-    const tabsY = rect.top + (rect.height / 2); // Adjust this for vertical position
+_positionExternalTabs(tabsContainer, windowElement) {
+  const rect = windowElement.getBoundingClientRect();
+  const tabsX = rect.right + 100;
+  const tabsY = rect.top + 200; // Same fixed offset
 
-    tabsContainer.style.position = 'fixed';
-    tabsContainer.style.left = `${tabsX}px`;
-    tabsContainer.style.top = `${tabsY}px`;
-    tabsContainer.style.zIndex = '10001';
-  }
+  tabsContainer.style.position = 'fixed';
+  tabsContainer.style.left = `${tabsX}px`;
+  tabsContainer.style.top = `${tabsY}px`;
+  tabsContainer.style.zIndex = '10001';
+}
 
   /**
    * Start smooth position tracking using requestAnimationFrame
    */
-  _startPositionTracking(windowElement) {
-    let lastX = 0, lastY = 0;
+_startPositionTracking(windowElement) {
+  let lastX = 0, lastY = 0;
+  let fixedYOffset = null; // Store the initial Y offset
+  
+  const updatePosition = () => {
+    if (!this._externalTabs || !windowElement || !document.body.contains(windowElement)) {
+      this._cleanupExternalTabs();
+      return;
+    }
+
+    const rect = windowElement.getBoundingClientRect();
     
-    const updatePosition = () => {
-      if (!this._externalTabs || !windowElement || !document.body.contains(windowElement)) {
-        this._cleanupExternalTabs();
-        return;
-      }
+    // Set fixed Y offset on first run
+    if (fixedYOffset === null) {
+      fixedYOffset = + 120; // Fixed distance from window top - adjust this value
+    }
+    
+    let newX = rect.right - 79;
+    let newY = rect.top + fixedYOffset; // Use fixed offset instead of centering
 
-      const rect = windowElement.getBoundingClientRect();
-      const newX = rect.right + 15;
-      const newY = rect.top + (rect.height / 2);
+    // Keep tabs on screen - clamp to viewport bounds
+    const maxX = window.innerWidth - 150;
+    const minX = 10;
+    const maxY = window.innerHeight - 30;
+    const minY = 10;
 
-      // Only update if position actually changed (reduces flicker)
-      if (newX !== lastX || newY !== lastY) {
-        this._externalTabs.style.left = `${newX}px`;
-        this._externalTabs.style.top = `${newY}px`;
-        lastX = newX;
-        lastY = newY;
-      }
+    newX = Math.min(Math.max(newX, minX), maxX);
+    newY = Math.min(Math.max(newY, minY), maxY);
 
-      this._animationFrame = requestAnimationFrame(updatePosition);
-    };
+    if (newX !== lastX || newY !== lastY) {
+      this._externalTabs.style.left = `${newX}px`;
+      this._externalTabs.style.top = `${newY}px`;
+      lastX = newX;
+      lastY = newY;
+    }
 
     this._animationFrame = requestAnimationFrame(updatePosition);
-  }
+  };
+
+  this._animationFrame = requestAnimationFrame(updatePosition);
+}
 
   /**
    * Switch to a specific tab
