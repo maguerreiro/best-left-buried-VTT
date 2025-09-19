@@ -1,8 +1,8 @@
-// sheets/actor-sheet-v2.js - Cleaned and Optimized External Tabs
+// sheets/actor-sheet-v2.js - Compact redesigned sheet
 
 import { WEAPON_TYPES } from "../module/helpers/weapons.js";
-import { ARMOR_TYPES, SHIELD_TYPES } from "../module/helpers/armor.js";
-import { ADVANCEMENT_TYPES, LOOT_TYPES } from "../module/helpers/new_items.js";
+import { ARMOR_TYPES } from "../module/helpers/armor.js";
+import { ADVANCEMENT_TYPES, CONSEQUENCE_TYPES, LOOT_TYPES } from "../module/helpers/new_items.js";
 
 export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.sheets.ActorSheetV2
@@ -11,7 +11,7 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
   /** @override */
   static DEFAULT_OPTIONS = {
     classes: ["best-left-buried", "sheet", "actor"],
-    position: { width: 700, height: 800 },
+    position: { width: 800, height: 700 },
     window: { 
       title: "Best Left Buried Character", 
       resizable: true,
@@ -23,11 +23,14 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     },
     actions: {
       updateXP: BLBActorSheetV2.#onUpdateXP,
+      updateAdvancement: BLBActorSheetV2.#onUpdateAdvancement,
       rollWeapon: BLBActorSheetV2.#onRollWeapon,
       rollAdvancement: BLBActorSheetV2.#onRollAdvancement,
+      rollConsequence: BLBActorSheetV2.#onRollConsequence,
       openItem: BLBActorSheetV2.#onOpenItem,
       deleteItem: BLBActorSheetV2.#onDeleteItem,
-      toggleEquip: BLBActorSheetV2.#onToggleEquip
+      toggleEquip: BLBActorSheetV2.#onToggleEquip,
+      toggleActive: BLBActorSheetV2.#onToggleActive
     }
   };
 
@@ -40,14 +43,10 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
 
   constructor(...args) {
     super(...args);
-    this.activeTab = "stats";
+    this.activeTab = "character";
     this._externalTabs = null;
     this._animationFrame = null;
   }
-
-  /* -------------------------------------------- */
-  /*  Rendering                                   */
-  /* -------------------------------------------- */
 
   /** @override */
   async _prepareContext(options) {
@@ -64,13 +63,12 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
       // Helper constants
       WEAPON_TYPES,
       ARMOR_TYPES,
-      SHIELD_TYPES,
       ADVANCEMENT_TYPES,
+      CONSEQUENCE_TYPES,
       LOOT_TYPES,
 
       // Items
       items: this._prepareItems(doc.items),
-      actions: this._prepareActions(doc.items),
 
       // Tab state
       activeTab: this.activeTab
@@ -84,41 +82,27 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
   async _onRender(context, options) {
     await super._onRender(context, options);
     this._activateTab(this.activeTab);
-    
-    // Create external tabs after a brief delay for DOM stabilization
     setTimeout(() => this._createExternalTabs(), 100);
   }
 
-  /* -------------------------------------------- */
-  /*  External Tabs System                        */
-  /* -------------------------------------------- */
-
-  /**
-   * Create external tabs positioned outside the window
-   */
   _createExternalTabs() {
     this._cleanupExternalTabs();
 
     const windowElement = this.element;
     if (!windowElement) return;
 
-    // Create tabs container
     const tabsContainer = document.createElement('div');
     tabsContainer.className = 'blb-external-tabs';
     
-    // Create navigation
     const tabsNav = document.createElement('nav');
     tabsNav.className = 'sheet-tabs tabs';
     tabsNav.setAttribute('data-group', 'primary');
 
-    // Tab definitions
     const tabs = [
-      { id: 'stats', label: 'Stats' },
-      { id: 'equipment', label: 'Equipment' },
-      { id: 'advancements', label: 'Empty' }
+      { id: 'character', label: 'Character' },
+      { id: 'equipment', label: 'Equipment' }
     ];
 
-    // Create tab buttons
     tabs.forEach(tab => {
       const tabButton = document.createElement('a');
       tabButton.className = `item ${this.activeTab === tab.id ? 'active' : ''}`;
@@ -135,87 +119,55 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     });
 
     tabsContainer.appendChild(tabsNav);
-    
-    // Position and add to DOM
     this._positionExternalTabs(tabsContainer, windowElement);
     document.body.appendChild(tabsContainer);
     this._externalTabs = tabsContainer;
-
-    // Start smooth position tracking
     this._startPositionTracking(windowElement);
   }
 
-  /**
-   * Position external tabs outside the window
-   */
-_positionExternalTabs(tabsContainer, windowElement) {
-  const rect = windowElement.getBoundingClientRect();
-  const tabsX = rect.right + 100;
-  const tabsY = rect.top + 200; // Same fixed offset
-
-  tabsContainer.style.position = 'fixed';
-  tabsContainer.style.left = `${tabsX}px`;
-  tabsContainer.style.top = `${tabsY}px`;
-  tabsContainer.style.zIndex = '10001';
-}
-
-  /**
-   * Start smooth position tracking using requestAnimationFrame
-   */
-_startPositionTracking(windowElement) {
-  let lastX = 0, lastY = 0;
-  let fixedYOffset = null; // Store the initial Y offset
-  
-  const updatePosition = () => {
-    if (!this._externalTabs || !windowElement || !document.body.contains(windowElement)) {
-      this._cleanupExternalTabs();
-      return;
-    }
-
+  _positionExternalTabs(tabsContainer, windowElement) {
     const rect = windowElement.getBoundingClientRect();
+    const tabsX = rect.right + 15;
+    const tabsY = rect.top + (rect.height / 2);
+
+    tabsContainer.style.position = 'fixed';
+    tabsContainer.style.left = `${tabsX}px`;
+    tabsContainer.style.top = `${tabsY}px`;
+    tabsContainer.style.zIndex = '10001';
+  }
+
+  _startPositionTracking(windowElement) {
+    let lastX = 0, lastY = 0;
     
-    // Set fixed Y offset on first run
-    if (fixedYOffset === null) {
-      fixedYOffset = + 120; // Fixed distance from window top - adjust this value
-    }
-    
-    let newX = rect.right - 79;
-    let newY = rect.top + fixedYOffset; // Use fixed offset instead of centering
+    const updatePosition = () => {
+      if (!this._externalTabs || !windowElement || !document.body.contains(windowElement)) {
+        this._cleanupExternalTabs();
+        return;
+      }
 
-    // Keep tabs on screen - clamp to viewport bounds
-    const maxX = window.innerWidth - 150;
-    const minX = 10;
-    const maxY = window.innerHeight - 30;
-    const minY = 10;
+      const rect = windowElement.getBoundingClientRect();
+      const newX = rect.right - 50;
+      const newY = rect.top + (rect.height / 2) - 250;
 
-    newX = Math.min(Math.max(newX, minX), maxX);
-    newY = Math.min(Math.max(newY, minY), maxY);
+      if (newX !== lastX || newY !== lastY) {
+        this._externalTabs.style.left = `${newX}px`;
+        this._externalTabs.style.top = `${newY}px`;
+        lastX = newX;
+        lastY = newY;
+      }
 
-    if (newX !== lastX || newY !== lastY) {
-      this._externalTabs.style.left = `${newX}px`;
-      this._externalTabs.style.top = `${newY}px`;
-      lastX = newX;
-      lastY = newY;
-    }
+      this._animationFrame = requestAnimationFrame(updatePosition);
+    };
 
     this._animationFrame = requestAnimationFrame(updatePosition);
-  };
+  }
 
-  this._animationFrame = requestAnimationFrame(updatePosition);
-}
-
-  /**
-   * Switch to a specific tab
-   */
   _switchToTab(tabId) {
     this.activeTab = tabId;
     this._activateTab(tabId);
     this._updateExternalTabStates();
   }
 
-  /**
-   * Activate tab content in the sheet
-   */
   _activateTab(tabName) {
     if (!this.element) return;
     
@@ -231,9 +183,6 @@ _startPositionTracking(windowElement) {
     });
   }
 
-  /**
-   * Update external tab visual states
-   */
   _updateExternalTabStates() {
     if (!this._externalTabs) return;
 
@@ -247,9 +196,6 @@ _startPositionTracking(windowElement) {
     });
   }
 
-  /**
-   * Cleanup external tabs and animations
-   */
   _cleanupExternalTabs() {
     if (this._externalTabs && document.body.contains(this._externalTabs)) {
       this._externalTabs.remove();
@@ -262,24 +208,17 @@ _startPositionTracking(windowElement) {
     }
   }
 
-  /**
-   * Override close to cleanup external tabs
-   */
   async close(options = {}) {
     this._cleanupExternalTabs();
     return super.close(options);
   }
 
-  /* -------------------------------------------- */
-  /*  Data Preparation                            */
-  /* -------------------------------------------- */
-
   _prepareItems(items) {
     const organized = {
       weapon: [],
       armor: [],
-      shield: [],
       advancement: [],
+      consequence: [],
       loot: []
     };
     
@@ -289,37 +228,14 @@ _startPositionTracking(windowElement) {
       }
     }
     
-    // Sort weapons by type
-    organized.weapon.sort((a, b) => {
-      const typeOrder = ["hand", "heavy", "light", "long", "ranged", "throwing"];
-      const aIndex = typeOrder.indexOf(a.system.weaponType || "hand");
-      const bIndex = typeOrder.indexOf(b.system.weaponType || "hand");
-      
-      if (aIndex !== bIndex) return aIndex - bIndex;
-      return a.name.localeCompare(b.name);
-    });
-    
+    // Sort items
+    organized.weapon.sort((a, b) => a.name.localeCompare(b.name));
     organized.armor.sort((a, b) => a.name.localeCompare(b.name));
-    organized.shield.sort((a, b) => a.name.localeCompare(b.name));
+    organized.advancement.sort((a, b) => a.name.localeCompare(b.name));
+    organized.consequence.sort((a, b) => a.name.localeCompare(b.name));
+    organized.loot.sort((a, b) => a.name.localeCompare(b.name));
     
     return organized;
-  }
-
-  _prepareActions(items) {
-    const actions = {
-      weapons: [],
-      advancements: []
-    };
-    
-    actions.weapons = items.filter(item => 
-      item.type === "weapon" && item.system.equipped
-    );
-    
-    actions.advancements = items.filter(item => 
-      item.type === "advancement" && item.system.equipped
-    );
-    
-    return actions;
   }
 
   _prepareArmor(context) {
@@ -331,11 +247,8 @@ _startPositionTracking(windowElement) {
       if (armor.system.equipped) {
         if (armor.system.armorType === "basic") armorBonus += 1;
         else if (armor.system.armorType === "plate") armorBonus += 2;
+        else if (armor.system.armorType === "shield") armorBonus += 1;
       }
-    }
-    
-    for (const shield of context.items.shield) {
-      if (shield.system.equipped) armorBonus += 1;
     }
     
     armorTotal += armorBonus;
@@ -344,10 +257,7 @@ _startPositionTracking(windowElement) {
     context.system.armorTotal = armorTotal;
   }
 
-  /* -------------------------------------------- */
-  /*  Event Handlers                              */
-  /* -------------------------------------------- */
-
+  // Event Handlers
   static async #onFormSubmit(event, form, formData) {
     const updateData = foundry.utils.expandObject(formData.object);
     await this.document.update(updateData);
@@ -357,11 +267,17 @@ _startPositionTracking(windowElement) {
     const change = target.dataset.change === "increase" ? 1 : -1;
     const currentXP = this.document.system.xp || 0;
     const newXP = Math.max(0, currentXP + change);
-    
     await this.document.update({ "system.xp": newXP });
   }
 
-  static async #onRollWeapon(event, target) {
+  static async #onUpdateAdvancement(event, target) {
+    const change = target.dataset.change === "increase" ? 1 : -1;
+    const currentAdv = this.document.system.advancement || 0;
+    const newAdv = Math.max(0, currentAdv + change);
+    await this.document.update({ "system.advancement": newAdv });
+  }
+
+static async #onRollWeapon(event, target) {
     const weaponId = target.dataset.weaponId;
     const weapon = this.document.items.get(weaponId);
     
@@ -375,21 +291,34 @@ _startPositionTracking(windowElement) {
     const attackStat = weaponData.attackStat;
     const attackValue = this.document.system[attackStat + "Total"] || this.document.system[attackStat]?.base || 0;
     
-    const roll = await new Roll(`1d20 + ${attackValue}`).evaluate();
-    roll.toMessage({
-      speaker: ChatMessage.getSpeaker({ actor: this.document }),
-      flavor: `${weapon.name} Attack Roll`
-    });
-    
     let damage = weaponData.damageMod || 0;
     if (weapon.system.isTwoHanded && weaponData.twoHandedBonus) damage += 1;
+
+    // Evaluate the roll as before
+    const roll = await new Roll(`3d6 + ${attackValue} + ${damage}`).evaluate();
+
+    // Get the results of each die from the first dice term
+    const dieResults = roll.dice[0].results.map(r => r.result);
     
-    const damageRoll = await new Roll(`1d6 + ${damage}`).evaluate();
-    damageRoll.toMessage({
-      speaker: ChatMessage.getSpeaker({ actor: this.document }),
-      flavor: `${weapon.name} Damage`
+    // Construct the text to display, including individual die rolls
+    let resultText = `
+        <div class="dice-roll">
+            <div class="dice-result">
+                <div class="dice-formula">${roll.formula}</div>
+                <h4 class="dice-total">
+                    ${dieResults.join(" + ")}
+                </h4>
+            </div>
+        </div>
+    `;
+
+    // Create a chat message using the custom content
+    ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor: this.document }),
+        flavor: `${weapon.name}: ${attackStat}: ${attackValue}, DamageMod: ${damage}`,
+        content: resultText
     });
-  }
+}
 
   static async #onRollAdvancement(event, target) {
     const advancementId = target.dataset.advancementId;
@@ -412,6 +341,27 @@ _startPositionTracking(windowElement) {
     });
   }
 
+  static async #onRollConsequence(event, target) {
+    const consequenceId = target.dataset.consequenceId;
+    const consequence = this.document.items.get(consequenceId);
+    
+    if (!consequence) return;
+    
+    let rollFormula = consequence.system.rollFormula || "1d20";
+    
+    if (consequence.system.usesAttribute !== "none") {
+      const attrValue = this.document.system[consequence.system.usesAttribute + "Total"] || 
+                       this.document.system[consequence.system.usesAttribute]?.base || 0;
+      rollFormula += ` + ${attrValue}`;
+    }
+    
+    const roll = await new Roll(rollFormula).evaluate();
+    roll.toMessage({
+      speaker: ChatMessage.getSpeaker({ actor: this.document }),
+      flavor: `${consequence.name} Roll`
+    });
+  }
+
   static async #onOpenItem(event, target) {
     const itemId = target.closest("[data-item-id]")?.dataset.itemId;
     const item = this.document.items.get(itemId);
@@ -431,9 +381,19 @@ _startPositionTracking(windowElement) {
     });
     
     if (confirmed) {
+      // Remove the item row from the DOM first to prevent scrollbar jump
       const itemRow = target.closest("[data-item-id]");
-      if (itemRow) itemRow.remove();
+      if (itemRow) {
+        itemRow.remove();
+      }
+      
+      // Delete the item without re-rendering the sheet
       await item.delete({ render: false });
+      
+      // If it was armor/shield, update the armor display
+      if (item.type === "armor" && item.system.equipped) {
+        this._updateArmorDisplay();
+      }
     }
   }
 
@@ -448,17 +408,31 @@ _startPositionTracking(windowElement) {
     const isEquipped = target.checked;
     
     try {
-      await item.update({ "system.equipped": isEquipped }, { render: true });
+      // Update item without re-rendering the sheet to avoid scrollbar jump
+      await item.update({ "system.equipped": isEquipped }, { render: false });
       
       // Handle exclusive equipment (armor/shields)
-      if ((item.type === "armor" || item.type === "shield") && isEquipped) {
+      if (item.type === "armor" && isEquipped) {
+        const armorType = item.system.armorType;
+        let conflictTypes = [];
+        
+        if (armorType === "basic" || armorType === "plate") {
+          conflictTypes = ["basic", "plate"];
+        } else if (armorType === "shield") {
+          conflictTypes = ["shield"];
+        }
+        
         const others = this.document.items.filter(i => 
-          i.type === item.type && i.id !== itemId && i.system.equipped
+          i.type === "armor" && 
+          i.id !== itemId && 
+          i.system.equipped && 
+          conflictTypes.includes(i.system.armorType)
         );
         
         for (const other of others) {
           await other.update({ "system.equipped": false }, { render: false });
           
+          // Manually update the other checkboxes in the UI
           const otherCheckbox = this.element.querySelector(`input[data-item-id="${other.id}"]`);
           if (otherCheckbox) {
             otherCheckbox.checked = false;
@@ -466,13 +440,15 @@ _startPositionTracking(windowElement) {
         }
       }
       
-      // Update armor display
+      // Update armor display manually
       this._updateArmorDisplay();
+      
+      // Ensure the clicked checkbox state is correct
       target.checked = isEquipped;
       
     } catch (error) {
       console.error("Error in equipment toggle:", error);
-      target.checked = !isEquipped;
+      target.checked = !isEquipped; // Revert on error
     }
   }
 
@@ -480,13 +456,10 @@ _startPositionTracking(windowElement) {
     const armorBonusEl = this.element?.querySelector('.armor-bonus');
     let armorTotalEl = null;
     
-    const statBoxes = this.element?.querySelectorAll('.stat-box') || [];
+    const statBoxes = this.element?.querySelectorAll('.armor-display') || [];
     for (const box of statBoxes) {
-      const statName = box.querySelector('.stat-name');
-      if (statName && statName.textContent.trim() === 'Armor') {
-        armorTotalEl = box.querySelector('.total-score');
-        break;
-      }
+      armorTotalEl = box.querySelector('.armor-total');
+      if (armorTotalEl) break;
     }
     
     if (armorBonusEl && armorTotalEl) {
@@ -496,21 +469,27 @@ _startPositionTracking(windowElement) {
       const equippedArmor = this.document.items.filter(item => 
         item.type === "armor" && item.system.equipped
       );
-      const equippedShields = this.document.items.filter(item => 
-        item.type === "shield" && item.system.equipped
-      );
       
       for (const armor of equippedArmor) {
         if (armor.system.armorType === "basic") armorBonus += 1;
         else if (armor.system.armorType === "plate") armorBonus += 2;
-      }
-      
-      for (const shield of equippedShields) {
-        armorBonus += 1;
+        else if (armor.system.armorType === "shield") armorBonus += 1;
       }
       
       armorBonusEl.textContent = armorBonus;
       armorTotalEl.textContent = armorBase + armorBonus;
     }
+  }
+
+  static async #onToggleActive(event, target) {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    const itemId = target.dataset.itemId;
+    const item = this.document.items.get(itemId);
+    if (!item) return;
+    
+    const isActive = target.checked;
+    await item.update({ "system.active": isActive });
   }
 }

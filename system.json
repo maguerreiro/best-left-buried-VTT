@@ -25,9 +25,9 @@
     "Item": {
       "weapon": {},
       "armor": {},
-      "shield": {},
       "advancement": {},
-      "treasure": {}
+      "consequence": {},
+      "loot": {}
     }
   },
 

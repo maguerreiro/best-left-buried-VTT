@@ -1,42 +1,42 @@
 /* ========================================
-   BEST LEFT BURIED FOUNDRY VTT SYSTEM CSS - PDF STYLE
-   ======================================== */
-
-/* ========================================
-   FONTS AND TYPOGRAPHY
+   BEST LEFT BURIED - COMPACT DARK THEME
    ======================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&display=swap');
 
+/* ========================================
+   GLOBAL VARIABLES & BASE STYLING
+   ======================================== */
+
+:root {
+    --bg-primary: #1e1e1e;
+    --bg-secondary: #2a2a2a;
+    --bg-tertiary: #353535;
+    --text-primary: #e0e0e0;
+    --text-secondary: #b0b0b0;
+    --accent-primary: #4a90e2;
+    --accent-secondary: #357abd;
+    --border-color: #555;
+    --border-light: #666;
+    --success: #4caf50;
+    --warning: #ff9800;
+    --danger: #f44336;
+}
+
 .best-left-buried {
     font-family: 'Cinzel', serif;
-}
-
-.best-left-buried .stat-name,
-.best-left-buried h1, .best-left-buried h2, .best-left-buried h3 {
-    font-family: 'Cinzel', serif;
-}
-
-/* Use Cinzel instead of Blackletter if Blackletter is not available */
-@font-face {
-    font-family: "Blackletter";
-    src: local('Cinzel'), local('Cinzel-Regular');
+    background: var(--bg-primary);
+    color: var(--text-primary);
 }
 
 /* ========================================
-   APPLICATION LAYOUT - PDF STYLE WITH EXTERNAL TABS
+   APPLICATION LAYOUT
    ======================================== */
 
-form.best-left-buried.sheet.actor {
-    display: flex;
-    flex-direction: column;
-}
-
 .best-left-buried.application {
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    background: #f5f5f5;
+    background: var(--bg-primary);
+    border: 2px solid var(--border-color);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
 }
 
 .best-left-buried .sheet-layout {
@@ -49,78 +49,62 @@ form.best-left-buried.sheet.actor {
     flex: 1;
     display: flex;
     flex-direction: column;
-    background: white;
-    border: 3px solid #2c2c2c;
-    box-shadow: 0 0 20px rgba(0,0,0,0.3);
-    margin: 10px;
+    background: var(--bg-primary);
     position: relative;
 }
 
 .best-left-buried .sheet-container {
-    padding: 5px;
+    padding: 15px;
+    overflow-y: auto;
+    overflow-x: hidden;
     flex: 1;
     height: 100%;
     box-sizing: border-box;
-    overflow-y: auto;
-    overflow-x: hidden;
 }
 
-/* ========================================
-   INTERNAL TAB SYSTEM - HIDE ONLY INTERNAL ONES
-   ======================================== */
-
-/* Hide only the internal tabs that are inside the sheet */
+/* Hide internal tabs */
 .best-left-buried.application .sheet-tabs {
     display: none;
 }
 
 /* ========================================
-   EXTERNAL TABS SYSTEM - ADD THIS TO YOUR EXISTING CSS
+   EXTERNAL TABS
    ======================================== */
 
-/* Hide only the internal tabs that are inside the sheet */
-.best-left-buried.application .sheet-tabs {
-    display: none;
-}
-
-/* External tabs container - positioned outside the window */
 .blb-external-tabs {
     position: fixed !important;
     z-index: 10001 !important;
     pointer-events: auto !important;
     transform: rotate(90deg);
     transform-origin: center center;
-    width: auto;                      /* Tab container width - adjust as needed */
-    height: auto;                      /* Tab container height - adjust as needed */
-    overflow-x: visible !important;
-    overflow-y: hidden !important;
+    width: 120px;
+    height: 25px;
+    overflow: visible !important;
 }
 
 .blb-external-tabs .sheet-tabs {
     display: flex !important;
     flex-direction: row;
     justify-content: space-between;
-    width: auto;
-    height: auto;
+    width: 100%;
+    height: 100%;
     margin: 0;
     padding: 0;
     gap: 2px;
     background: none;
     border: none;
-    overflow-x: visible;
-    overflow-y: hidden !important;
+    overflow: visible;
 }
 
-/* Clean, professional external tab styling */
 .blb-external-tabs .sheet-tabs .item {
-    height: 30px !important;
+    height: 22px !important;
     padding: 1px 4px !important;
     line-height: 20px !important;
-    background: #ffffff !important;
-    border: 1px solid #2c2c2c !important;
+    background: var(--bg-secondary) !important;
+    border: 1px solid var(--border-color) !important;
     border-radius: 3px !important;
-    font-size: 16px !important;
-    color: #2c2c2c !important;
+    font-size: 8px !important;
+    color: var(--text-primary) !important;
     text-decoration: none !important;
     cursor: pointer !important;
     white-space: nowrap !important;
@@ -128,79 +112,53 @@ form.best-left-buried.sheet.actor {
     align-items: center !important;
     justify-content: center !important;
     transition: all 0.15s ease !important;
-    min-width: 25px !important;
-    max-width: 250px !important;
-    flex: none !important;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1) !important;
+    min-width: 50px !important;
+    flex: 1 !important;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
+    font-family: 'Cinzel', serif !important;
     font-weight: normal !important;
-    text-shadow: none !important;
 }
 
-/* Active external tab */
 .blb-external-tabs .sheet-tabs .item.active {
-    background: #2c2c2c !important;
+    background: var(--accent-primary) !important;
     color: white !important;
     font-weight: bold !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4) !important;
 }
 
-
-/* Responsive: Hide external tabs on smaller screens, show internal ones */
-@media (max-width: 1024px) {
-    .blb-external-tabs {
-        display: none !important;
-    }
-    
-    .best-left-buried.application .sheet-tabs {
-        display: flex !important;
-        position: static;
-        transform: none;
-        width: 100%;
-        height: auto;
-        border-top: 3px solid #2c2c2c;
-        padding: 10px 0;
-        flex-direction: row;
-        justify-content: center;
-    }
-    
-    .best-left-buried.application .sheet-tabs .item {
-        transform: none;
-        border: 2px solid #2c2c2c;
-        border-bottom: none;
-        border-radius: 8px 8px 0 0;
-        margin: 0 2px;
-        padding: 8px 12px;
-        font-size: 0.9em;
-    }
+.blb-external-tabs .sheet-tabs .item:hover:not(.active) {
+    background: var(--bg-tertiary) !important;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.4) !important;
 }
 
 /* ========================================
-   CHARACTER HEADER WITH PORTRAIT
+   CHARACTER HEADER
    ======================================== */
 
 .best-left-buried .character-header {
     display: flex;
     align-items: flex-start;
-    gap: 20px;
+    gap: 15px;
     padding: 15px;
-    border-bottom: 3px solid #2c2c2c;
-    background: #fafafa;
-    margin: -15px -15px 20px -15px;
+    border-bottom: 2px solid var(--border-color);
+    background: var(--bg-secondary);
+    margin: -15px -15px 15px -15px;
+    border-radius: 5px 5px 0 0;
 }
 
 .best-left-buried .portrait-section {
     display: flex;
-    gap: 15px;
-    align-items: flex-start;
-    flex: 1;
+    align-items: center;
 }
 
 .best-left-buried .character-portrait {
-    width: 120px;
-    height: 150px;
+    width: 80px;
+    height: 100px;
     object-fit: cover;
-    border: 3px solid #2c2c2c;
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    border: 2px solid var(--border-color);
+    border-radius: 5px;
     cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
 .best-left-buried .character-info {
@@ -211,69 +169,107 @@ form.best-left-buried.sheet.actor {
 }
 
 .best-left-buried .character-name {
-    font-size: 1.8em;
+    font-size: 1.4em;
     font-weight: bold;
-    font-family: "Blackletter", serif;
-    border: 2px solid #2c2c2c;
-    padding: 8px;
-    background: white;
-}
-
-.best-left-buried .race-input,
-.best-left-buried .archetype-input {
-    font-size: 1.2em;
-    border: 2px solid #2c2c2c;
+    border: 2px solid var(--border-color);
     padding: 6px;
-    background: white;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border-radius: 3px;
+    width: 100%;
 }
 
-.best-left-buried .xp-tracker {
-    width: 120px;
-    height: 90px;
-    padding: 10px;
-    border: 3px solid #2c2c2c;
-    background: white;
-    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+.best-left-buried .info-row {
+    display: flex;
+    gap: 15px;
 }
 
-.best-left-buried .xp-tracker h3 {
-    text-align: center;
-    margin-bottom: 10px;
-    font-family: "Blackletter", serif;
-    font-size: 1.3em;
-    color: #2c2c2c;
+.best-left-buried .info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
 }
 
-.best-left-buried .xp-controls {
+.best-left-buried .info-item label {
+    font-size: 0.9em;
+    color: var(--text-secondary);
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+.best-left-buried .info-item input[type="text"],
+.best-left-buried .info-item input[type="number"] {
+    padding: 4px 6px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border-radius: 3px;
+    font-size: 0.9em;
+}
+
+.best-left-buried .counter-controls {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 8px;
+    gap: 4px;
 }
 
-.best-left-buried .xp-button {
-    width: 24px !important;
-    height: 24px !important;
-    border: 2px solid #2c2c2c !important;
-    background: white !important;
-    color: #2c2c2c;
-    font-weight: bold;
+.best-left-buried .counter-button {
+    width: 20px;
+    height: 20px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
     cursor: pointer;
+    border-radius: 2px;
+    font-size: 0.8em;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.best-left-buried .xp-button:hover {
-    background: #f0f0f0 !important;
+.best-left-buried .counter-button:hover {
+    background: var(--accent-primary);
 }
 
-.best-left-buried .xp-value {
+.best-left-buried .counter-value {
     width: 40px;
     text-align: center;
-    border: 2px solid #2c2c2c;
-    padding: 2px;
-    font-weight: bold;
+    padding: 2px 4px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border-radius: 2px;
+    font-size: 0.9em;
+}
+
+.best-left-buried .split-input {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.best-left-buried .split-left,
+.best-left-buried .split-right {
+    width: 35px;
+    padding: 2px 4px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border-radius: 2px;
+    text-align: center;
+    font-size: 0.9em;
+}
+
+.best-left-buried .single-input {
+    width: 80px;
+    padding: 2px 4px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border-radius: 2px;
+    text-align: center;
+    font-size: 0.9em;
 }
 
 /* ========================================
@@ -289,496 +285,311 @@ form.best-left-buried.sheet.actor {
 }
 
 /* ========================================
-   STATS SECTION - MAIN AND SUB STATS
+   MAIN STATS ROW
    ======================================== */
 
-.best-left-buried .stats-section h2 {
-    font-family: "Blackletter", serif;
-    font-size: 2.2em;
-    color: #2c2c2c;
-    border-bottom: 3px solid #2c2c2c;
-    padding-bottom: 5px;
-    margin-bottom: 20px;
-}
-
-.best-left-buried .main-stats-grid {
+.best-left-buried .main-stats-row {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
     margin-bottom: 20px;
-}
-
-.best-left-buried .sub-stats-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-    margin-bottom: 30px;
-}
-
-.best-left-buried .stat-box {
-    border: 3px solid #2c2c2c;
     padding: 15px;
-    text-align: center;
-    position: relative;
-    background: white;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    background: var(--bg-secondary);
+    border-radius: 5px;
+    border: 1px solid var(--border-color);
 }
 
-.best-left-buried .stat-box.main-stat {
-    min-height: 120px;
-}
-
-.best-left-buried .stat-box.sub-stat {
-    min-height: 100px;
-    background: #f8f8f8;
-    border-style: dashed;
-}
-
-/* Decorative corners for main stats */
-.best-left-buried .stat-box.main-stat::before,
-.best-left-buried .stat-box.main-stat::after {
-    content: '';
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    border: 3px solid #2c2c2c;
-}
-
-.best-left-buried .stat-box.main-stat::before {
-    top: -8px;
-    right: -8px;
-    border-left: none;
-    border-bottom: none;
-    background: white;
-}
-
-.best-left-buried .stat-box.main-stat::after {
-    bottom: -8px;
-    left: -8px;
-    border-right: none;
-    border-top: none;
-    background: white;
-}
-
-.best-left-buried .stat-name {
-    font-family: "Blackletter", serif;
-    font-size: 1.6em;
-    margin-bottom: 12px;
-    text-transform: uppercase;
-    color: #2c2c2c;
-}
-
-.best-left-buried .stat-box.sub-stat .stat-name {
-    font-size: 1.3em;
-    color: #555;
-}
-
-.best-left-buried .ability-breakdown {
+.best-left-buried .stat-item {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 0.4rem;
+    gap: 5px;
 }
 
-.best-left-buried .stat-box input[type="number"] {
-    width: 50px !important;
-    text-align: center;
-    padding: 6px 4px !important;
-    font-size: 1.1em;
-    font-weight: bold;
-    border: 2px solid #2c2c2c;
-    background: white;
-    box-sizing: border-box;
-}
-
-.best-left-buried .stat-box.sub-stat input[type="number"] {
-    width: 45px !important;
-    background: #f5f5f5;
-}
-
-.best-left-buried .ability-breakdown .plus,
-.best-left-buried .ability-breakdown .equals,
-.best-left-buried .ability-breakdown .slash {
-    font-weight: bold;
-    color: #2c2c2c;
-    font-size: 1.3em;
-    min-width: 15px;
-    text-align: center;
-}
-
-.best-left-buried .total-score {
-    font-weight: bold;
-    color: #2c2c2c;
-    font-size: 1.4em;
-    min-width: 30px;
-}
-
-.best-left-buried .optional-rule {
-    font-style: italic;
-    color: #666;
-    font-size: 0.75em;
-    font-weight: 500;
+.best-left-buried .stat-item label {
+    font-size: 0.9em;
+    font-weight: 600;
+    color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    margin-top: 8px;
+}
+
+.best-left-buried .stat-item input {
+    width: 50px;
+    padding: 4px;
+    text-align: center;
+    border: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border-radius: 3px;
+    font-weight: 600;
+}
+
+.best-left-buried .armor-display {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.9em;
+    font-weight: 600;
 }
 
 .best-left-buried .armor-base,
-.best-left-buried .armor-bonus {
-    color: #2c2c2c;
-    font-weight: bold;
-    font-size: 1.1em;
+.best-left-buried .armor-bonus,
+.best-left-buried .armor-total {
+    color: var(--text-primary);
+}
+
+.best-left-buried .plus,
+.best-left-buried .equals {
+    color: var(--text-secondary);
 }
 
 /* ========================================
-   ACTIONS SECTION
+   LISTS STYLING
    ======================================== */
 
-.best-left-buried .actions-section h2 {
-    font-family: "Blackletter", serif;
-    font-size: 2.2em;
-    color: #2c2c2c;
-    border-bottom: 3px solid #2c2c2c;
-    padding-bottom: 5px;
+.best-left-buried .list-section,
+.best-left-buried .table-section {
     margin-bottom: 20px;
 }
 
-.best-left-buried .action-category {
-    margin-bottom: 25px;
-}
-
-.best-left-buried .action-category h3 {
-    font-family: "Blackletter", serif;
-    font-size: 1.5em;
-    color: #2c2c2c;
+.best-left-buried .list-section h3,
+.best-left-buried .table-section h3 {
+    font-size: 1.2em;
+    color: var(--text-primary);
     margin-bottom: 10px;
-    border-bottom: 2px solid #ccc;
-    padding-bottom: 3px;
+    padding: 8px 12px;
+    background: var(--bg-secondary);
+    border-radius: 5px;
+    border: 1px solid var(--border-color);
+    font-weight: 600;
 }
 
-.best-left-buried .actions-list {
-    display: flex;
-    flex-direction: column;
+/* ========================================
+   WEAPONS TABLE
+   ======================================== */
+
+.best-left-buried .weapons-table {
+    background: var(--bg-secondary);
+    border-radius: 5px;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+.best-left-buried .table-header {
+    display: grid;
+    grid-template-columns: 60px 30px 1fr 80px 60px 80px 80px 80px 60px;
     gap: 8px;
+    padding: 8px 12px;
+    background: var(--bg-tertiary);
+    border-bottom: 2px solid var(--border-color);
+    font-weight: 600;
+    font-size: 0.85em;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-.best-left-buried .action-item {
+.best-left-buried .table-row {
+    display: grid;
+    grid-template-columns: 60px 30px 1fr 80px 60px 80px 80px 80px 60px;
+    gap: 8px;
+    align-items: center;
+    padding: 6px 12px;
+    border-bottom: 1px solid var(--border-light);
+    transition: background-color 0.2s ease;
+    font-size: 0.9em;
+}
+
+.best-left-buried .table-row:last-child {
+    border-bottom: none;
+}
+
+.best-left-buried .table-row:hover {
+    background: var(--bg-tertiary);
+}
+
+.best-left-buried .col-controls {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 10px;
-    border: 2px solid #2c2c2c;
-    background: white;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    gap: 4px;
 }
 
-.best-left-buried .action-item:hover {
-    background: #f8f8f8;
+.best-left-buried .col-controls input[type="checkbox"] {
+    transform: scale(1.1);
+    margin: 0;
 }
 
-.best-left-buried .action-info {
+.best-left-buried .col-icon {
+    display: flex;
+    justify-content: center;
+}
+
+.best-left-buried .col-name {
+    font-weight: 500;
+}
+
+.best-left-buried .col-type,
+.best-left-buried .col-range,
+.best-left-buried .col-stat,
+.best-left-buried .col-damage,
+.best-left-buried .col-initiative {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.85em;
+}
+
+.best-left-buried .col-actions {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+}
+
+.best-left-buried .roll-button-mini {
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-color);
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.7em;
+}
+
+.best-left-buried .roll-button-mini:hover {
+    background: var(--accent-primary);
+    border-color: var(--accent-secondary);
+}
+
+/* ========================================
+   REGULAR LISTS (for armor and loot)
+   ======================================== */
+
+.best-left-buried .items-list {
+    background: var(--bg-secondary);
+    border-radius: 5px;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+.best-left-buried .list-item {
     display: flex;
     align-items: center;
     gap: 10px;
-    flex: 1;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border-light);
+    transition: background-color 0.2s ease;
 }
 
-.best-left-buried .action-icon {
-    width: 32px;
-    height: 32px;
+.best-left-buried .list-item:last-child {
+    border-bottom: none;
+}
+
+.best-left-buried .list-item:hover {
+    background: var(--bg-tertiary);
+}
+
+.best-left-buried .equipment-item {
+    padding: 6px 12px;
+}
+
+.best-left-buried .equipment-controls-left {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.best-left-buried .equipment-controls-left input[type="checkbox"] {
+    transform: scale(1.2);
+    margin: 0;
+}
+
+.best-left-buried .item-icon {
+    width: 24px;
+    height: 24px;
     object-fit: cover;
-    border: 1px solid #ccc;
+    border-radius: 2px;
+    border: 1px solid var(--border-light);
 }
 
-.best-left-buried .action-details {
+.best-left-buried .item-info {
+    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 2px;
 }
 
-.best-left-buried .action-name {
-    font-weight: bold;
-    color: #2c2c2c;
-    font-size: 1.1em;
+.best-left-buried .item-name {
+    font-weight: 600;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: color 0.2s ease;
 }
 
-.best-left-buried .action-stats {
-    font-size: 0.9em;
-    color: #666;
+.best-left-buried .item-name:hover {
+    color: var(--accent-primary);
+}
+
+.best-left-buried .item-description,
+.best-left-buried .item-properties {
+    font-size: 0.85em;
+    color: var(--text-secondary);
     font-style: italic;
 }
 
-.best-left-buried .action-roll {
-    width: 40px;
-    height: 40px;
-    border: 2px solid #2c2c2c !important;
-    background: white !important;
-    color: #2c2c2c;
-    cursor: pointer;
+.best-left-buried .item-controls {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2em;
+    gap: 6px;
 }
 
-.best-left-buried .action-roll:hover {
-    background: #f0f0f0 !important;
-    transform: scale(1.05);
-}
-
-/* ========================================
-   EQUIPMENT SECTION
-   ======================================== */
-
-.best-left-buried .equipment-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 20px;
-    height: 100%;
-}
-
-.best-left-buried .equipment-column {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.best-left-buried .equipment-section,
-.best-left-buried .loot-section {
-    padding: 15px;
-    border: 3px solid #2c2c2c;
-    background: white;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-
-.best-left-buried .equipment-section h3,
-.best-left-buried .loot-section h3 {
-    font-family: "Blackletter", serif;
-    font-size: 1.5em;
-    color: #2c2c2c;
-    margin-bottom: 15px;
-    border-bottom: 2px solid #2c2c2c;
-    padding-bottom: 5px;
-}
-
-.best-left-buried .equipment-row,
-.best-left-buried .loot-row {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 80px;
-    align-items: center;
-    gap: 10px;
-    padding: 8px;
-    border-bottom: 1px solid #eee;
-}
-
-.best-left-buried .equipment-row:hover,
-.best-left-buried .loot-row:hover {
-    background-color: #f8f8f8;
-}
-
-.best-left-buried .equipment-name,
-.best-left-buried .loot-name {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.best-left-buried .equipment-name:hover,
-.best-left-buried .loot-name:hover {
-    color: #2c2c2c;
-    font-weight: bold;
-}
-
-.best-left-buried .equipment-type,
-.best-left-buried .loot-type,
-.best-left-buried .loot-value {
-    text-align: center;
-    font-style: italic;
-    color: #666;
-}
-
-.best-left-buried .equipment-equipped {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    justify-content: center;
-}
-
-.best-left-buried .equipment-equipped input[type="checkbox"] {
-    margin: 0;
-    transform: scale(1.2);
-}
-
-.best-left-buried .equipment-equipped label {
-    font-size: 0.9em;
-    cursor: pointer;
-    color: #2c2c2c;
-}
-
-.best-left-buried .equipment-controls,
-.best-left-buried .loot-controls {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-}
-
-.best-left-buried .item-control {
-    cursor: pointer;
-    color: #666;
+.best-left-buried .roll-button,
+.best-left-buried .control-button {
     width: 24px;
     height: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: color 0.2s ease;
-}
-
-.best-left-buried .item-control:hover {
-    color: #2c2c2c;
-}
-
-.best-left-buried .item-delete:hover {
-    color: #ff0000;
-}
-
-/* ========================================
-   ADVANCEMENT SECTION
-   ======================================== */
-
-.best-left-buried .advancement-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 20px;
-}
-
-.best-left-buried .advancement-section {
-    padding: 15px;
-    border: 3px solid #2c2c2c;
-    background: white;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-
-.best-left-buried .advancement-section h3 {
-    font-family: "Blackletter", serif;
-    font-size: 1.5em;
-    color: #2c2c2c;
-    margin-bottom: 15px;
-    border-bottom: 2px solid #2c2c2c;
-    padding-bottom: 5px;
-}
-
-.best-left-buried .advancement-row {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 80px;
-    align-items: center;
-    gap: 10px;
-    padding: 8px;
-    border-bottom: 1px solid #eee;
-}
-
-.best-left-buried .advancement-row:hover {
-    background-color: #f8f8f8;
-}
-
-.best-left-buried .advancement-name {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border-radius: 3px;
     cursor: pointer;
     transition: all 0.2s ease;
+    font-size: 0.8em;
 }
 
-.best-left-buried .advancement-name:hover {
-    color: #2c2c2c;
-    font-weight: bold;
+.best-left-buried .roll-button:hover {
+    background: var(--accent-primary);
+    border-color: var(--accent-secondary);
 }
 
-.best-left-buried .advancement-type {
-    text-align: center;
-    font-style: italic;
-    color: #666;
+.best-left-buried .control-button:hover {
+    background: var(--accent-primary);
+    border-color: var(--accent-secondary);
 }
 
-.best-left-buried .advancement-equipped {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    justify-content: center;
-}
-
-.best-left-buried .advancement-equipped input[type="checkbox"] {
-    margin: 0;
-    transform: scale(1.2);
-}
-
-.best-left-buried .advancement-equipped label {
-    font-size: 0.9em;
-    cursor: pointer;
-    color: #2c2c2c;
-}
-
-.best-left-buried .advancement-controls {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
+.best-left-buried .control-button.delete:hover {
+    background: var(--danger);
+    border-color: #d32f2f;
 }
 
 /* ========================================
-   SCROLLBAR STYLING
-   ======================================== */
-
-.best-left-buried .sheet-container::-webkit-scrollbar,
-.best-left-buried .weapon-list::-webkit-scrollbar,
-.best-left-buried .armor-list::-webkit-scrollbar,
-.best-left-buried .shield-list::-webkit-scrollbar,
-.best-left-buried .loot-list::-webkit-scrollbar,
-.best-left-buried .advancement-list::-webkit-scrollbar {
-    width: 8px;
-}
-
-.best-left-buried .sheet-container::-webkit-scrollbar-track,
-.best-left-buried .weapon-list::-webkit-scrollbar-track,
-.best-left-buried .armor-list::-webkit-scrollbar-track,
-.best-left-buried .shield-list::-webkit-scrollbar-track,
-.best-left-buried .loot-list::-webkit-scrollbar-track,
-.best-left-buried .advancement-list::-webkit-scrollbar-track {
-    border-radius: 4px;
-    background: #f1f1f1;
-}
-
-.best-left-buried .sheet-container::-webkit-scrollbar-thumb,
-.best-left-buried .weapon-list::-webkit-scrollbar-thumb,
-.best-left-buried .armor-list::-webkit-scrollbar-thumb,
-.best-left-buried .shield-list::-webkit-scrollbar-thumb,
-.best-left-buried .loot-list::-webkit-scrollbar-thumb,
-.best-left-buried .advancement-list::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 4px;
-}
-
-.best-left-buried .sheet-container::-webkit-scrollbar-thumb:hover,
-.best-left-buried .weapon-list::-webkit-scrollbar-thumb:hover,
-.best-left-buried .armor-list::-webkit-scrollbar-thumb:hover,
-.best-left-buried .shield-list::-webkit-scrollbar-thumb:hover,
-.best-left-buried .loot-list::-webkit-scrollbar-thumb:hover,
-.best-left-buried .advancement-list::-webkit-scrollbar-thumb:hover {
-    background: #555;
-}
-
-/* ========================================
-   GENERAL FORM ELEMENTS
+   FORM ELEMENTS
    ======================================== */
 
 .best-left-buried input[type="text"],
 .best-left-buried input[type="number"],
 .best-left-buried select,
 .best-left-buried textarea {
-    border: 2px solid #2c2c2c;
-    padding: 4px 8px;
-    border-radius: 2px;
-    background: white;
+    border: 1px solid var(--border-color);
+    padding: 6px 8px;
+    border-radius: 3px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
     font-family: inherit;
 }
 
@@ -787,22 +598,25 @@ form.best-left-buried.sheet.actor {
 .best-left-buried select:focus,
 .best-left-buried textarea:focus {
     outline: none;
-    border-color: #4a90e2;
+    border-color: var(--accent-primary);
     box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.25);
 }
 
 .best-left-buried button {
     padding: 6px 12px;
-    border: 2px solid #2c2c2c;
-    background: white;
-    color: #2c2c2c;
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
     cursor: pointer;
     font-family: inherit;
-    font-weight: bold;
+    font-weight: 500;
+    border-radius: 3px;
+    transition: all 0.2s ease;
 }
 
 .best-left-buried button:hover {
-    background: #f0f0f0;
+    background: var(--accent-primary);
+    border-color: var(--accent-secondary);
 }
 
 /* ========================================
@@ -810,7 +624,7 @@ form.best-left-buried.sheet.actor {
    ======================================== */
 
 .best-left-buried.sheet.item {
-    background: white;
+    background: var(--bg-primary);
 }
 
 .best-left-buried.sheet.item .sheet-container {
@@ -826,13 +640,14 @@ form.best-left-buried.sheet.actor {
     gap: 15px;
     margin-bottom: 20px;
     padding-bottom: 15px;
-    border-bottom: 3px solid #2c2c2c;
+    border-bottom: 2px solid var(--border-color);
 }
 
 .best-left-buried.sheet.item .sheet-header img {
-    border: 2px solid #2c2c2c;
+    border: 2px solid var(--border-color);
     cursor: pointer;
-    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+    border-radius: 5px;
 }
 
 .best-left-buried.sheet.item .sheet-header h1 {
@@ -841,30 +656,30 @@ form.best-left-buried.sheet.actor {
 }
 
 .best-left-buried.sheet.item .sheet-header input {
-    font-size: 1.5em;
+    font-size: 1.1em !important;  /* Fixed: reduced from 1.3em */
     font-weight: bold;
-    font-family: "Blackletter", serif;
     width: 100%;
-    border: 2px solid #2c2c2c;
+    border: 2px solid var(--border-color);
     padding: 8px;
-    background: white;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border-radius: 3px;
 }
 
 .best-left-buried.sheet.item .form-group {
     margin-bottom: 15px;
     padding: 10px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color);
     border-radius: 5px;
-    background: #fafafa;
+    background: var(--bg-secondary);
 }
 
 .best-left-buried.sheet.item .form-group label {
     display: block;
-    font-weight: bold;
+    font-weight: 600;
     margin-bottom: 5px;
-    color: #2c2c2c;
-    font-family: "Blackletter", serif;
-    font-size: 1.1em;
+    color: var(--text-primary);
+    font-size: 1em;
 }
 
 .best-left-buried.sheet.item .form-group select,
@@ -873,26 +688,79 @@ form.best-left-buried.sheet.actor {
     width: 100%;
     max-width: 300px;
     padding: 6px;
-    border: 2px solid #2c2c2c;
-    background: white;
+    border: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border-radius: 3px;
 }
 
+/* Checkbox styling for item sheets - grey when unchecked */
 .best-left-buried.sheet.item .form-group input[type="checkbox"] {
-    transform: scale(1.3);
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--border-color);
+    border-radius: 3px;
+    background: var(--bg-tertiary);
     margin-right: 8px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.best-left-buried.sheet.item .form-group input[type="checkbox"]:checked {
+    background: var(--accent-primary);
+    border-color: var(--accent-secondary);
+}
+
+.best-left-buried.sheet.item .form-group input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute;
+    top: -2px;
+    left: 2px;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.best-left-buried.sheet.item .form-group input[type="checkbox"]:not(:checked) {
+    background: #666;  /* Grey when unchecked */
+    border-color: #555;
 }
 
 .best-left-buried.sheet.item .form-group small {
     display: block;
     margin-top: 5px;
-    color: #666;
+    color: var(--text-secondary);
     font-style: italic;
     font-size: 0.9em;
 }
 
 .best-left-buried.sheet.item .form-group span {
-    color: #555;
+    color: var(--text-secondary);
     font-size: 0.95em;
+}
+
+/* ========================================
+   SCROLLBAR STYLING
+   ======================================== */
+
+.best-left-buried .sheet-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.best-left-buried .sheet-container::-webkit-scrollbar-track {
+    border-radius: 4px;
+    background: var(--bg-secondary);
+}
+
+.best-left-buried .sheet-container::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+.best-left-buried .sheet-container::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-primary);
 }
 
 /* ========================================
@@ -904,40 +772,32 @@ form.best-left-buried.sheet.actor {
         display: none !important;
     }
     
-    .best-left-buried .sheet-tabs {
+    .best-left-buried.application .sheet-tabs {
         display: flex !important;
         position: static;
         transform: none;
         width: 100%;
         height: auto;
-        top: auto;
-        right: auto;
-        border-top: 3px solid #2c2c2c;
+        border-bottom: 2px solid var(--border-color);
         padding: 10px 0;
         flex-direction: row;
         justify-content: center;
+        background: var(--bg-secondary);
     }
     
-    .best-left-buried .sheet-tabs .item {
+    .best-left-buried.application .sheet-tabs .item {
         transform: none;
-        border: 2px solid #2c2c2c;
-        border-bottom: none;
-        border-radius: 8px 8px 0 0;
-        margin: 0 2px;
+        border: 1px solid var(--border-color);
+        border-radius: 5px;
+        margin: 0 4px;
         padding: 8px 12px;
         font-size: 0.9em;
+        background: var(--bg-tertiary);
+        color: var(--text-primary);
     }
     
-    .best-left-buried .main-stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .best-left-buried .sub-stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .best-left-buried .equipment-grid {
-        grid-template-columns: 1fr;
+    .best-left-buried .main-stats-row {
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
@@ -948,75 +808,34 @@ form.best-left-buried.sheet.actor {
         text-align: center;
     }
     
-    .best-left-buried .portrait-section {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-    
     .best-left-buried .character-portrait {
-        width: 100px;
-        height: 120px;
+        width: 60px;
+        height: 80px;
     }
     
-    .best-left-buried .main-stats-grid,
-    .best-left-buried .sub-stats-grid {
+    .best-left-buried .main-stats-row {
         grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
+        gap: 8px;
     }
     
-    .best-left-buried .stat-box {
-        padding: 10px;
-        min-height: auto;
+    .best-left-buried .info-row {
+        flex-direction: column;
+        gap: 8px;
     }
     
-    .best-left-buried .stat-name {
-        font-size: 1.3em;
-        margin-bottom: 8px;
+    .best-left-buried .list-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
     }
     
-    .best-left-buried .equipment-row,
-    .best-left-buried .loot-row,
-    .best-left-buried .advancement-row {
-        grid-template-columns: 1fr;
-        gap: 5px;
-        text-align: center;
-    }
-    
-    .best-left-buried .equipment-name,
-    .best-left-buried .loot-name,
-    .best-left-buried .advancement-name {
-        justify-content: center;
+    .best-left-buried .item-controls {
+        align-self: flex-end;
     }
 }
 
 @media (max-width: 600px) {
-    .best-left-buried .main-stats-grid,
-    .best-left-buried .sub-stats-grid {
+    .best-left-buried .main-stats-row {
         grid-template-columns: 1fr;
-    }
-    
-    .best-left-buried .sheet-tabs .item span {
-        display: none;
-    }
-    
-    .best-left-buried .sheet-tabs .item {
-        padding: 10px;
-        justify-content: center;
-    }
-    
-    .best-left-buried .actions-section h2,
-    .best-left-buried .stats-section h2 {
-        font-size: 1.8em;
-    }
-    
-    .best-left-buried .action-item {
-        flex-direction: column;
-        gap: 10px;
-        text-align: center;
-    }
-    
-    .best-left-buried .action-info {
-        justify-content: center;
     }
 }

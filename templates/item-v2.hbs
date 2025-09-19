@@ -36,7 +36,7 @@
             <div class="form-group">
                 <label>Equipped</label>
                 <input type="checkbox" name="system.equipped" data-action="toggleEquipped" {{checked system.equipped}}/>
-                <span>Show this weapon in the Actions section for quick rolling</span>
+                <span>Show this weapon for quick rolling</span>
             </div>
         {{/if}}
 
@@ -53,20 +53,7 @@
             <div class="form-group">
                 <label>Equipped</label>
                 <input type="checkbox" name="system.equipped" data-action="toggleEquipped" {{checked system.equipped}}/>
-                <span>This armor is currently worn (only one armor can be equipped)</span>
-            </div>
-        {{/if}}
-
-        {{! Shield-specific fields }}
-        {{#if (eq item.type "shield")}}
-            <div class="form-group">
-                <label>Shield</label>
-                <p>Provides +1 to armor when equipped</p>
-            </div>
-            <div class="form-group">
-                <label>Equipped</label>
-                <input type="checkbox" name="system.equipped" data-action="toggleEquipped" {{checked system.equipped}}/>
-                <span>This shield is currently equipped (only one shield can be equipped)</span>
+                <span>This {{#if (eq system.armorType "shield")}}shield{{else}}armor{{/if}} is currently worn</span>
             </div>
         {{/if}}
 
@@ -99,19 +86,54 @@
             </div>
 
             <div class="form-group">
-                <label>Active</label>
+                <label>Equipped</label>
                 <input type="checkbox" name="system.equipped" data-action="toggleEquipped" {{checked system.equipped}}/>
-                <span>Show this ability in the Actions section for quick rolling</span>
+                <span>Show this ability for quick rolling</span>
+            </div>
+        {{/if}}
+
+        {{! Consequence-specific fields }}
+        {{#if (eq item.type "consequence")}}
+            <div class="form-group">
+                <label>Consequence Type</label>
+                <select name="system.consequenceType" data-action="updateConsequenceType">
+                    {{#each CONSEQUENCE_TYPES as |type id|}}
+                        <option value="{{id}}" {{#if (eq ../system.consequenceType id)}}selected{{/if}}>{{type.label}}</option>
+                    {{/each}}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Roll Formula</label>
+                <input type="text" name="system.rollFormula" value="{{system.rollFormula}}" placeholder="1d20"/>
+                <small>Base dice to roll (e.g., 1d20, 2d6, 1d10+2)</small>
+            </div>
+
+            <div class="form-group">
+                <label>Uses Attribute</label>
+                <select name="system.usesAttribute">
+                    <option value="none" {{#if (eq system.usesAttribute "none")}}selected{{/if}}>None</option>
+                    <option value="brawn" {{#if (eq system.usesAttribute "brawn")}}selected{{/if}}>Brawn</option>
+                    <option value="wit" {{#if (eq system.usesAttribute "wit")}}selected{{/if}}>Wit</option>
+                    <option value="will" {{#if (eq system.usesAttribute "will")}}selected{{/if}}>Will</option>
+                </select>
+                <small>Add this attribute modifier to the roll</small>
+            </div>
+
+            <div class="form-group">
+                <label>Active</label>
+                <input type="checkbox" name="system.active" data-action="toggleActive" {{checked system.active}}/>
+                <span>This consequence is currently affecting the character</span>
             </div>
         {{/if}}
 
         {{! Loot-specific fields }}
         {{#if (eq item.type "loot")}}
             <div class="form-group">
-                <label>Loot</label>
+                <label>Loot Type</label>
                 <select name="system.lootType" data-action="updateLootType">
-                    {{#each LOOT as |type id|}}
-                        <option value="{{id}}" {{#if (eq ../system.LootType id)}}selected{{/if}}>{{type.label}}</option>
+                    {{#each LOOT_TYPES as |type id|}}
+                        <option value="{{id}}" {{#if (eq ../system.lootType id)}}selected{{/if}}>{{type.label}}</option>
                     {{/each}}
                 </select>
             </div>

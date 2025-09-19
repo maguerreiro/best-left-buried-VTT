@@ -37,3 +37,10 @@ export const LOOT_TYPES = {
         description: "Items that can be consumed or used up"
     }
 };
+
+export const CONSEQUENCE_TYPES = {
+    ability: {
+        label: "Negative ability",
+        description: "Negative ability effects and debuffs"
+    }
+};

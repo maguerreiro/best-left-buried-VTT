@@ -1,4 +1,4 @@
-// module/item.js - COMPLETE DATA MODELS
+// module/items.js - Updated for new item types
 
 export class BLBWeaponData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
@@ -38,7 +38,7 @@ export class BLBArmorData extends foundry.abstract.TypeDataModel {
       armorType: new fields.StringField({
         required: true,
         initial: "basic",
-        choices: ["basic", "plate"]
+        choices: ["basic", "plate", "shield"]
       }),
       equipped: new fields.BooleanField({
         required: true,
@@ -47,22 +47,6 @@ export class BLBArmorData extends foundry.abstract.TypeDataModel {
     };
   }
 }
-
-export class BLBShieldData extends foundry.abstract.TypeDataModel {
-  static defineSchema() {
-    const fields = foundry.data.fields;
-    return {
-      description: new fields.StringField({ 
-        initial: "" 
-      }),
-      equipped: new fields.BooleanField({
-        required: true,
-        initial: false
-      })
-    };
-  }
-}
-
 
 export class BLBAdvancementData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
@@ -82,10 +66,39 @@ export class BLBAdvancementData extends foundry.abstract.TypeDataModel {
       }),
       advancementType: new fields.StringField({
         required: true,
-        initial: "ability",
-        choices: ["ability", "spell", "skill", "trait"]
+        initial: "special_ability",
+        choices: ["special_ability"]
       }),
       equipped: new fields.BooleanField({
+        required: true,
+        initial: true
+      })
+    };
+  }
+}
+
+export class BLBConsequenceData extends foundry.abstract.TypeDataModel {
+  static defineSchema() {
+    const fields = foundry.data.fields;
+    return {
+      description: new fields.StringField({ 
+        initial: "" 
+      }),
+      rollFormula: new fields.StringField({
+        required: false,
+        initial: "1d20"
+      }),
+      usesAttribute: new fields.StringField({
+        required: false,
+        initial: "none",
+        choices: ["none", "brawn", "wit", "will"]
+      }),
+      consequenceType: new fields.StringField({
+        required: true,
+        initial: "negative_effect",
+        choices: ["negative_effect"]
+      }),
+      active: new fields.BooleanField({
         required: true,
         initial: true
       })
@@ -107,8 +120,8 @@ export class BLBLootData extends foundry.abstract.TypeDataModel {
       }),
       lootType: new fields.StringField({
         required: true,
-        initial: "misc",
-        choices: ["misc", "valuable", "artifact", "consumable"]
+        initial: "adventuring_gear",
+        choices: ["adventuring_gear", "treasure"]
       })
     };
   }
