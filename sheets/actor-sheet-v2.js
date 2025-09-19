@@ -25,6 +25,8 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
       updateXP: BLBActorSheetV2.#onUpdateXP,
       updateAdvancement: BLBActorSheetV2.#onUpdateAdvancement,
       rollWeapon: BLBActorSheetV2.#onRollWeapon,
+      rollWeaponKh2: BLBActorSheetV2.#onRollWeaponKh2,
+      rollWeaponKl2: BLBActorSheetV2.#onRollWeaponKl2,
       rollAdvancement: BLBActorSheetV2.#onRollAdvancement,
       rollConsequence: BLBActorSheetV2.#onRollConsequence,
       openItem: BLBActorSheetV2.#onOpenItem,
@@ -299,18 +301,20 @@ static async #onRollWeapon(event, target) {
 
     // Get the results of each die from the first dice term
     const dieResults = roll.dice[0].results.map(r => r.result);
-    
+    const rollTooltip = await roll.getTooltip();
+
     // Construct the text to display, including individual die rolls
-    let resultText = `
-        <div class="dice-roll">
-            <div class="dice-result">
-                <div class="dice-formula">${roll.formula}</div>
-                <h4 class="dice-total">
-                    ${dieResults.join(" + ")}
-                </h4>
-            </div>
+const resultText = `
+    <div class="dice-roll">
+        <div class="dice-result">
+            <div class="dice-formula">${roll.formula}</div>
+            <h4 class="dice-total dice-results-box">
+                ${dieResults.map(r => `<div class="dice-result-box">${r}</div>`).join("")}
+            </h4>
+            <div class="dice-tooltip">${rollTooltip}</div>
         </div>
-    `;
+    </div>
+`;
 
     // Create a chat message using the custom content
     ChatMessage.create({
@@ -319,6 +323,143 @@ static async #onRollWeapon(event, target) {
         content: resultText
     });
 }
+
+
+static async #onRollWeaponKh2(event, target) {
+  const weaponId = target.dataset.weaponId;
+  const weapon = this.document.items.get(weaponId);
+
+  if (!weapon) return;
+
+  const weaponType = weapon.system.weaponType || "hand";
+  const weaponData = WEAPON_TYPES[weaponType];
+
+  if (!weaponData) return;
+
+  const attackStat = weaponData.attackStat;
+  const attackValue = this.document.system[attackStat + "Total"] || this.document.system[attackStat]?.base || 0;
+
+  let damage = weaponData.damageMod || 0;
+  if (weapon.system.isTwoHanded && weaponData.twoHandedBonus) damage += 1;
+
+  // Evaluate the roll using the 'keep highest 2' formula
+  const roll = await new Roll(`4d6kh2 + ${attackValue}`).evaluate();
+
+  // Get the results of each individual die.
+  const allDieResults = roll.dice[0].results;
+
+  // Find the single lowest value among the three dice
+  let lowestValue = allDieResults[0].result;
+  for (const r of allDieResults) {
+    if (r.result < lowestValue) {
+      lowestValue = r.result;
+    }
+  }
+  
+  // Find the first occurrence of the lowest value to mark it as discarded
+  const discardedDieIndex = allDieResults.findIndex(r => r.result === lowestValue);
+
+  // Map the results to HTML, applying the 'discarded' class to the correct die
+  const dieResultsHtml = allDieResults.map((r, index) => {
+    if (index === discardedDieIndex) {
+      return `<div class="dice-result-box discarded">${r.result}</div>`;
+    } else {
+      return `<div class="dice-result-box">${r.result}</div>`;
+    }
+  }).join("");
+
+  // Get the HTML for the visual dice.
+  const rollTooltip = await roll.getTooltip();
+
+  // Construct a custom chat message card that displays all the information at once
+  const messageContent = `
+    <div class="dice-roll">
+        <div class="dice-result">
+            <div class="dice-formula">${roll.formula}</div>
+            <h4 class="dice-total dice-results-box">
+                ${dieResultsHtml}
+            </h4>
+            <div class="dice-tooltip">${rollTooltip}</div>
+        </div>
+    </div>
+  `;
+
+  // Create the chat message with the custom content
+  ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor: this.document }),
+    flavor: `${weapon.name} (Keep Highest 2): Stat: ${attackValue}, DamageMod: ${damage}`,
+    content: messageContent,
+  });
+}
+
+
+static async #onRollWeaponKl2(event, target) {
+  const weaponId = target.dataset.weaponId;
+  const weapon = this.document.items.get(weaponId);
+
+  if (!weapon) return;
+
+  const weaponType = weapon.system.weaponType || "hand";
+  const weaponData = WEAPON_TYPES[weaponType];
+
+  if (!weaponData) return;
+
+  const attackStat = weaponData.attackStat;
+  const attackValue = this.document.system[attackStat + "Total"] || this.document.system[attackStat]?.base || 0;
+
+  let damage = weaponData.damageMod || 0;
+  if (weapon.system.isTwoHanded && weaponData.twoHandedBonus) damage += 1;
+
+  // Evaluate the roll using the 'keep lowest 2' formula
+  const roll = await new Roll(`4d6kl2 + ${attackValue}`).evaluate();
+
+  // Get the results of each individual die.
+  const allDieResults = roll.dice[0].results;
+
+  // Find the single highest value among the three dice
+  let highestValue = allDieResults[0].result;
+  for (const r of allDieResults) {
+    if (r.result > highestValue) {
+      highestValue = r.result;
+    }
+  }
+  
+  // Find the first occurrence of the highest value to mark it as discarded
+  const discardedDieIndex = allDieResults.findIndex(r => r.result === highestValue);
+
+  // Map the results to HTML, applying the 'discarded' class to the correct die
+  const dieResultsHtml = allDieResults.map((r, index) => {
+    if (index === discardedDieIndex) {
+      return `<div class="dice-result-box discarded">${r.result}</div>`;
+    } else {
+      return `<div class="dice-result-box">${r.result}</div>`;
+    }
+  }).join("");
+
+  // Get the HTML for the visual dice.
+  const rollTooltip = await roll.getTooltip();
+
+  // Construct a custom chat message card that displays all the information at once
+  const messageContent = `
+    <div class="dice-roll">
+        <div class="dice-result">
+            <div class="dice-formula">${roll.formula}</div>
+            <h4 class="dice-total dice-results-box">
+                ${dieResultsHtml}
+            </h4>
+            <div class="dice-tooltip">${rollTooltip}</div>
+        </div>
+    </div>
+  `;
+
+  // Create the chat message with the custom content
+  ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor: this.document }),
+    flavor: `${weapon.name} (Keep Lowest 2): Stat: ${attackValue}, DamageMod: ${damage}`,
+    content: messageContent,
+  });
+}
+
 
   static async #onRollAdvancement(event, target) {
     const advancementId = target.dataset.advancementId;

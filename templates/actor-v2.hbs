@@ -152,7 +152,7 @@
                         <h3>Weapons</h3>
                         <div class="weapons-table">
                             <div class="table-header">
-                                <div class="col-equip">E</div>
+                                <div class="col-equip"></div>
                                 <div class="col-icon"></div>
                                 <div class="col-name">Name</div>
                                 <div class="col-type">Type</div>
@@ -160,7 +160,8 @@
                                 <div class="col-stat">Attack Stat</div>
                                 <div class="col-damage">Damage Mod</div>
                                 <div class="col-initiative">Initiative</div>
-                                <div class="col-actions">Actions</div>
+                                <div class="col-actions">Attack</div>
+                                <div class="col-delete"></div>
                             </div>
                             {{#each items.weapon as |item|}}
                             <div class="table-row" data-item-id="{{item._id}}">
@@ -185,13 +186,22 @@
                                     {{/if}}
                                 </div>
                                 <div class="col-actions">
-                                    <button type="button" data-action="rollWeapon" data-weapon-id="{{item._id}}" class="roll-button-mini" title="Attack Roll">
-                                        <i class="fas fa-dice-d6"></i>
+                                    <button type="button" data-action="rollWeaponKh2" data-weapon-id="{{item._id}}" class="roll-button-mini" title="Upper Hand">
+                                        <i class="fas fa-arrow-up"></i>
                                     </button>
-                                    <a data-action="deleteItem" class="control-button delete" title="Delete">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
+                                    <button type="button" data-action="rollWeapon" data-weapon-id="{{item._id}}" class="roll-button-mini" title="Standard">
+                                        <i class="fas fa-sword"></i>
+                                    </button>
+                                    <button type="button" data-action="rollWeaponKl2" data-weapon-id="{{item._id}}" class="roll-button-mini" title="Against the Odds">
+                                        <i class="fas fa-arrow-down"></i>
+                                    </button>
                                 </div>
+                                    <div class="col-delete"> 
+                                        <a data-action="deleteItem" class="control-button delete" title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                
                             </div>
                             {{/each}}
                         </div>
