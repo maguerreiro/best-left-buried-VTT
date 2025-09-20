@@ -12,11 +12,11 @@
                     <input type="text" name="name" value="{{actor.name}}" placeholder="Character Name" class="character-name"/>
                     
                     <div class="info-row">
-                        <div class="info-item">
+                        <div class="info-char">
                             <label>Race</label>
                             <input type="text" name="system.race" value="{{system.race}}" placeholder="Race"/>
                         </div>
-                        <div class="info-item">
+                        <div class="info-char">
                             <label>Archetype</label>
                             <input type="text" name="system.archetype" value="{{system.archetype}}" placeholder="Archetype"/>
                         </div>
@@ -32,17 +32,6 @@
                             </div>
                         </div>
                         <div class="info-item">
-                            <label>XP</label>
-                            <div class="counter-controls">
-                                <button type="button" data-action="updateXP" data-change="decrease" class="counter-button">-</button>
-                                <input type="number" name="system.xp" value="{{system.xp}}" min="0" class="counter-value"/>
-                                <button type="button" data-action="updateXP" data-change="increase" class="counter-button">+</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="info-row">
-                        <div class="info-item">
                             <label>Vigour</label>
                             <div class="split-input">
                                 <input type="number" name="system.vigour.current" value="{{system.vigour.current}}" class="split-left"/>
@@ -53,6 +42,22 @@
                         <div class="info-item">
                             <label>Grip</label>
                             <input type="number" name="system.grip.base" value="{{system.grip.base}}" class="single-input"/>
+                        </div>
+                        <div class="info-item">
+                            <label>Encumbrance</label>
+                            <div class="split-input">
+                                <input type="number" name="system.encumbrance.current" value="{{system.encumbrance.current}}" class="split-left"/>
+                                <span>/</span>
+                                <input type="number" name="system.encumbrance.max" value="{{system.encumbrance.max}}" class="split-right"/>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <label>XP</label>
+                            <div class="counter-controls">
+                                <button type="button" data-action="updateXP" data-change="decrease" class="counter-button">-</button>
+                                <input type="number" name="system.xp" value="{{system.xp}}" min="0" class="counter-value"/>
+                                <button type="button" data-action="updateXP" data-change="increase" class="counter-button">+</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -86,13 +91,7 @@
                         </div>
                         <div class="stat-item">
                             <label>Armor</label>
-                            <div class="armor-display">
-                                <span class="armor-base">{{system.armor.base}}</span>
-                                <span class="plus">+</span>
-                                <span class="armor-bonus">{{system.armorBonus}}</span>
-                                <span class="equals">=</span>
-                                <span class="armor-total">{{system.armorTotal}}</span>
-                            </div>
+                            <span class="armor-total">{{system.armorTotal}}</span>
                         </div>
                     </div>
 
@@ -105,12 +104,6 @@
                                 <div class="item-name" data-action="openItem">{{item.name}}</div>
                                 <div class="item-description">{{item.system.description}}</div>
                                 <div class="item-controls">
-                                    <button type="button" data-action="rollAdvancement" data-advancement-id="{{item._id}}" class="roll-button" title="Roll">
-                                        <i class="fas fa-dice-d20"></i>
-                                    </button>
-                                    <a data-action="openItem" class="control-button" title="Edit">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
                                     <a data-action="deleteItem" class="control-button delete" title="Delete">
                                         <i class="fas fa-trash"></i>
                                     </a>
@@ -129,12 +122,6 @@
                                 <div class="item-name" data-action="openItem">{{item.name}}</div>
                                 <div class="item-description">{{item.system.description}}</div>
                                 <div class="item-controls">
-                                    <button type="button" data-action="rollConsequence" data-consequence-id="{{item._id}}" class="roll-button" title="Roll">
-                                        <i class="fas fa-dice-d20"></i>
-                                    </button>
-                                    <a data-action="openItem" class="control-button" title="Edit">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
                                     <a data-action="deleteItem" class="control-button delete" title="Delete">
                                         <i class="fas fa-trash"></i>
                                     </a>
@@ -217,7 +204,7 @@
                                 <div class="col-name">Name</div>
                                 <div class="col-type">Type</div>
                                 <div class="col-armor">Armor</div>
-                                <div class="col-actions">Actions</div>
+                                <div class="col-actions"></div>
                             </div>
                             {{#each items.armor as |item|}}
                             <div class="table-row" data-item-id="{{item._id}}">
@@ -257,14 +244,9 @@
                             {{#each items.loot as |item|}}
                             <div class="list-item" data-item-id="{{item._id}}">
                                 <img src="{{item.img}}" class="item-icon"/>
-                                <div class="item-info">
                                     <div class="item-name" data-action="openItem">{{item.name}}</div>
                                     <div class="item-properties">{{getLootType item.system.lootType}} - {{item.system.value}} gp</div>
-                                </div>
-                                <div class="item-controls">
-                                    <a data-action="openItem" class="control-button" title="Edit">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
+                                 <div class="item-controls">
                                     <a data-action="deleteItem" class="control-button delete" title="Delete">
                                         <i class="fas fa-trash"></i>
                                     </a>

@@ -131,15 +131,16 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     const rect = windowElement.getBoundingClientRect();
     const tabsX = rect.right + 15;
     const tabsY = rect.top + (rect.height / 2);
-
+    const tabsZ = Number(windowElement.style.zIndex); 
+    
     tabsContainer.style.position = 'fixed';
     tabsContainer.style.left = `${tabsX}px`;
     tabsContainer.style.top = `${tabsY}px`;
-    tabsContainer.style.zIndex = 'auto';
+    tabsContainer.style.zIndex = tabsZ; 
   }
 
   _startPositionTracking(windowElement) {
-    let lastX = 0, lastY = 0;
+    let lastX = 0, lastY = 0, lastZ = 0;
     
     const updatePosition = () => {
       if (!this._externalTabs || !windowElement || !document.body.contains(windowElement)) {
@@ -150,12 +151,15 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
       const rect = windowElement.getBoundingClientRect();
       const newX = rect.right - 50;
       const newY = rect.top + (rect.height / 2) - 250;
+      const newZ = Number(windowElement.style.zIndex);
 
-      if (newX !== lastX || newY !== lastY) {
+      if (newX !== lastX || newY !== lastY || newZ !== lastZ) {
         this._externalTabs.style.left = `${newX}px`;
         this._externalTabs.style.top = `${newY}px`;
+        this._externalTabs.style.zIndex = newZ;
         lastX = newX;
         lastY = newY;
+        lastZ = newZ;
       }
 
       this._animationFrame = requestAnimationFrame(updatePosition);
@@ -633,4 +637,42 @@ static async #onRollWeaponKl2(event, target) {
     const isActive = target.checked;
     await item.update({ "system.active": isActive });
   }
+
+
+// Add this method to your actor sheet class (BLBActorSheetV2)
+
+/** @override */
+async _onRender(context, options) {
+  await super._onRender(context, options);
+  this._activateTab(this.activeTab);
+  setTimeout(() => this._createExternalTabs(), 100);
+  
+  // Set up portrait click handler
+  this._setupPortraitHandler();
+}
+
+_setupPortraitHandler() {
+  const portrait = this.element.querySelector('.character-portrait[data-edit="img"]');
+  if (portrait) {
+    portrait.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      
+      const current = this.document.img || '';
+      
+      const fp = new FilePicker({
+        type: "image",
+        current: current,
+        callback: async (path) => {
+          await this.document.update({ img: path });
+        },
+        top: this.position.top + 40,
+        left: this.position.left + 10
+      });
+      
+      fp.render(true);
+    });
+  }
+}
+
 }
