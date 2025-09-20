@@ -29,6 +29,206 @@
     color: var(--text-primary);
 }
 
+/* Additional CSS for item descriptions and character portrait improvements */
+
+/* Additional CSS for item descriptions and character portrait improvements */
+
+/* ========================================
+   RICH TEXT EDITOR DESCRIPTIONS
+   ======================================== */
+
+.best-left-buried .description-group {
+    margin-bottom: 20px !important;
+}
+
+.best-left-buried .description-group .editor {
+    border: 2px solid var(--border-color);
+    border-radius: 5px;
+    background: var(--bg-primary);
+    transition: border-color 0.2s ease;
+    text-transform: none;
+}
+
+.best-left-buried .description-group .editor:focus-within {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.25);
+    text-transform: none;
+}
+
+/* TinyMCE editor styling for dark theme */
+.best-left-buried .tox.tox-tinymce {
+    border: none !important;
+    border-radius: 0 0 5px 5px;
+}
+
+.best-left-buried .tox .tox-editor-header {
+    background: var(--bg-secondary) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    padding: 4px !important;
+}
+
+.best-left-buried .tox .tox-toolbar__group {
+    background: transparent !important;
+}
+
+.best-left-buried .tox .tox-tbtn {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-color) !important;
+    margin: 1px !important;
+    border-radius: 3px !important;
+}
+
+.best-left-buried .tox .tox-tbtn:hover {
+    background: var(--accent-primary) !important;
+    border-color: var(--accent-secondary) !important;
+}
+
+.best-left-buried .tox .tox-tbtn--enabled {
+    background: var(--accent-primary) !important;
+    color: white !important;
+}
+
+.best-left-buried .tox .tox-edit-area iframe {
+    background: var(--bg-primary) !important;
+}
+
+/* Editor content styling */
+.best-left-buried .editor-content {
+    background: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+    font-family: inherit !important;
+    font-size: 0.95em !important;
+    line-height: 1.4 !important;
+    min-height: 120px;
+    padding: 10px;
+}
+
+/* ========================================
+   CHARACTER PORTRAIT IMPROVEMENTS
+   ======================================== */
+
+.best-left-buried .character-portrait {
+    width: 80px;
+    height: 100px;
+    object-fit: cover;
+    border: 2px solid var(--border-color);
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    transition: all 0.2s ease;
+    background: var(--bg-tertiary);
+}
+
+.best-left-buried .character-portrait:hover {
+    border-color: var(--accent-primary);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+    transform: scale(1.02);
+}
+
+/* Placeholder for empty character portraits */
+.best-left-buried .character-portrait[src*="mystery-man"] {
+    background: var(--bg-tertiary);
+    border-style: dashed;
+    opacity: 0.8;
+}
+
+/* ========================================
+   ITEM ICON IMPROVEMENTS
+   ======================================== */
+
+.best-left-buried .item-icon {
+    width: 24px;
+    height: 24px;
+    object-fit: contain; /* Changed from cover to contain for better SVG display */
+    border-radius: 2px;
+    border: 1px solid var(--border-light);
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2px;
+    box-sizing: border-box;
+}
+
+/* Weapon icons in tables */
+.best-left-buried .weapons-table .item-icon,
+.best-left-buried .armor-table .item-icon {
+    width: 20px;
+    height: 20px;
+    filter: invert(0.8); /* Make SVG icons lighter for better visibility on dark background */
+}
+
+/* Item sheet header icon */
+.best-left-buried.sheet.item .sheet-header img {
+    border: 2px solid var(--border-color);
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+    border-radius: 5px;
+    width: 64px;  
+    height: 64px; 
+    object-fit: contain; /* Better for SVG icons */
+    flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 8px;
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+}
+
+.best-left-buried.sheet.item .sheet-header img:hover {
+    border-color: var(--accent-primary);
+    transform: scale(1.05);
+}
+
+/* ========================================
+   FORM IMPROVEMENTS
+   ======================================== */
+
+.best-left-buried .form-group select,
+.best-left-buried .form-group input[type="text"],
+.best-left-buried .form-group input[type="number"] {
+    width: 100%;
+    max-width: 350px;
+    padding: 8px;
+    border: 2px solid var(--border-color);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border-radius: 4px;
+    font-size: 0.95em;
+    transition: border-color 0.2s ease;
+}
+
+.best-left-buried .form-group select:focus,
+.best-left-buried .form-group input[type="text"]:focus,
+.best-left-buried .form-group input[type="number"]:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.25);
+}
+
+/* Better label spacing */
+.best-left-buried .form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+    font-size: 1em;
+}
+
+/* Checkbox labels inline */
+.best-left-buried .form-group label input[type="checkbox"] {
+    margin-right: 8px;
+    width: auto;
+    max-width: none;
+}
+
+/* Small descriptive text */
+.best-left-buried .form-group small {
+    display: block;
+    margin-top: 6px;
+    color: var(--text-secondary);
+    font-style: italic;
+    font-size: 0.85em;
+    line-height: 1.3;
+}
+
 /* ========================================
    APPLICATION LAYOUT
    ======================================== */
@@ -603,6 +803,7 @@
     font-size: 0.85em;
     color: var(--text-secondary);
     font-style: italic;
+    text-transform: none;
 }
 
 .best-left-buried .item-controls {

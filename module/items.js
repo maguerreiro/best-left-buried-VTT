@@ -1,4 +1,4 @@
-// module/items.js - Updated for new item types
+// module/items.js - Updated for better default icons
 
 export class BLBWeaponData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
@@ -25,6 +25,30 @@ export class BLBWeaponData extends foundry.abstract.TypeDataModel {
         initial: false
       })
     };
+  }
+
+  // Set default icon based on weapon type
+  prepareDerivedData() {
+    const parent = this.parent;
+    if (parent && (parent.img === "icons/svg/item-bag.svg" || !parent.img)) {
+      let defaultIcon = "systems/best-left-buried/icons/weapon_1_hand.svg";
+      
+      switch (this.weaponType) {
+        case "heavy":
+        case "long":
+          defaultIcon = "systems/best-left-buried/icons/weapon_2_hand.svg";
+          break;
+        case "hand":
+        case "light":
+        case "ranged":
+        case "throwing":
+        default:
+          defaultIcon = "systems/best-left-buried/icons/weapon_1_hand.svg";
+          break;
+      }
+      
+      // Don't update here to avoid infinite loops, this is handled in the sheet
+    }
   }
 }
 

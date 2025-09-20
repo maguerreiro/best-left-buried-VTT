@@ -1,7 +1,7 @@
-{{! templates/item-v2.hbs - Fixed duplicate checkbox issue }}
+{{! templates/item-v2.hbs - Updated with textarea description }}
 <div class="item-sheet-container">
     <header class="sheet-header">
-        <img src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64"/>
+        <img src="{{#if item.img}}{{item.img}}{{else}}{{defaultIcon}}{{/if}}" data-edit="img" title="{{item.name}}" height="64" width="64"/>
         <h1><input name="name" type="text" value="{{item.name}}" placeholder="Item Name"/></h1>
     </header>
 
@@ -123,10 +123,11 @@
             </div>
         {{/if}}
 
-        {{! Description field for all items }}
-        <div class="form-group">
+        {{! Description field for all items - Now as textarea }}
+        <div class="form-group description-group">
             <label>Description</label>
-            {{editor system.description target="system.description" button=true owner=owner editable=editable}}
+            <textarea name="system.description" rows="6" placeholder="Enter item description...">{{system.description}}</textarea>
+            <small>Describe this item's properties, effects, and special characteristics</small>
         </div>
     </section>
 </div>
