@@ -55,23 +55,14 @@ export class BLBAdvancementData extends foundry.abstract.TypeDataModel {
       description: new fields.StringField({ 
         initial: "" 
       }),
-      rollFormula: new fields.StringField({
-        required: false,
-        initial: "1d20"
-      }),
-      usesAttribute: new fields.StringField({
-        required: false,
-        initial: "none",
-        choices: ["none", "brawn", "wit", "will"]
-      }),
       advancementType: new fields.StringField({
         required: true,
         initial: "special_ability",
-        choices: ["special_ability"]
+        choices: ["special_ability", "ability", "spell", "skill", "trait"]
       }),
       equipped: new fields.BooleanField({
         required: true,
-        initial: true
+        initial: false
       })
     };
   }
@@ -84,23 +75,14 @@ export class BLBConsequenceData extends foundry.abstract.TypeDataModel {
       description: new fields.StringField({ 
         initial: "" 
       }),
-      rollFormula: new fields.StringField({
-        required: false,
-        initial: "1d20"
-      }),
-      usesAttribute: new fields.StringField({
-        required: false,
-        initial: "none",
-        choices: ["none", "brawn", "wit", "will"]
-      }),
       consequenceType: new fields.StringField({
         required: true,
         initial: "negative_effect",
-        choices: ["negative_effect"]
+        choices: ["negative_effect", "ability"]
       }),
       active: new fields.BooleanField({
         required: true,
-        initial: true
+        initial: false
       })
     };
   }
@@ -121,7 +103,7 @@ export class BLBLootData extends foundry.abstract.TypeDataModel {
       lootType: new fields.StringField({
         required: true,
         initial: "adventuring_gear",
-        choices: ["adventuring_gear", "treasure"]
+        choices: ["adventuring_gear", "treasure", "misc", "valuable", "artifact", "consumable"]
       })
     };
   }

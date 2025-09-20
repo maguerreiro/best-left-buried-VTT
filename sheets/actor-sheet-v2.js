@@ -135,7 +135,7 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     tabsContainer.style.position = 'fixed';
     tabsContainer.style.left = `${tabsX}px`;
     tabsContainer.style.top = `${tabsY}px`;
-    tabsContainer.style.zIndex = '10001';
+    tabsContainer.style.zIndex = 'auto';
   }
 
   _startPositionTracking(windowElement) {

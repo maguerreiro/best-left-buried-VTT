@@ -1,9 +1,13 @@
 // module/helpers/new_items.js - Helper constants for new item types
 
 export const ADVANCEMENT_TYPES = {
-    ability: {
-        label: "Ability",
+    special_ability: {
+        label: "Special Ability",
         description: "Special character abilities and powers"
+    },
+    ability: {
+        label: "Ability", 
+        description: "Character abilities and powers"
     },
     spell: {
         label: "Spell",
@@ -20,6 +24,14 @@ export const ADVANCEMENT_TYPES = {
 };
 
 export const LOOT_TYPES = {
+    adventuring_gear: {
+        label: "Adventuring Gear",
+        description: "Equipment and tools for adventuring"
+    },
+    treasure: {
+        label: "Treasure",
+        description: "Valuable items and treasures"
+    },
     misc: {
         label: "Miscellaneous",
         description: "General items and gear"
@@ -39,6 +51,10 @@ export const LOOT_TYPES = {
 };
 
 export const CONSEQUENCE_TYPES = {
+    negative_effect: {
+        label: "Negative Effect",
+        description: "Negative consequences and debuffs"
+    },
     ability: {
         label: "Negative ability",
         description: "Negative ability effects and debuffs"

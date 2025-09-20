@@ -27,10 +27,6 @@ export class BLBItemSheetV2 extends foundry.applications.api.HandlebarsApplicati
       updateAdvancementType: BLBItemSheetV2.#onUpdateAdvancementType,
       updateConsequenceType: BLBItemSheetV2.#onUpdateConsequenceType,
       updateLootType: BLBItemSheetV2.#onUpdateLootType,
-      toggleEquipped: BLBItemSheetV2.#onToggleEquipped,
-      toggleActive: BLBItemSheetV2.#onToggleActive,
-      toggleTwoHanded: BLBItemSheetV2.#onToggleTwoHanded,
-      toggleInMelee: BLBItemSheetV2.#onToggleInMelee
     }
   };
 
@@ -101,31 +97,4 @@ export class BLBItemSheetV2 extends foundry.applications.api.HandlebarsApplicati
     });
   }
 
-  static async #onToggleEquipped(event, target) {
-    const isEquipped = target.checked;
-    await this.document.update({
-      "system.equipped": isEquipped
-    });
-  }
-
-  static async #onToggleActive(event, target) {
-    const isActive = target.checked;
-    await this.document.update({
-      "system.active": isActive
-    });
-  }
-
-  static async #onToggleTwoHanded(event, target) {
-    const isTwoHanded = target.checked;
-    await this.document.update({
-      "system.isTwoHanded": isTwoHanded
-    });
-  }
-
-  static async #onToggleInMelee(event, target) {
-    const inMelee = target.checked;
-    await this.document.update({
-      "system.inMelee": inMelee
-    });
-  }
 }

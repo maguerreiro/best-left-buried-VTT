@@ -1,4 +1,4 @@
-{{! templates/item-v2.hbs - Updated for all item types }}
+{{! templates/item-v2.hbs - Fixed duplicate checkbox issue }}
 <div class="item-sheet-container">
     <header class="sheet-header">
         <img src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64"/>
@@ -19,24 +19,30 @@
 
             {{#if (or (eq system.weaponType "hand") (eq system.weaponType "long"))}}
             <div class="form-group">
-                <label>Two-Handed</label>
-                <input type="checkbox" name="system.isTwoHanded" data-action="toggleTwoHanded" {{checked system.isTwoHanded}}/>
+                <label>
+                    <input type="checkbox" name="system.isTwoHanded" {{checked system.isTwoHanded}}/>
+                    Two-Handed
+                </label>
                 <span>Use weapon with both hands for +1 damage</span>
             </div>
             {{/if}}
 
             {{#if (eq system.weaponType "throwing")}}
             <div class="form-group">
-                <label>In Melee Range</label>
-                <input type="checkbox" name="system.inMelee" data-action="toggleInMelee" {{checked system.inMelee}}/>
+                <label>
+                    <input type="checkbox" name="system.inMelee" {{checked system.inMelee}}/>
+                    In Melee Range
+                </label>
                 <span>Weapon is being used in melee combat (-1 damage penalty)</span>
             </div>
             {{/if}}
 
             <div class="form-group">
-                <label>Equipped</label>
-                <input type="checkbox" name="system.equipped" data-action="toggleEquipped" {{checked system.equipped}}/>
-                <span>Show this weapon for quick rolling</span>
+                <label>
+                    <input type="checkbox" name="system.equipped" {{checked system.equipped}}/>
+                    Equipped
+                </label>
+                <span>Equip this weapon</span>
             </div>
         {{/if}}
 
@@ -51,9 +57,11 @@
                 </select>
             </div>
             <div class="form-group">
-                <label>Equipped</label>
-                <input type="checkbox" name="system.equipped" data-action="toggleEquipped" {{checked system.equipped}}/>
-                <span>This {{#if (eq system.armorType "shield")}}shield{{else}}armor{{/if}} is currently worn</span>
+                <label>
+                    <input type="checkbox" name="system.equipped" {{checked system.equipped}}/>
+                    Equipped
+                </label>
+                <span>Wear this {{#if (eq system.armorType "shield")}}shield{{else}}armor{{/if}}</span>
             </div>
         {{/if}}
 
@@ -69,26 +77,11 @@
             </div>
 
             <div class="form-group">
-                <label>Roll Formula</label>
-                <input type="text" name="system.rollFormula" value="{{system.rollFormula}}" placeholder="1d20"/>
-                <small>Base dice to roll (e.g., 1d20, 2d6, 1d10+2)</small>
-            </div>
-
-            <div class="form-group">
-                <label>Uses Attribute</label>
-                <select name="system.usesAttribute">
-                    <option value="none" {{#if (eq system.usesAttribute "none")}}selected{{/if}}>None</option>
-                    <option value="brawn" {{#if (eq system.usesAttribute "brawn")}}selected{{/if}}>Brawn</option>
-                    <option value="wit" {{#if (eq system.usesAttribute "wit")}}selected{{/if}}>Wit</option>
-                    <option value="will" {{#if (eq system.usesAttribute "will")}}selected{{/if}}>Will</option>
-                </select>
-                <small>Add this attribute modifier to the roll</small>
-            </div>
-
-            <div class="form-group">
-                <label>Equipped</label>
-                <input type="checkbox" name="system.equipped" data-action="toggleEquipped" {{checked system.equipped}}/>
-                <span>Show this ability for quick rolling</span>
+                <label>
+                    <input type="checkbox" name="system.equipped" {{checked system.equipped}}/>
+                    Active
+                </label>
+                <span>This advancement is currently benefiting the character</span>
             </div>
         {{/if}}
 
@@ -104,26 +97,11 @@
             </div>
 
             <div class="form-group">
-                <label>Roll Formula</label>
-                <input type="text" name="system.rollFormula" value="{{system.rollFormula}}" placeholder="1d20"/>
-                <small>Base dice to roll (e.g., 1d20, 2d6, 1d10+2)</small>
-            </div>
-
-            <div class="form-group">
-                <label>Uses Attribute</label>
-                <select name="system.usesAttribute">
-                    <option value="none" {{#if (eq system.usesAttribute "none")}}selected{{/if}}>None</option>
-                    <option value="brawn" {{#if (eq system.usesAttribute "brawn")}}selected{{/if}}>Brawn</option>
-                    <option value="wit" {{#if (eq system.usesAttribute "wit")}}selected{{/if}}>Wit</option>
-                    <option value="will" {{#if (eq system.usesAttribute "will")}}selected{{/if}}>Will</option>
-                </select>
-                <small>Add this attribute modifier to the roll</small>
-            </div>
-
-            <div class="form-group">
-                <label>Active</label>
-                <input type="checkbox" name="system.active" data-action="toggleActive" {{checked system.active}}/>
-                <span>This consequence is currently affecting the character</span>
+                <label>
+                    <input type="checkbox" name="system.active" {{checked system.active}}/>
+                    Active
+                </label>
+                <span>This consequence is currently hindering the character</span>
             </div>
         {{/if}}
 
