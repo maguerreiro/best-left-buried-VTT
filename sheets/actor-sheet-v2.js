@@ -543,59 +543,85 @@ static async #onRollWeaponKl2(event, target) {
   }
 
   static async #onToggleEquip(event, target) {
-    event.preventDefault();
-    event.stopPropagation();
+  event.preventDefault();
+  event.stopPropagation();
+  
+  const itemId = target.dataset.itemId;
+  const item = this.document.items.get(itemId);
+  if (!item) return;
+  
+  const isEquipped = target.checked;
+  
+  try {
+    // Update item without re-rendering the sheet to avoid scrollbar jump
+    await item.update({ "system.equipped": isEquipped }, { render: false });
     
-    const itemId = target.dataset.itemId;
-    const item = this.document.items.get(itemId);
-    if (!item) return;
-    
-    const isEquipped = target.checked;
-    
-    try {
-      // Update item without re-rendering the sheet to avoid scrollbar jump
-      await item.update({ "system.equipped": isEquipped }, { render: false });
+    // Handle exclusive equipment (armor/shields)
+    if (item.type === "armor" && isEquipped) {
+      const armorType = item.system.armorType;
+      let conflictTypes = [];
       
-      // Handle exclusive equipment (armor/shields)
-      if (item.type === "armor" && isEquipped) {
-        const armorType = item.system.armorType;
-        let conflictTypes = [];
-        
-        if (armorType === "basic" || armorType === "plate") {
-          conflictTypes = ["basic", "plate"];
-        } else if (armorType === "shield") {
-          conflictTypes = ["shield"];
-        }
-        
-        const others = this.document.items.filter(i => 
-          i.type === "armor" && 
-          i.id !== itemId && 
-          i.system.equipped && 
-          conflictTypes.includes(i.system.armorType)
-        );
-        
-        for (const other of others) {
-          await other.update({ "system.equipped": false }, { render: false });
-          
-          // Manually update the other checkboxes in the UI
-          const otherCheckbox = this.element.querySelector(`input[data-item-id="${other.id}"]`);
-          if (otherCheckbox) {
-            otherCheckbox.checked = false;
-          }
-        }
+      if (armorType === "basic" || armorType === "plate") {
+        conflictTypes = ["basic", "plate"];
+      } else if (armorType === "shield") {
+        conflictTypes = ["shield"];
       }
       
-      // Update armor display manually
-      this._updateArmorDisplay();
+      const others = this.document.items.filter(i => 
+        i.type === "armor" && 
+        i.id !== itemId && 
+        i.system.equipped && 
+        conflictTypes.includes(i.system.armorType)
+      );
       
-      // Ensure the clicked checkbox state is correct
-      target.checked = isEquipped;
-      
-    } catch (error) {
-      console.error("Error in equipment toggle:", error);
-      target.checked = !isEquipped; // Revert on error
+      for (const other of others) {
+        await other.update({ "system.equipped": false }, { render: false });
+        
+        // Manually update the other checkboxes in the UI
+        const otherCheckbox = this.element.querySelector(`input[data-item-id="${other.id}"]`);
+        if (otherCheckbox) {
+          otherCheckbox.checked = false;
+        }
+      }
     }
+    
+    // FIXED: Update armor display for all armor types
+    if (item.type === "armor") {
+      // Calculate armor values
+      let armorBonus = 0;
+      const armorBase = this.document.system.armor?.base || 7;
+      
+      const equippedArmor = this.document.items.filter(item => 
+        item.type === "armor" && item.system.equipped
+      );
+      
+      for (const armor of equippedArmor) {
+        if (armor.system.armorType === "basic") armorBonus += 1;
+        else if (armor.system.armorType === "plate") armorBonus += 2;
+        else if (armor.system.armorType === "shield") armorBonus += 1;
+      }
+      
+      const newArmorTotal = armorBase + armorBonus;
+      
+      // Update the display
+      const armorTotalEl = this.element?.querySelector('.armor-total');
+      if (armorTotalEl) {
+        armorTotalEl.textContent = newArmorTotal;
+      }
+      
+      // Update the document's system data for consistency (without triggering render)
+      this.document.system.armorTotal = newArmorTotal;
+      this.document.system.armorBonus = armorBonus;
+    }
+    
+    // Ensure the clicked checkbox state is correct
+    target.checked = isEquipped;
+    
+  } catch (error) {
+    console.error("Error in equipment toggle:", error);
+    target.checked = !isEquipped; // Revert on error
   }
+}
 
   _updateArmorDisplay() {
     const armorBonusEl = this.element?.querySelector('.armor-bonus');

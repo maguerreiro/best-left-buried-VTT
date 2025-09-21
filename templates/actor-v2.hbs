@@ -101,7 +101,12 @@
                         <div class="items-list">
                             {{#each items.advancement as |item|}}
                             <div class="list-item" data-item-id="{{item._id}}">
-                                <div class="item-name" data-action="openItem">{{item.name}}</div>
+                                <div class="col-equip">
+                                    <input type="checkbox" data-action="toggleEquip" data-item-id="{{item._id}}" {{checked item.system.equipped}} title="Equipped"/>
+                                </div>
+                                <div class="col-icon">
+                                    <img src="{{item.img}}" class="item-icon"/>
+                                </div>                                <div class="item-name" data-action="openItem">{{item.name}}</div>
                                 <div class="item-description">{{item.system.description}}</div>
                                 <div class="item-controls">
                                     <a data-action="deleteItem" class="control-button delete" title="Delete">
@@ -119,6 +124,12 @@
                         <div class="items-list">
                             {{#each items.consequence as |item|}}
                             <div class="list-item" data-item-id="{{item._id}}">
+                                <div class="col-equip">
+                                    <input type="checkbox" data-action="toggleEquip" data-item-id="{{item._id}}" {{checked item.system.equipped}} title="Equipped"/>
+                                </div>
+                                <div class="col-icon">
+                                    <img src="{{item.img}}" class="item-icon"/>
+                                </div>                                
                                 <div class="item-name" data-action="openItem">{{item.name}}</div>
                                 <div class="item-description">{{item.system.description}}</div>
                                 <div class="item-controls">
@@ -243,10 +254,15 @@
                         <div class="items-list">
                             {{#each items.loot as |item|}}
                             <div class="list-item" data-item-id="{{item._id}}">
-                                <img src="{{item.img}}" class="item-icon"/>
+                                <div class="col-equip">
+                                    <input type="checkbox" data-action="toggleEquip" data-item-id="{{item._id}}" {{checked item.system.equipped}} title="Equipped"/>
+                                </div>
+                                <div class="col-icon">
+                                    <img src="{{item.img}}" class="item-icon"/>
+                                </div> 
                                     <div class="item-name" data-action="openItem">{{item.name}}</div>
                                     <div class="item-properties">{{getLootType item.system.lootType}} - {{item.system.value}} gp</div>
-                                 <div class="item-controls">
+                                    <div class="item-controls">
                                     <a data-action="deleteItem" class="control-button delete" title="Delete">
                                         <i class="fas fa-trash"></i>
                                     </a>
