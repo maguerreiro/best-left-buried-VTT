@@ -3,6 +3,7 @@
    ======================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Roboto:wght@400;700&display=swap');
 
 /* ========================================
    GLOBAL VARIABLES & BASE STYLING
@@ -53,44 +54,6 @@
     box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.25);
 }
 
-/* TinyMCE editor styling for dark theme */
-.best-left-buried .tox.tox-tinymce {
-    border: none !important;
-    border-radius: 0 0 5px 5px;
-}
-
-.best-left-buried .tox .tox-editor-header {
-    background: var(--bg-secondary) !important;
-    border-bottom: 1px solid var(--border-color) !important;
-    padding: 4px !important;
-}
-
-.best-left-buried .tox .tox-toolbar__group {
-    background: transparent !important;
-}
-
-.best-left-buried .tox .tox-tbtn {
-    background: var(--bg-tertiary) !important;
-    color: var(--text-primary) !important;
-    border: 1px solid var(--border-color) !important;
-    margin: 1px !important;
-    border-radius: 3px !important;
-}
-
-.best-left-buried .tox .tox-tbtn:hover {
-    background: var(--accent-primary) !important;
-    border-color: var(--accent-secondary) !important;
-}
-
-.best-left-buried .tox .tox-tbtn--enabled {
-    background: var(--accent-primary) !important;
-    color: white !important;
-}
-
-.best-left-buried .tox .tox-edit-area iframe {
-    background: var(--bg-primary) !important;
-}
-
 /* Editor content styling */
 .best-left-buried .editor-content {
     background: var(--bg-primary) !important;
@@ -101,6 +64,27 @@
     min-height: 120px;
     padding: 10px;
 }
+.best-left-buried .description-group textarea {
+    width: 100%;
+    box-sizing: border-box;
+    border: 2px solid var(--border-color);
+    border-radius: 5px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    padding: 10px;
+    font-family: inherit;
+    font-size: 0.95em;
+    transition: border-color 0.2s ease;
+}
+
+.best-left-buried .description-group textarea:focus {
+    /* Styles for when the textarea is in focus */
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.25);
+}
+
+
 
 /* ========================================
    CHARACTER PORTRAIT IMPROVEMENTS
