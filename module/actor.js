@@ -1,4 +1,4 @@
-// module/actor.js - Updated for new sheet layout
+// module/actor.js - Updated for new sheet layout and encumbrance
 
 export class BLBActorData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
@@ -129,6 +129,22 @@ export class BLBActorData extends foundry.abstract.TypeDataModel {
         }),
       }),
 
+      // Encumbrance
+      encumbrance: new fields.SchemaField({
+        current: new fields.NumberField({
+          required: true,
+          integer: true,
+          initial: 0,
+          min: 0,
+        }),
+        max: new fields.NumberField({
+          required: true,
+          integer: true,
+          initial: 12,
+          min: 0,
+        }),
+      }),
+
       // Armor (base value before modifiers)
       armor: new fields.SchemaField({
         base: new fields.NumberField({
@@ -176,9 +192,15 @@ export class BLBActorData extends foundry.abstract.TypeDataModel {
     this.armorTotal = this.armor.base;
     this.armorBonus = 0;
 
-    // Add armor bonuses from equipped items
+    // Calculate encumbrance maximum
+    this.encumbranceMax = 12 + (2 * this.brawnTotal) + Math.max(this.witTotal, this.willTotal);
+    
+    // Calculate current encumbrance from items
+    this.encumbranceCurrent = 0;
+
     const actor = this.parent;
     if (actor) {
+      // Calculate armor bonuses
       const armorItems = actor.items.filter(item => item.type === "armor");
       for (let armor of armorItems) {
         if (armor.system.equipped) {
@@ -194,6 +216,19 @@ export class BLBActorData extends foundry.abstract.TypeDataModel {
           }
         }
       }
+
+      // Calculate encumbrance from all items with slot values
+      const itemsWithSlots = actor.items.filter(item => 
+        item.system.slotValue !== undefined && item.system.slotValue > 0
+      );
+      
+      for (let item of itemsWithSlots) {
+        this.encumbranceCurrent += item.system.slotValue;
+      }
     }
+    
+    // Update the encumbrance fields in the system data
+    this.encumbrance.current = this.encumbranceCurrent;
+    this.encumbrance.max = this.encumbranceMax;
   }
 }

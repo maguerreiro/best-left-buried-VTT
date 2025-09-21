@@ -30,10 +30,6 @@
     color: var(--text-primary);
 }
 
-/* Additional CSS for item descriptions and character portrait improvements */
-
-/* Additional CSS for item descriptions and character portrait improvements */
-
 /* ========================================
    RICH TEXT EDITOR DESCRIPTIONS
    ======================================== */
@@ -64,6 +60,7 @@
     min-height: 120px;
     padding: 10px;
 }
+
 .best-left-buried .description-group textarea {
     width: 100%;
     box-sizing: border-box;
@@ -78,13 +75,10 @@
 }
 
 .best-left-buried .description-group textarea:focus {
-    /* Styles for when the textarea is in focus */
     outline: none;
     border-color: var(--accent-primary);
     box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.25);
 }
-
-
 
 /* ========================================
    CHARACTER PORTRAIT IMPROVEMENTS
@@ -100,7 +94,7 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.3);
     transition: all 0.2s ease;
     background: var(--bg-tertiary);
-    position: relative; /* Ensure proper click handling */
+    position: relative;
 }
 
 .best-left-buried .character-portrait:hover {
@@ -109,18 +103,16 @@
     transform: scale(1.02);
 }
 
-/* Placeholder for empty character portraits */
 .best-left-buried .character-portrait[src*="mystery-man"] {
     background: var(--bg-tertiary);
     border-style: dashed;
     opacity: 0.8;
 }
 
-/* Ensure portrait section allows clicking through */
 .best-left-buried .portrait-section {
     display: flex;
     align-items: center;
-    position: relative; /* Ensure proper stacking context */
+    position: relative;
 }
 
 /* ========================================
@@ -130,7 +122,7 @@
 .best-left-buried .item-icon {
     width: 24px;
     height: 24px;
-    object-fit: contain; /* Changed from cover to contain for better SVG display */
+    object-fit: contain;
     border-radius: 2px;
     border: 1px solid var(--border-light);
     background: rgba(255, 255, 255, 0.1);
@@ -138,15 +130,13 @@
     box-sizing: border-box;
 }
 
-/* Weapon icons in tables */
 .best-left-buried .weapons-table .item-icon,
 .best-left-buried .armor-table .item-icon {
     width: 20px;
     height: 20px;
-    filter: invert(0.8); /* Make SVG icons lighter for better visibility on dark background */
+    filter: invert(0.8);
 }
 
-/* Item sheet header icon */
 .best-left-buried.sheet.item .sheet-header img {
     border: 2px solid var(--border-color);
     cursor: pointer;
@@ -154,7 +144,7 @@
     border-radius: 5px;
     width: 64px;  
     height: 64px; 
-    object-fit: contain; /* Better for SVG icons */
+    object-fit: contain;
     flex-shrink: 0;
     background: rgba(255, 255, 255, 0.1);
     padding: 8px;
@@ -193,7 +183,6 @@
     box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.25);
 }
 
-/* Better label spacing */
 .best-left-buried .form-group label {
     display: block;
     font-weight: 600;
@@ -202,14 +191,12 @@
     font-size: 1em;
 }
 
-/* Checkbox labels inline */
 .best-left-buried .form-group label input[type="checkbox"] {
     margin-right: 8px;
     width: auto;
     max-width: none;
 }
 
-/* Small descriptive text */
 .best-left-buried .form-group small {
     display: block;
     margin-top: 6px;
@@ -252,13 +239,12 @@
 }
 
 .best-left-buried .sheet-container {
-    padding: 15px;
+    padding: 15px 25px 15px 15px; /* More padding on right */
     overflow-y: auto;
     overflow-x: hidden;
     flex: 1;
     height: 100%;
     box-sizing: border-box;
-    padding-right: 25px;
 }
 
 /* Hide internal tabs */
@@ -345,7 +331,7 @@
     padding: 15px;
     border-bottom: 2px solid var(--border-color);
     background: var(--bg-secondary);
-    margin: -15px -15px 15px -15px;
+    margin: -15px -25px 15px -15px; /* Adjusted for new padding */
     border-radius: 5px 5px 0 0;
 }
 
@@ -354,21 +340,12 @@
     align-items: center;
 }
 
-.best-left-buried .character-portrait {
-    width: 80px;
-    height: 100px;
-    object-fit: cover;
-    border: 2px solid var(--border-color);
-    border-radius: 5px;
-    cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-}
-
 .best-left-buried .character-info {
     display: flex;
     flex-direction: column;
     gap: 8px;
     flex: 1;
+    min-width: 600px; /* Ensure enough space for content */
 }
 
 .best-left-buried .character-name {
@@ -380,11 +357,6 @@
     color: var(--text-primary);
     border-radius: 3px;
     width: 100%;
-}
-
-.best-left-buried .info-char {
-    display: flex;
-    gap: 15px;
 }
 
 .best-left-buried .info-char {
@@ -401,10 +373,10 @@
     margin-bottom: 2px;
 }
 
-
 .best-left-buried .info-row {
     display: flex;
     gap: 15px;
+    flex-wrap: nowrap; /* Prevent wrapping on wider sheets */
 }
 
 .best-left-buried .info-item {
@@ -414,6 +386,7 @@
     flex: 1;
     text-align: center;
     align-items: center;
+    
 }
 
 .best-left-buried .info-item label {
@@ -476,7 +449,8 @@
 
 .best-left-buried .split-left,
 .best-left-buried .split-right {
-    width: 35px;
+    width: 40px;
+    height: 30px;
     padding: 2px 4px;
     border: 1px solid var(--border-color);
     background: var(--bg-primary);
@@ -484,10 +458,23 @@
     border-radius: 2px;
     text-align: center;
     font-size: 0.9em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+/* Special styling for read-only encumbrance display */
+.best-left-buried .split-left.encumbrance-current,
+.best-left-buried .split-right.encumbrance-max {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-light);
+    font-weight: 600;
 }
 
 .best-left-buried .single-input {
     width: 40px;
+    height: 30px;
     padding: 2px 4px;
     border: 1px solid var(--border-color);
     background: var(--bg-primary);
@@ -495,6 +482,25 @@
     border-radius: 2px;
     text-align: center;
     font-size: 0.9em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+/* Ensure consistent input sizing in info items */
+.best-left-buried .info-item input[type="text"],
+.best-left-buried .info-item input[type="number"] {
+    padding: 2px 4px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border-radius: 3px;
+    font-size: 0.9em;
+    height: 20px;
+    box-sizing: border-box;
+    width: 40px;
+    height: 30px;
 }
 
 /* ========================================
@@ -516,14 +522,15 @@
 .best-left-buried .main-stats-row {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    gap: 10px;
+    gap: 12px; /* Slightly more gap for wider sheet */
     margin-bottom: 20px;
-    padding: 15px;
+    padding: 10px;
     background: var(--bg-secondary);
     border-radius: 5px;
     border: 1px solid var(--border-color);    
     margin-left: -15px;
-    margin-right: -15px;
+    margin-right: -25px; /* Adjusted for new padding */
+    align-items: start; /* Align all items to top for consistent positioning */
 }
 
 .best-left-buried .stat-item {
@@ -539,10 +546,40 @@
     color: var(--text-secondary);
     text-transform: none;
     letter-spacing: 0.5px;
+    height: 24px; /* Fixed height for consistent alignment */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0; /* Remove default margin */
+}
+
+.best-left-buried .stat-label-button {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 0.9em;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    padding: 2px 4px;
+    border-radius: 3px;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    height: 24px; /* Same height as labels */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0; /* Remove default margin */
+}
+
+.best-left-buried .stat-label-button:hover {
+    background: var(--accent-primary);
+    color: white;
 }
 
 .best-left-buried .stat-item input {
-    width: 50px;
+    width: 40px;
     height: 30px;
     padding: 4px;
     text-align: center;
@@ -554,7 +591,7 @@
 }
 
 .best-left-buried .stat-item span {
-    width: 50px;
+    width: 40px;
     height: 30px;
     padding: 4px;
     text-align: center;
@@ -563,6 +600,9 @@
     color: var(--text-primary);
     border-radius: 3px;
     font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .best-left-buried .armor-base,
@@ -577,6 +617,50 @@
 }
 
 /* ========================================
+   STAT ROLL BUTTONS - NEW LAYOUT
+   ======================================== */
+
+.best-left-buried .stat-input-row {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.best-left-buried .stat-arrow {
+    width: 18px;
+    height: 30px; /* Match input height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-color);
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.7em;
+}
+
+.best-left-buried .stat-arrow:hover {
+    background: var(--accent-primary);
+    border-color: var(--accent-secondary);
+}
+
+/* Color coding for stat roll types */
+.best-left-buried .stat-arrow[data-action="rollStatKl2"] i {
+    color: #FF6B6B; 
+}
+
+.best-left-buried .stat-arrow[data-action="rollStatKh2"] i {
+    color: #77DD77; 
+}
+
+/* Remove old stat roll button styling */
+.best-left-buried .stat-roll-buttons {
+    display: none;
+}
+
+/* ========================================
    LISTS STYLING
    ======================================== */
 
@@ -584,7 +668,7 @@
 .best-left-buried .table-section {
     margin-bottom: 20px;
     margin-left: -15px;
-    margin-right: -15px;
+    margin-right: -25px; /* Adjusted for new padding */
 }
 
 .best-left-buried .list-section h3,
@@ -604,7 +688,6 @@
    ======================================== */
 
 .best-left-buried .weapons-table {
-    background: var(--bg-secondary);
     border-radius: 5px;
     border: 1px solid var(--border-color);
     overflow: hidden;
@@ -612,7 +695,7 @@
 
 .best-left-buried .weapons-table .table-header {
     display: grid;
-    grid-template-columns: 25px 30px 1fr 110px 60px 80px 80px 80px 80px 30px;
+    grid-template-columns: 25px 30px 1fr 110px 60px 80px 80px 80px 50px 90px 30px; /* Wider columns */
     gap: 8px;
     padding: 2px 12px;
     background: var(--bg-tertiary);
@@ -630,7 +713,7 @@
 
 .best-left-buried .weapons-table .table-row {
     display: grid;
-    grid-template-columns: 25px 30px 1fr 110px 60px 80px 80px 80px 80px 30px;
+    grid-template-columns: 25px 30px 1fr 110px 60px 80px 80px 80px 50px 90px 30px; /* Wider columns */
     gap: 8px;
     align-items: center;
     padding: 6px 12px;
@@ -639,9 +722,15 @@
     font-size: 0.9em;
 }
 
+.best-left-buried .armor-table {
+    border-radius: 5px;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
 .best-left-buried .armor-table .table-header {
     display: grid;
-    grid-template-columns: 25px 30px 1fr 110px 60px 80px;
+    grid-template-columns: 25px 30px 1fr 110px 60px 50px 30px; /* Wider columns */
     gap: 8px;
     padding: 6px 12px;
     background: var(--bg-tertiary);
@@ -660,7 +749,7 @@
 
 .best-left-buried .armor-table .table-row {
     display: grid;
-    grid-template-columns: 25px 30px 1fr 110px 60px 80px;
+    grid-template-columns: 25px 30px 1fr 110px 60px 50px 30px; /* Wider columns */
     gap: 8px;
     padding: 6px 12px;
     border-bottom: 1px solid var(--border-light);
@@ -682,10 +771,20 @@
 .best-left-buried .armor-table .col-name {
     text-align: left;
     justify-self: start;
-    font-weight: 500; /* Add this if you want to be explicit */
+    font-weight: 500;
 }
 
 .best-left-buried .col-armor {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.85em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 20px;
+}
+
+.best-left-buried .col-slots {
     text-align: center;
     color: var(--text-secondary);
     font-size: 0.85em;
@@ -719,11 +818,6 @@
     justify-content: center;
 }
 
-.best-left-buried .armor-table .col-name {
-    font-weight: 500;
-    text-align: left !important;
-}
-
 .best-left-buried .col-type,
 .best-left-buried .col-range,
 .best-left-buried .col-stat,
@@ -737,7 +831,7 @@
 .best-left-buried .col-actions {
     display: flex;
     justify-content: center;
-    gap: 4px;
+    gap: 2px; /* Reduced gap for weapon roll buttons */
 }
 
 .best-left-buried .roll-button-mini {
@@ -760,7 +854,6 @@
     border-color: var(--accent-secondary);
 }
 
-
 .best-left-buried button[data-action="rollWeaponKl2"] i {
     color: #FF6B6B; 
 }
@@ -779,12 +872,77 @@
     height: 24px;
 }
 
+.best-left-buried .col-value {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.85em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 20px;
+}
+
+/* ========================================
+   LOOT TABLE
+   ======================================== */
+
+.best-left-buried .loot-table {
+    border-radius: 5px;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+.best-left-buried .loot-table .table-header {
+    display: grid;
+    grid-template-columns: 25px 30px 1fr 110px 80px 50px 30px;
+    gap: 8px;
+    padding: 6px 12px;
+    background: var(--bg-tertiary);
+    border-bottom: 2px solid var(--border-color);
+    font-weight: 600;
+    font-size: 0.85em;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    align-items: center; 
+    line-height: 1;
+    position: relative;    
+    min-height: 32px;
+    box-sizing: border-box;
+}
+
+.best-left-buried .loot-table .table-row {
+    display: grid;
+    grid-template-columns: 25px 30px 1fr 110px 80px 50px 30px;
+    gap: 8px;
+    padding: 6px 12px;
+    border-bottom: 1px solid var(--border-light);
+    transition: background-color 0.2s ease;
+    font-size: 0.9em;
+    min-height: 32px;
+    box-sizing: border-box;
+}
+
+.best-left-buried .loot-table .table-header > div,
+.best-left-buried .loot-table .table-row > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    line-height: 1;
+}
+
+.best-left-buried .loot-table .col-name {
+    text-align: left;
+    justify-self: start;
+    font-weight: 500;
+}
+
 /* ========================================
    REGULAR LISTS (for armor and loot)
    ======================================== */
 
 .best-left-buried .items-list {
-    background: var(--bg-secondary);
     border-radius: 5px;
     border: 1px solid var(--border-color);
     overflow: hidden;
@@ -821,14 +979,6 @@
 .best-left-buried .equipment-controls-left input[type="checkbox"] {
     transform: scale(1.2);
     margin: 0;
-}
-
-.best-left-buried .item-icon {
-    width: 24px;
-    height: 24px;
-    object-fit: cover;
-    border-radius: 2px;
-    border: 1px solid var(--border-light);
 }
 
 .best-left-buried .item-info {
@@ -895,6 +1045,171 @@
 }
 
 /* ========================================
+   ENCUMBRANCE STYLING
+   ======================================== */
+
+.best-left-buried .split-left.encumbrance-current,
+.best-left-buried .split-right.encumbrance-max {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-light);
+    font-weight: 600;
+}
+
+/* ========================================
+   ITEM SHEET STYLING
+   ======================================== */
+
+.best-left-buried.sheet.item {
+    background: var(--bg-primary);
+}
+
+.best-left-buried.sheet.item .window-content {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    max-height: calc(100vh - 100px);
+}
+
+.best-left-buried.sheet.item .sheet-container {
+    padding: 15px;
+}
+
+.best-left-buried.sheet.item .item-sheet-container {
+    min-height: auto;
+}
+
+.best-left-buried.sheet.item .form-group {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    background: var(--bg-secondary);
+}
+
+/* Custom scrollbar for item sheets */
+.best-left-buried.sheet.item .window-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.best-left-buried.sheet.item .window-content::-webkit-scrollbar-track {
+    border-radius: 4px;
+    background: var(--bg-secondary);
+}
+
+.best-left-buried.sheet.item .window-content::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+.best-left-buried.sheet.item .window-content::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-primary);
+}
+
+.best-left-buried.sheet.item .sheet-header {
+    display: flex;
+    align-items: center !important;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.best-left-buried.sheet.item .sheet-header h1 {
+    flex: 1;
+    margin: 0;
+    display: flex;  
+    align-items: center;  
+}
+
+.best-left-buried.sheet.item .sheet-header input {
+    font-size: 0.5em !important;
+    font-weight: bold;
+    width: 100%;
+    height: 40px;
+    border: 2px solid var(--border-color);
+    padding: 8px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border-radius: 3px;
+    line-height: 1.2;
+    box-sizing: border-box;
+}
+
+.best-left-buried.sheet.item .form-group label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: var(--text-primary);
+    font-size: 1em;
+}
+
+.best-left-buried.sheet.item .form-group select,
+.best-left-buried.sheet.item .form-group input[type="text"],
+.best-left-buried.sheet.item .form-group input[type="number"] {
+    width: 100%;
+    max-width: 300px;
+    padding: 6px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border-radius: 3px;
+}
+
+/* Checkbox styling for item sheets */
+.best-left-buried.sheet.item .form-group input[type="checkbox"] {
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    width: 18px !important;
+    height: 18px !important;
+    border: 2px solid var(--border-color) !important;
+    border-radius: 3px !important;
+    background: #666 !important;
+    margin-right: 8px !important;
+    position: relative !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+
+.best-left-buried.sheet.item .form-group input[type="checkbox"]:checked {
+    background: var(--accent-primary) !important;
+    border-color: var(--accent-secondary) !important;
+}
+
+.best-left-buried.sheet.item .form-group input[type="checkbox"]:checked::after {
+    content: '✓' !important;
+    position: absolute !important;
+    top: -2px !important;
+    left: 2px !important;
+    color: white !important;
+    font-size: 12px !important;
+    font-weight: bold !important;
+}
+
+.best-left-buried.sheet.item .form-group input[type="checkbox"]:not(:checked) {
+    background: #666666;
+    border-color: #555555;
+}
+
+.best-left-buried.sheet.item .form-group input[type="checkbox"]:not(:checked)::before {
+    display: none;
+}
+
+.best-left-buried.sheet.item .form-group small {
+    display: block;
+    margin-top: 5px;
+    color: var(--text-secondary);
+    font-style: italic;
+    font-size: 0.9em;
+}
+
+.best-left-buried.sheet.item .form-group span {
+    color: var(--text-secondary);
+    font-size: 0.95em;
+}
+
+/* ========================================
    FORM ELEMENTS
    ======================================== */
 
@@ -936,183 +1251,6 @@
 }
 
 /* ========================================
-   ITEM SHEET STYLING
-   ======================================== */
-
-.best-left-buried.sheet.item {
-    background: var(--bg-primary);
-}
-
-.best-left-buried.sheet.item .window-content {
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
-    max-height: calc(100vh - 100px); /* Adjust based on your needs */
-}
-
-.best-left-buried.sheet.item .sheet-container {
-    padding: 15px;
-    /* Remove any height/overflow constraints */
-}
-
-.best-left-buried.sheet.item .item-sheet-container {
-    /* Let content flow naturally */
-    min-height: auto;
-}
-
-/* Ensure form groups don't get cut off */
-.best-left-buried.sheet.item .form-group {
-    margin-bottom: 15px;
-    padding: 10px;
-    border: 1px solid var(--border-color);
-    border-radius: 5px;
-    background: var(--bg-secondary);
-}
-
-/* Custom scrollbar for item sheets */
-.best-left-buried.sheet.item .window-content::-webkit-scrollbar {
-    width: 8px;
-}
-
-.best-left-buried.sheet.item .window-content::-webkit-scrollbar-track {
-    border-radius: 4px;
-    background: var(--bg-secondary);
-}
-
-.best-left-buried.sheet.item .window-content::-webkit-scrollbar-thumb {
-    background: var(--border-color);
-    border-radius: 4px;
-}
-
-.best-left-buried.sheet.item .window-content::-webkit-scrollbar-thumb:hover {
-    background: var(--accent-primary);
-}
-
-.best-left-buried.sheet.item .sheet-header {
-    display: flex;
-    align-items: center !important;
-    gap: 15px;
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-    border-bottom: 2px solid var(--border-color);
-}
-
-.best-left-buried.sheet.item .sheet-header img {
-    border: 2px solid var(--border-color);
-    cursor: pointer;
-    box-shadow: 0 0 5px rgba(0,0,0,0.3);
-    border-radius: 5px;
-    width: 64px;  
-    height: 64px; 
-    object-fit: cover;  
-    flex-shrink: 0; 
-
-}
-
-.best-left-buried.sheet.item .sheet-header h1 {
-    flex: 1;
-    margin: 0;
-    display: flex;  
-    align-items: center;  
-}
-
-.best-left-buried.sheet.item .sheet-header input {
-    font-size: 0.5em !important;  /* Fixed: reduced from 1.3em */
-    font-weight: bold;
-    width: 100%;
-    height: 40px;
-    border: 2px solid var(--border-color);
-    padding: 8px;
-    background: var(--bg-primary);
-    color: var(--text-primary);
-    border-radius: 3px;
-    line-height: 1.2;  /* Better line height for vertical centering of text */
-    box-sizing: border-box;
-}
-
-.best-left-buried.sheet.item .form-group {
-    margin-bottom: 15px;
-    padding: 10px;
-    border: 1px solid var(--border-color);
-    border-radius: 5px;
-    background: var(--bg-secondary);
-}
-
-.best-left-buried.sheet.item .form-group label {
-    display: flex;
-    align-items: center;
-    gap: 4px; /* Optional: adds a little space between the checkbox and text */
-    font-weight: 600;
-    margin-bottom: 5px;
-    color: var(--text-primary);
-    font-size: 1em;
-}
-
-.best-left-buried.sheet.item .form-group select,
-.best-left-buried.sheet.item .form-group input[type="text"],
-.best-left-buried.sheet.item .form-group input[type="number"] {
-    width: 100%;
-    max-width: 300px;
-    padding: 6px;
-    border: 1px solid var(--border-color);
-    background: var(--bg-primary);
-    color: var(--text-primary);
-    border-radius: 3px;
-}
-
-/* Checkbox styling for item sheets - grey when unchecked */
-/* More specific selector with !important to override any conflicts */
-.best-left-buried.sheet.item .form-group input[type="checkbox"] {
-    appearance: none !important;
-    -webkit-appearance: none !important;
-    -moz-appearance: none !important;
-    width: 18px !important;
-    height: 18px !important;
-    border: 2px solid var(--border-color) !important;
-    border-radius: 3px !important;
-    background: #666 !important; /* Grey when unchecked */
-    margin-right: 8px !important;
-    position: relative !important;
-    cursor: pointer !important;
-    transition: all 0.2s ease !important;
-}
-
-.best-left-buried.sheet.item .form-group input[type="checkbox"]:checked {
-    background: var(--accent-primary) !important;
-    border-color: var(--accent-secondary) !important;
-}
-
-.best-left-buried.sheet.item .form-group input[type="checkbox"]:checked::after {
-    content: '✓' !important;
-    position: absolute !important;
-    top: -2px !important;
-    left: 2px !important;
-    color: white !important;
-    font-size: 12px !important;
-    font-weight: bold !important;
-}
-.best-left-buried.sheet.item .form-group input[type="checkbox"]:not(:checked) {
-    background: #666666;  /* Grey when unchecked */
-    border-color: #555555;
-}
-
-.best-left-buried.sheet.item .form-group input[type="checkbox"]:not(:checked)::before {
-    display: none;
-}
-
-.best-left-buried.sheet.item .form-group small {
-    display: block;
-    margin-top: 5px;
-    color: var(--text-secondary);
-    font-style: italic;
-    font-size: 0.9em;
-}
-
-.best-left-buried.sheet.item .form-group span {
-    color: var(--text-secondary);
-    font-size: 0.95em;
-}
-
-/* ========================================
    SCROLLBAR STYLING
    ======================================== */
 
@@ -1135,8 +1273,58 @@
 }
 
 /* ========================================
+   DICE ROLL STYLING
+   ======================================== */
+
+.dice-results-box {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    justify-content: center;
+}
+
+.dice-result-box {
+    border: 1px solid #7a7971;
+    border-radius: 4px;
+    padding: 0;
+    background: rgba(255, 255, 240, 0.8);
+    color: #444444;
+    font-weight: bold;
+    font-size: 1.2em;
+    height: 30px;
+    min-width: 30px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dice-result-box.discarded {
+    opacity: 0.5;
+    text-decoration: line-through;
+}
+
+/* ========================================
    RESPONSIVE DESIGN
    ======================================== */
+
+@media (max-width: 1200px) {
+    .best-left-buried.application {
+        min-width: 800px;
+    }
+    
+    .best-left-buried .sheet-layout {
+        min-width: 780px;
+    }
+    
+    .best-left-buried .sheet-main {
+        min-width: 760px;
+    }
+    
+    .best-left-buried .character-info {
+        min-width: 500px;
+    }
+}
 
 @media (max-width: 1024px) {
     .blb-external-tabs {
@@ -1169,6 +1357,21 @@
     
     .best-left-buried .main-stats-row {
         grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .best-left-buried .weapons-table .table-header,
+    .best-left-buried .weapons-table .table-row {
+        grid-template-columns: 25px 30px 1fr 80px 50px 60px 60px 60px 40px 70px 25px;
+    }
+    
+    .best-left-buried .armor-table .table-header,
+    .best-left-buried .armor-table .table-row {
+        grid-template-columns: 25px 30px 1fr 80px 50px 40px 70px;
+    }
+    
+    .best-left-buried .loot-table .table-header,
+    .best-left-buried .loot-table .table-row {
+        grid-template-columns: 25px 30px 1fr 80px 60px 40px 70px;
     }
 }
 
@@ -1204,6 +1407,24 @@
     .best-left-buried .item-controls {
         align-self: flex-end;
     }
+    
+    .best-left-buried .weapons-table .table-header,
+    .best-left-buried .weapons-table .table-row {
+        grid-template-columns: 1fr;
+        gap: 4px;
+    }
+    
+    .best-left-buried .armor-table .table-header,
+    .best-left-buried .armor-table .table-row {
+        grid-template-columns: 1fr;
+        gap: 4px;
+    }
+    
+    .best-left-buried .loot-table .table-header,
+    .best-left-buried .loot-table .table-row {
+        grid-template-columns: 1fr;
+        gap: 4px;
+    }
 }
 
 @media (max-width: 600px) {
@@ -1211,30 +1432,3 @@
         grid-template-columns: 1fr;
     }
 }
-
-
-.dice-results-box {
-  display: flex;
-  gap: 5px;
-  align-items: center;
-  justify-content: center;
-}
-
-.dice-result-box {
-  border: 1px solid #7a7971;
-  border-radius: 4px;
-  padding: 0;
-  background: rgba(255, 255, 240, 0.8);
-  color: #444444;
-  font-weight: bold;
-  font-size: 1.2em;
-  height: 30px;
-  min-width: 30px;
-  text-align: center;
-}
-
-.dice-result-box.discarded {
-  opacity: 0.5; /* Makes it greyed out */
-  text-decoration: line-through; /* Adds a strikethrough */
-}
-

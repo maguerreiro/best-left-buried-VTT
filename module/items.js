@@ -1,4 +1,4 @@
-// module/items.js - Updated for better default icons
+// module/items.js - Updated for slot values and refined types
 
 export class BLBWeaponData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
@@ -23,6 +23,11 @@ export class BLBWeaponData extends foundry.abstract.TypeDataModel {
       equipped: new fields.BooleanField({
         required: true,
         initial: false
+      }),
+      slotValue: new fields.NumberField({
+        required: true,
+        initial: 1,
+        min: 0
       })
     };
   }
@@ -67,6 +72,11 @@ export class BLBArmorData extends foundry.abstract.TypeDataModel {
       equipped: new fields.BooleanField({
         required: true,
         initial: false
+      }),
+      slotValue: new fields.NumberField({
+        required: true,
+        initial: 1,
+        min: 0
       })
     };
   }
@@ -82,7 +92,7 @@ export class BLBAdvancementData extends foundry.abstract.TypeDataModel {
       advancementType: new fields.StringField({
         required: true,
         initial: "special_ability",
-        choices: ["special_ability", "ability", "spell", "skill", "trait"]
+        choices: ["special_ability"]
       }),
       equipped: new fields.BooleanField({
         required: true,
@@ -101,8 +111,8 @@ export class BLBConsequenceData extends foundry.abstract.TypeDataModel {
       }),
       consequenceType: new fields.StringField({
         required: true,
-        initial: "negative_effect",
-        choices: ["negative_effect", "ability"]
+        initial: "negative_ability",
+        choices: ["negative_ability"]
       }),
       active: new fields.BooleanField({
         required: true,
@@ -127,7 +137,12 @@ export class BLBLootData extends foundry.abstract.TypeDataModel {
       lootType: new fields.StringField({
         required: true,
         initial: "adventuring_gear",
-        choices: ["adventuring_gear", "treasure", "misc", "valuable", "artifact", "consumable"]
+        choices: ["adventuring_gear", "treasure"]
+      }),
+      slotValue: new fields.NumberField({
+        required: true,
+        initial: 1,
+        min: 0
       })
     };
   }

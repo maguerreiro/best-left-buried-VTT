@@ -1,4 +1,4 @@
-{{! templates/item-v2.hbs - Updated with textarea description }}
+{{! templates/item-v2.hbs - Updated with slot values and refined types }}
 <div class="item-sheet-container">
     <header class="sheet-header">
         <img src="{{#if item.img}}{{item.img}}{{else}}{{defaultIcon}}{{/if}}" data-edit="img" title="{{item.name}}" height="64" width="64"/>
@@ -44,6 +44,12 @@
                 </label>
                 <span>Equip this weapon</span>
             </div>
+
+            <div class="form-group">
+                <label>Slot Value</label>
+                <input type="number" name="system.slotValue" value="{{system.slotValue}}" min="0" step="1"/>
+                <small>How many inventory slots this weapon occupies</small>
+            </div>
         {{/if}}
 
         {{! Armor-specific fields }}
@@ -62,6 +68,12 @@
                     Equipped
                 </label>
                 <span>Wear this {{#if (eq system.armorType "shield")}}shield{{else}}armor{{/if}}</span>
+            </div>
+
+            <div class="form-group">
+                <label>Slot Value</label>
+                <input type="number" name="system.slotValue" value="{{system.slotValue}}" min="0" step="1"/>
+                <small>How many inventory slots this {{#if (eq system.armorType "shield")}}shield{{else}}armor{{/if}} occupies</small>
             </div>
         {{/if}}
 
@@ -120,6 +132,12 @@
                 <label>Value (Gold Pieces)</label>
                 <input type="number" name="system.value" value="{{system.value}}" min="0" step="0.01"/>
                 <small>Monetary value in gold pieces</small>
+            </div>
+
+            <div class="form-group">
+                <label>Slot Value</label>
+                <input type="number" name="system.slotValue" value="{{system.slotValue}}" min="0" step="1"/>
+                <small>How many inventory slots this item occupies</small>
             </div>
         {{/if}}
 

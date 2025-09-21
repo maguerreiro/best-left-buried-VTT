@@ -1,4 +1,4 @@
-// sheets/item-sheet-v2.js - Updated for textarea descriptions and weapon icons
+// sheets/item-sheet-v2.js - Updated for slot values and refined types
 
 import { WEAPON_TYPES } from "../module/helpers/weapons.js";
 import { ARMOR_TYPES } from "../module/helpers/armor.js";
