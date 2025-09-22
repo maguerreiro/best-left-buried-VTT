@@ -516,21 +516,21 @@
 }
 
 /* ========================================
-   MAIN STATS ROW
+   MAIN STATS ROW - UPDATED FOR NEW LAYOUT
    ======================================== */
 
 .best-left-buried .main-stats-row {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    gap: 12px; /* Slightly more gap for wider sheet */
+    gap: 12px;
     margin-bottom: 20px;
     padding: 10px;
     background: var(--bg-secondary);
     border-radius: 5px;
     border: 1px solid var(--border-color);    
     margin-left: -15px;
-    margin-right: -25px; /* Adjusted for new padding */
-    align-items: start; /* Align all items to top for consistent positioning */
+    margin-right: -25px;
+    align-items: start;
 }
 
 .best-left-buried .stat-item {
@@ -546,11 +546,19 @@
     color: var(--text-secondary);
     text-transform: none;
     letter-spacing: 0.5px;
-    height: 24px; /* Fixed height for consistent alignment */
+    height: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 0; /* Remove default margin */
+    margin-bottom: 0;
+}
+
+/* New stat name row with arrows */
+.best-left-buried .stat-name-row {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    height: 24px;
 }
 
 .best-left-buried .stat-label-button {
@@ -566,16 +574,46 @@
     border-radius: 3px;
     transition: all 0.2s ease;
     font-family: inherit;
-    height: 24px; /* Same height as labels */
+    height: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 0; /* Remove default margin */
+    margin: 0;
+    white-space: nowrap;
 }
 
 .best-left-buried .stat-label-button:hover {
     background: var(--accent-primary);
     color: white;
+}
+
+.best-left-buried .stat-arrow {
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-color);
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.7em;
+}
+
+.best-left-buried .stat-arrow:hover {
+    background: var(--accent-primary);
+    border-color: var(--accent-secondary);
+}
+
+/* Color coding for stat roll types */
+.best-left-buried .stat-arrow[data-action="rollStatKl2"] i {
+    color: #FF6B6B; 
+}
+
+.best-left-buried .stat-arrow[data-action="rollStatKh2"] i {
+    color: #77DD77; 
 }
 
 .best-left-buried .stat-item input {
@@ -605,15 +643,13 @@
     justify-content: center;
 }
 
-.best-left-buried .armor-base,
-.best-left-buried .armor-bonus,
-.best-left-buried .armor-total {
-    color: var(--text-primary);
+/* Remove old stat input row and related styles */
+.best-left-buried .stat-input-row {
+    display: none;
 }
 
-.best-left-buried .plus,
-.best-left-buried .equals {
-    color: var(--text-secondary);
+.best-left-buried .stat-roll-buttons {
+    display: none;
 }
 
 /* ========================================

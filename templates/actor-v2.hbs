@@ -1,4 +1,4 @@
-{{! templates/actor-v2.hbs - Updated with stat rolling and encumbrance }}
+{{! templates/actor-v2.hbs - Updated with repositioned arrows and Affluence rolling }}
 <div class="sheet-layout">
     <div class="sheet-main">
         <div class="sheet-container">
@@ -70,43 +70,43 @@
                     {{! Main Stats Row with Roll Buttons }}
                     <div class="main-stats-row">
                         <div class="stat-item">
-                            <button type="button" data-action="rollStat" data-stat="brawn" class="stat-label-button" title="Roll Brawn Check">Brawn</button>
-                            <div class="stat-input-row">
-                                <button type="button" data-action="rollStatKh2" data-stat="brawn" class="roll-button-mini stat-arrow" title="Upper Hand">
+                            <div class="stat-name-row">
+                                <button type="button" data-action="rollStatKh2" data-stat="brawn" class="stat-arrow" title="Upper Hand">
                                     <i class="fas fa-arrow-up"></i>
                                 </button>
-                                <input type="number" name="system.brawn.base" value="{{system.brawn.base}}"/>
-                                <button type="button" data-action="rollStatKl2" data-stat="brawn" class="roll-button-mini stat-arrow" title="Against the Odds">
+                                <button type="button" data-action="rollStat" data-stat="brawn" class="stat-label-button" title="Roll Brawn Check">Brawn</button>
+                                <button type="button" data-action="rollStatKl2" data-stat="brawn" class="stat-arrow" title="Against the Odds">
                                     <i class="fas fa-arrow-down"></i>
                                 </button>
                             </div>
+                            <input type="number" name="system.brawn.base" value="{{system.brawn.base}}"/>
                         </div>
                         <div class="stat-item">
-                            <button type="button" data-action="rollStat" data-stat="wit" class="stat-label-button" title="Roll Wit Check">Wit</button>
-                            <div class="stat-input-row">
-                                <button type="button" data-action="rollStatKh2" data-stat="wit" class="roll-button-mini stat-arrow" title="Upper Hand">
+                            <div class="stat-name-row">
+                                <button type="button" data-action="rollStatKh2" data-stat="wit" class="stat-arrow" title="Upper Hand">
                                     <i class="fas fa-arrow-up"></i>
                                 </button>
-                                <input type="number" name="system.wit.base" value="{{system.wit.base}}"/>
-                                <button type="button" data-action="rollStatKl2" data-stat="wit" class="roll-button-mini stat-arrow" title="Against the Odds">
+                                <button type="button" data-action="rollStat" data-stat="wit" class="stat-label-button" title="Roll Wit Check">Wit</button>
+                                <button type="button" data-action="rollStatKl2" data-stat="wit" class="stat-arrow" title="Against the Odds">
                                     <i class="fas fa-arrow-down"></i>
                                 </button>
                             </div>
+                            <input type="number" name="system.wit.base" value="{{system.wit.base}}"/>
                         </div>
                         <div class="stat-item">
-                            <button type="button" data-action="rollStat" data-stat="will" class="stat-label-button" title="Roll Will Check">Will</button>
-                            <div class="stat-input-row">
-                                <button type="button" data-action="rollStatKh2" data-stat="will" class="roll-button-mini stat-arrow" title="Upper Hand">
+                            <div class="stat-name-row">
+                                <button type="button" data-action="rollStatKh2" data-stat="will" class="stat-arrow" title="Upper Hand">
                                     <i class="fas fa-arrow-up"></i>
                                 </button>
-                                <input type="number" name="system.will.base" value="{{system.will.base}}"/>
-                                <button type="button" data-action="rollStatKl2" data-stat="will" class="roll-button-mini stat-arrow" title="Against the Odds">
+                                <button type="button" data-action="rollStat" data-stat="will" class="stat-label-button" title="Roll Will Check">Will</button>
+                                <button type="button" data-action="rollStatKl2" data-stat="will" class="stat-arrow" title="Against the Odds">
                                     <i class="fas fa-arrow-down"></i>
                                 </button>
                             </div>
+                            <input type="number" name="system.will.base" value="{{system.will.base}}"/>
                         </div>
                         <div class="stat-item">
-                            <label>Affluence</label>
+                            <button type="button" data-action="rollStat" data-stat="affluence" class="stat-label-button" title="Roll Affluence Check">Affluence</button>
                             <input type="number" name="system.affluence.base" value="{{system.affluence.base}}"/>
                         </div>
                         <div class="stat-item">
