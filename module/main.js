@@ -4,7 +4,7 @@ import { BLBActorData } from "./actor.js";
 import { BLBWeaponData, BLBArmorData, BLBAdvancementData, BLBConsequenceData, BLBLootData } from "./items.js";
 import { WEAPON_TYPES } from "./helpers/weapons.js";
 import { ARMOR_TYPES } from "./helpers/armor.js";
-import { ADVANCEMENT_TYPES, CONSEQUENCE_TYPES, LOOT_TYPES } from "./helpers/new_items.js";
+import { CONSEQUENCE_TYPES } from "./helpers/new_items.js";
 
 class BLBActor extends Actor {}
 
@@ -49,19 +49,9 @@ Hooks.once("init", () => {
     return armorData ? armorData.label : armorType;
   });
 
-  Handlebars.registerHelper('getAdvancementType', function(advancementType) {
-    const advData = ADVANCEMENT_TYPES[advancementType];
-    return advData ? advData.label : advancementType;
-  });
-
   Handlebars.registerHelper('getConsequenceType', function(consequenceType) {
     const consData = CONSEQUENCE_TYPES[consequenceType];
     return consData ? consData.label : consequenceType;
-  });
-
-  Handlebars.registerHelper('getLootType', function(lootType) {
-    const lootData = LOOT_TYPES[lootType];
-    return lootData ? lootData.label : lootType;
   });
 
   Handlebars.registerHelper('eq', function(a, b) {
@@ -97,5 +87,3 @@ Hooks.once("ready", async () => {
     console.error("Sheet registration failed:", error);
   }
 });
-
-

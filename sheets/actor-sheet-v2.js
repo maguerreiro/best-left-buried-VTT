@@ -1,8 +1,8 @@
-// sheets/actor-sheet-v2.js - Complete updated version with stat rolling and no armor exclusivity
+// sheets/actor-sheet-v2.js - Updated for new advancement and consequence handling
 
 import { WEAPON_TYPES } from "../module/helpers/weapons.js";
 import { ARMOR_TYPES } from "../module/helpers/armor.js";
-import { ADVANCEMENT_TYPES, CONSEQUENCE_TYPES, LOOT_TYPES } from "../module/helpers/new_items.js";
+import { CONSEQUENCE_TYPES } from "../module/helpers/new_items.js";
 
 export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.sheets.ActorSheetV2
@@ -68,9 +68,7 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
       // Helper constants
       WEAPON_TYPES,
       ARMOR_TYPES,
-      ADVANCEMENT_TYPES,
       CONSEQUENCE_TYPES,
-      LOOT_TYPES,
 
       // Items
       items: this._prepareItems(doc.items),
@@ -158,14 +156,14 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
   _positionExternalTabs(tabsContainer, windowElement) {
     const rect = windowElement.getBoundingClientRect();
     const tabsX = rect.right;
-    const tabsY = rect.top; // Fixed offset from top of window
+    const tabsY = rect.top; 
     const tabsZ = Number(windowElement.style.zIndex); 
     
     tabsContainer.style.position = 'fixed';
     tabsContainer.style.left = `${tabsX}px`;
     tabsContainer.style.top = `${tabsY}px`;
     tabsContainer.style.zIndex = tabsZ;
-    tabsContainer.style.clipPath = `inset(0 0 ${Math.max(0, (tabsY + 120) - (rect.bottom))}px 0)`; // Clip when exceeding window bounds
+    tabsContainer.style.clipPath = `inset(0 0 ${Math.max(0, (tabsY + 120) - (rect.bottom))}px 0)`;
   }
 
   _startPositionTracking(windowElement) {
@@ -179,7 +177,7 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
 
       const rect = windowElement.getBoundingClientRect();
       const newX = rect.right - 49;
-      const newY = rect.top + 100; // Fixed offset from top
+      const newY = rect.top + 100; 
       const newZ = Number(windowElement.style.zIndex);
 
       if (newX !== lastX || newY !== lastY || newZ !== lastZ) {
@@ -187,8 +185,7 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
         this._externalTabs.style.top = `${newY}px`;
         this._externalTabs.style.zIndex = newZ;
         
-        // Calculate clipping for tabs that would extend beyond window bottom
-        const tabsHeight = 120; // Approximate height of rotated tabs
+        const tabsHeight = 120; 
         const clipAmount = Math.max(0, (newY + tabsHeight) - rect.bottom);
         this._externalTabs.style.clipPath = clipAmount > 0 ? `inset(0 0 ${clipAmount}px 0)` : 'none';
         
@@ -322,7 +319,62 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     }
   }
 
-  // Event Handlers
+  _updateEncumbranceDisplay() {
+    // Calculate current encumbrance from all items with slot values
+    let currentEncumbrance = 0;
+    const itemsWithSlots = this.document.items.filter(item => 
+      item.system.slotValue !== undefined && item.system.slotValue > 0
+    );
+    
+    for (let item of itemsWithSlots) {
+      currentEncumbrance += item.system.slotValue;
+    }
+    
+    // Update the display
+    const encumbranceCurrentEl = this.element?.querySelector('.split-left');
+    if (encumbranceCurrentEl) {
+      encumbranceCurrentEl.textContent = currentEncumbrance;
+    }
+    
+    // Update the maximum as well in case brawn/wit/will changed
+    const encumbranceMaxEl = this.element?.querySelector('.split-right');
+    if (encumbranceMaxEl) {
+      const brawnTotal = this.document.system.brawnTotal || this.document.system.brawn?.base || 0;
+      const witTotal = this.document.system.witTotal || this.document.system.wit?.base || 0;
+      const willTotal = this.document.system.willTotal || this.document.system.will?.base || 0;
+      const maxEncumbrance = 12 + (2 * brawnTotal) + Math.max(witTotal, willTotal);
+      encumbranceMaxEl.textContent = maxEncumbrance;
+    }
+    
+    // Update the document's system data for consistency
+    this.document.system.encumbranceCurrent = currentEncumbrance;
+    if (this.document.system.encumbrance) {
+      this.document.system.encumbrance.current = currentEncumbrance;
+    }
+  }
+
+  _updateArmorDisplay() {
+    const armorTotalEl = this.element?.querySelector('.armor-total');
+    
+    if (armorTotalEl) {
+      let armorBonus = 0;
+      const armorBase = this.document.system.armor?.base || 7;
+      
+      const equippedArmor = this.document.items.filter(item => 
+        item.type === "armor" && item.system.equipped
+      );
+      
+      for (const armor of equippedArmor) {
+        if (armor.system.armorType === "basic") armorBonus += 1;
+        else if (armor.system.armorType === "plate") armorBonus += 2;
+        else if (armor.system.armorType === "shield") armorBonus += 1;
+      }
+      
+      armorTotalEl.textContent = armorBase + armorBonus;
+    }
+  }
+
+  // Event Handlers - All static methods with proper # prefix
   static async #onFormSubmit(event, form, formData) {
     const updateData = foundry.utils.expandObject(formData.object);
     await this.document.update(updateData);
@@ -359,14 +411,10 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     let damage = weaponData.damageMod || 0;
     if (weapon.system.isTwoHanded && weaponData.twoHandedBonus) damage += 1;
 
-    // Evaluate the roll as before
     const roll = await new Roll(`3d6 + ${attackValue} + ${damage}`).evaluate();
-
-    // Get the results of each die from the first dice term
     const dieResults = roll.dice[0].results.map(r => r.result);
     const rollTooltip = await roll.getTooltip();
 
-    // Construct the text to display, including individual die rolls
     const resultText = `
         <div class="dice-roll">
             <div class="dice-result">
@@ -379,7 +427,6 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
         </div>
     `;
 
-    // Create a chat message using the custom content
     ChatMessage.create({
         speaker: ChatMessage.getSpeaker({ actor: this.document }),
         flavor: `${weapon.name}: ${attackStat}: ${attackValue}, DamageMod: ${damage}`,
@@ -404,13 +451,9 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     let damage = weaponData.damageMod || 0;
     if (weapon.system.isTwoHanded && weaponData.twoHandedBonus) damage += 1;
 
-    // Evaluate the roll using the 'keep highest 2' formula
     const roll = await new Roll(`4d6kh2 + ${attackValue}`).evaluate();
-
-    // Get the results of each individual die.
     const allDieResults = roll.dice[0].results;
 
-    // Find the single lowest value among the four dice
     let lowestValue = allDieResults[0].result;
     for (const r of allDieResults) {
       if (r.result < lowestValue) {
@@ -418,10 +461,8 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
       }
     }
     
-    // Find the first occurrence of the lowest value to mark it as discarded
     const discardedDieIndex = allDieResults.findIndex(r => r.result === lowestValue);
 
-    // Map the results to HTML, applying the 'discarded' class to the correct die
     const dieResultsHtml = allDieResults.map((r, index) => {
       if (index === discardedDieIndex) {
         return `<div class="dice-result-box discarded">${r.result}</div>`;
@@ -430,10 +471,8 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
       }
     }).join("");
 
-    // Get the HTML for the visual dice.
     const rollTooltip = await roll.getTooltip();
 
-    // Construct a custom chat message card that displays all the information at once
     const messageContent = `
       <div class="dice-roll">
           <div class="dice-result">
@@ -446,7 +485,6 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
       </div>
     `;
 
-    // Create the chat message with the custom content
     ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.document }),
       flavor: `${weapon.name} (Keep Highest 2): Stat: ${attackValue}, DamageMod: ${damage}`,
@@ -471,13 +509,9 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     let damage = weaponData.damageMod || 0;
     if (weapon.system.isTwoHanded && weaponData.twoHandedBonus) damage += 1;
 
-    // Evaluate the roll using the 'keep lowest 2' formula
     const roll = await new Roll(`4d6kl2 + ${attackValue}`).evaluate();
-
-    // Get the results of each individual die.
     const allDieResults = roll.dice[0].results;
 
-    // Find the single highest value among the four dice
     let highestValue = allDieResults[0].result;
     for (const r of allDieResults) {
       if (r.result > highestValue) {
@@ -485,10 +519,8 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
       }
     }
     
-    // Find the first occurrence of the highest value to mark it as discarded
     const discardedDieIndex = allDieResults.findIndex(r => r.result === highestValue);
 
-    // Map the results to HTML, applying the 'discarded' class to the correct die
     const dieResultsHtml = allDieResults.map((r, index) => {
       if (index === discardedDieIndex) {
         return `<div class="dice-result-box discarded">${r.result}</div>`;
@@ -497,10 +529,8 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
       }
     }).join("");
 
-    // Get the HTML for the visual dice.
     const rollTooltip = await roll.getTooltip();
 
-    // Construct a custom chat message card that displays all the information at once
     const messageContent = `
       <div class="dice-roll">
           <div class="dice-result">
@@ -513,7 +543,6 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
       </div>
     `;
 
-    // Create the chat message with the custom content
     ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.document }),
       flavor: `${weapon.name} (Keep Lowest 2): Stat: ${attackValue}, DamageMod: ${damage}`,
@@ -521,7 +550,6 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     });
   }
 
-  // Stat rolling methods
   static async #onRollStat(event, target) {
     const statName = target.dataset.stat;
     const statValue = this.document.system[statName + "Total"] || this.document.system[statName]?.base || 0;
@@ -561,10 +589,8 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     const statValue = this.document.system[statName + "Total"] || this.document.system[statName]?.base || 0;
     
     const roll = await new Roll(`3d6kh2 + ${statValue}`).evaluate();
-    
     const allDieResults = roll.dice[0].results;
     
-    // Find the single lowest value to mark as discarded
     let lowestValue = allDieResults[0].result;
     for (const r of allDieResults) {
       if (r.result < lowestValue) {
@@ -583,7 +609,6 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     }).join("");
     
     const rollTooltip = await roll.getTooltip();
-    
     const total = roll.total;
     const success = total >= 9;
     
@@ -614,10 +639,8 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     const statValue = this.document.system[statName + "Total"] || this.document.system[statName]?.base || 0;
     
     const roll = await new Roll(`3d6kl2 + ${statValue}`).evaluate();
-    
     const allDieResults = roll.dice[0].results;
     
-    // Find the single highest value to mark as discarded
     let highestValue = allDieResults[0].result;
     for (const r of allDieResults) {
       if (r.result > highestValue) {
@@ -636,7 +659,6 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     }).join("");
     
     const rollTooltip = await roll.getTooltip();
-    
     const total = roll.total;
     const success = total >= 9;
     
@@ -668,18 +690,29 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     
     if (!advancement) return;
     
-    let rollFormula = advancement.system.rollFormula || "1d20";
-    
-    if (advancement.system.usesAttribute !== "none") {
-      const attrValue = this.document.system[advancement.system.usesAttribute + "Total"] || 
-                       this.document.system[advancement.system.usesAttribute]?.base || 0;
-      rollFormula += ` + ${attrValue}`;
-    }
+    let rollFormula = advancement.system.rollFormula || "2d6";
     
     const roll = await new Roll(rollFormula).evaluate();
-    roll.toMessage({
+    
+    const dieResults = roll.dice[0]?.results?.map(r => r.result) || [];
+    const rollTooltip = await roll.getTooltip();
+    
+    const resultText = `
+      <div class="dice-roll">
+          <div class="dice-result">
+              <div class="dice-formula">${roll.formula}</div>
+              <h4 class="dice-total dice-results-box">
+                  ${dieResults.map(r => `<div class="dice-result-box">${r}</div>`).join("")}
+              </h4>
+              <div class="dice-tooltip">${rollTooltip}</div>
+          </div>
+      </div>
+    `;
+
+    ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.document }),
-      flavor: `${advancement.name} Roll`
+      flavor: `${advancement.name} Roll`,
+      content: resultText
     });
   }
 
@@ -689,18 +722,29 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     
     if (!consequence) return;
     
-    let rollFormula = consequence.system.rollFormula || "1d20";
-    
-    if (consequence.system.usesAttribute !== "none") {
-      const attrValue = this.document.system[consequence.system.usesAttribute + "Total"] || 
-                       this.document.system[consequence.system.usesAttribute]?.base || 0;
-      rollFormula += ` + ${attrValue}`;
-    }
+    let rollFormula = consequence.system.rollFormula || "2d6";
     
     const roll = await new Roll(rollFormula).evaluate();
-    roll.toMessage({
+    
+    const dieResults = roll.dice[0]?.results?.map(r => r.result) || [];
+    const rollTooltip = await roll.getTooltip();
+    
+    const resultText = `
+      <div class="dice-roll">
+          <div class="dice-result">
+              <div class="dice-formula">${roll.formula}</div>
+              <h4 class="dice-total dice-results-box">
+                  ${dieResults.map(r => `<div class="dice-result-box">${r}</div>`).join("")}
+              </h4>
+              <div class="dice-tooltip">${rollTooltip}</div>
+          </div>
+      </div>
+    `;
+
+    ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.document }),
-      flavor: `${consequence.name} Roll`
+      flavor: `${consequence.name} Roll`,
+      content: resultText
     });
   }
 
@@ -758,8 +802,6 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
       // Update item without re-rendering the sheet to avoid scrollbar jump
       await item.update({ "system.equipped": isEquipped }, { render: false });
       
-      // No armor exclusivity anymore - all armor/shields can be equipped together
-      
       // Update armor display for armor items
       if (item.type === "armor") {
         // Calculate armor values
@@ -784,7 +826,7 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
           armorTotalEl.textContent = newArmorTotal;
         }
         
-        // Update the document's system data for consistency (without triggering render)
+        // Update the document's system data for consistency
         this.document.system.armorTotal = newArmorTotal;
         this.document.system.armorBonus = armorBonus;
       }
@@ -798,113 +840,6 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     } catch (error) {
       console.error("Error in equipment toggle:", error);
       target.checked = !isEquipped; // Revert on error
-    }
-  }
-
-  _updateEncumbranceDisplay() {
-    console.log("Updating encumbrance display..."); // Debug log
-    
-    // Calculate current encumbrance from all items with slot values
-    let currentEncumbrance = 0;
-    const itemsWithSlots = this.document.items.filter(item => 
-      item.system.slotValue !== undefined && item.system.slotValue > 0
-    );
-    
-    console.log("Items with slots:", itemsWithSlots.length); // Debug log
-    
-    for (let item of itemsWithSlots) {
-      currentEncumbrance += item.system.slotValue;
-      console.log(`Item ${item.name}: ${item.system.slotValue} slots`); // Debug log
-    }
-    
-    console.log("Total encumbrance:", currentEncumbrance); // Debug log
-    
-    // Update the display - try multiple selectors to find the element
-    let encumbranceCurrentEl = this.element?.querySelector('.encumbrance-current');
-    
-    if (!encumbranceCurrentEl) {
-      // Try finding by content if class selector fails
-      const allSpans = this.element?.querySelectorAll('span.split-left');
-      for (let span of allSpans || []) {
-        if (span.classList.contains('encumbrance-current')) {
-          encumbranceCurrentEl = span;
-          break;
-        }
-      }
-    }
-    
-    if (!encumbranceCurrentEl) {
-      // Last resort - find by looking for the encumbrance section
-      const encumbranceLabels = this.element?.querySelectorAll('label');
-      for (let label of encumbranceLabels || []) {
-        if (label.textContent?.includes('Encumbrance')) {
-          const splitInput = label.parentElement?.querySelector('.split-input');
-          encumbranceCurrentEl = splitInput?.querySelector('.split-left');
-          break;
-        }
-      }
-    }
-    
-    console.log("Available elements:", this.element?.querySelectorAll('*[class*="encumbrance"]')); // Debug log
-    console.log("Split elements:", this.element?.querySelectorAll('.split-left')); // Debug log
-    
-    if (encumbranceCurrentEl) {
-      console.log("Found encumbrance element, updating to:", currentEncumbrance); // Debug log
-      encumbranceCurrentEl.textContent = currentEncumbrance;
-    } else {
-      console.warn("Could not find encumbrance current element"); // Debug log
-      console.log("Sheet element:", this.element); // Debug log
-      // Try to find any element with encumbrance in the class
-      const allEncumbranceEls = this.element?.querySelectorAll('*[class*="encumbrance"]');
-      console.log("All encumbrance elements found:", allEncumbranceEls);
-    }
-    
-    // Update the maximum as well in case brawn/wit/will changed
-    const encumbranceMaxEl = this.element?.querySelector('.encumbrance-max') || 
-                            this.element?.querySelector('span.encumbrance-max') ||
-                            this.element?.querySelector('.split-right.encumbrance-max');
-    
-    if (encumbranceMaxEl) {
-      const brawnTotal = this.document.system.brawnTotal || this.document.system.brawn?.base || 0;
-      const witTotal = this.document.system.witTotal || this.document.system.wit?.base || 0;
-      const willTotal = this.document.system.willTotal || this.document.system.will?.base || 0;
-      const maxEncumbrance = 12 + (2 * brawnTotal) + Math.max(witTotal, willTotal);
-      encumbranceMaxEl.textContent = maxEncumbrance;
-    }
-    
-    // Update the document's system data for consistency (without triggering render)
-    this.document.system.encumbranceCurrent = currentEncumbrance;
-    if (this.document.system.encumbrance) {
-      this.document.system.encumbrance.current = currentEncumbrance;
-    }
-  }
-
-  _updateArmorDisplay() {
-    const armorBonusEl = this.element?.querySelector('.armor-bonus');
-    let armorTotalEl = null;
-    
-    const statBoxes = this.element?.querySelectorAll('.armor-display') || [];
-    for (const box of statBoxes) {
-      armorTotalEl = box.querySelector('.armor-total');
-      if (armorTotalEl) break;
-    }
-    
-    if (armorBonusEl && armorTotalEl) {
-      let armorBonus = 0;
-      const armorBase = this.document.system.armor?.base || 7;
-      
-      const equippedArmor = this.document.items.filter(item => 
-        item.type === "armor" && item.system.equipped
-      );
-      
-      for (const armor of equippedArmor) {
-        if (armor.system.armorType === "basic") armorBonus += 1;
-        else if (armor.system.armorType === "plate") armorBonus += 2;
-        else if (armor.system.armorType === "shield") armorBonus += 1;
-      }
-      
-      armorBonusEl.textContent = armorBonus;
-      armorTotalEl.textContent = armorBase + armorBonus;
     }
   }
 

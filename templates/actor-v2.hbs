@@ -125,9 +125,7 @@
                         <div class="items-list">
                             {{#each items.advancement as |item|}}
                             <div class="list-item" data-item-id="{{item._id}}">
-                                <div class="col-equip">
-                                    <input type="checkbox" data-action="toggleEquip" data-item-id="{{item._id}}" {{checked item.system.equipped}} title="Equipped"/>
-                                </div>
+                                <div class="col-equip"></div> {{! empty column for alignment }}
                                 <div class="col-icon">
                                     <img src="{{item.img}}" class="item-icon"/>
                                 </div>                                <div class="item-name" data-action="openItem">{{item.name}}</div>
@@ -284,8 +282,7 @@
                                 <div class="col-equip"></div>
                                 <div class="col-icon"></div>
                                 <div class="col-name">Name</div>
-                                <div class="col-type">Type</div>
-                                <div class="col-value">Value</div>
+                                <div class="col-value">Affluence</div>
                                 <div class="col-slots">Slots</div>
                                 <div class="col-actions"></div>
                             </div>
@@ -300,8 +297,7 @@
                                 <div class="col-name">
                                     <span class="item-name" data-action="openItem">{{item.name}}</span>
                                 </div>
-                                <div class="col-type">{{getLootType item.system.lootType}}</div>
-                                <div class="col-value">{{item.system.value}} gp</div>
+                                <div class="col-value">{{item.system.affluence}}</div>
                                 <div class="col-slots">{{item.system.slotValue}}</div>
                                 <div class="col-actions">
                                     <a data-action="deleteItem" class="control-button delete" title="Delete">

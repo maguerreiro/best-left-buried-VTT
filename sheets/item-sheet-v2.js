@@ -1,8 +1,8 @@
-// sheets/item-sheet-v2.js - Updated for slot values and refined types
+// sheets/item-sheet-v2.js - Updated for new requirements
 
 import { WEAPON_TYPES } from "../module/helpers/weapons.js";
 import { ARMOR_TYPES } from "../module/helpers/armor.js";
-import { ADVANCEMENT_TYPES, CONSEQUENCE_TYPES, LOOT_TYPES } from "../module/helpers/new_items.js";
+import { CONSEQUENCE_TYPES } from "../module/helpers/new_items.js";
 
 export class BLBItemSheetV2 extends foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.sheets.ItemSheetV2
@@ -24,9 +24,8 @@ export class BLBItemSheetV2 extends foundry.applications.api.HandlebarsApplicati
     actions: {
       updateWeaponType: BLBItemSheetV2.#onUpdateWeaponType,
       updateArmorType: BLBItemSheetV2.#onUpdateArmorType,
-      updateAdvancementType: BLBItemSheetV2.#onUpdateAdvancementType,
       updateConsequenceType: BLBItemSheetV2.#onUpdateConsequenceType,
-      updateLootType: BLBItemSheetV2.#onUpdateLootType,
+      rollAdvancement: BLBItemSheetV2.#onRollAdvancement
     }
   };
 
@@ -48,16 +47,33 @@ export class BLBItemSheetV2 extends foundry.applications.api.HandlebarsApplicati
       defaultIcon = this._getDefaultIcon(doc.type, doc.system.weaponType);
     }
 
+    // Get weapon properties for display
+    let weaponProperties = null;
+    if (doc.type === "weapon" && doc.system.weaponType) {
+      const weaponData = WEAPON_TYPES[doc.system.weaponType];
+      if (weaponData) {
+        let damage = weaponData.damageMod || 0;
+        if (doc.system.isTwoHanded && weaponData.twoHandedBonus) damage += 1;
+        if (doc.system.inMelee && weaponData.meleePenalty) damage -= 1;
+
+        weaponProperties = {
+          range: weaponData.range,
+          attackStat: weaponData.attackStat,
+          damageMod: damage >= 0 ? `+${damage}` : `${damage}`,
+          initiative: weaponData.initiative || 0
+        };
+      }
+    }
+
     return {
       item: doc,
       source: src,
       system: doc.system,
       defaultIcon: defaultIcon,
+      weaponProperties: weaponProperties,
       WEAPON_TYPES,
       ARMOR_TYPES,
-      ADVANCEMENT_TYPES,
-      CONSEQUENCE_TYPES,
-      LOOT_TYPES
+      CONSEQUENCE_TYPES
     };
   }
 
@@ -116,13 +132,6 @@ export class BLBItemSheetV2 extends foundry.applications.api.HandlebarsApplicati
     });
   }
 
-  static async #onUpdateAdvancementType(event, target) {
-    const newAdvancementType = target.value;
-    await this.document.update({
-      "system.advancementType": newAdvancementType
-    });
-  }
-
   static async #onUpdateConsequenceType(event, target) {
     const newConsequenceType = target.value;
     await this.document.update({
@@ -130,10 +139,30 @@ export class BLBItemSheetV2 extends foundry.applications.api.HandlebarsApplicati
     });
   }
 
-  static async #onUpdateLootType(event, target) {
-    const newLootType = target.value;
-    await this.document.update({
-      "system.lootType": newLootType
+  static async #onRollAdvancement(event, target) {
+    const rollFormula = this.document.system.rollFormula || "2d6";
+    
+    const roll = await new Roll(rollFormula).evaluate();
+    
+    const dieResults = roll.dice[0]?.results?.map(r => r.result) || [];
+    const rollTooltip = await roll.getTooltip();
+    
+    const resultText = `
+      <div class="dice-roll">
+          <div class="dice-result">
+              <div class="dice-formula">${roll.formula}</div>
+              <h4 class="dice-total dice-results-box">
+                  ${dieResults.map(r => `<div class="dice-result-box">${r}</div>`).join("")}
+              </h4>
+              <div class="dice-tooltip">${rollTooltip}</div>
+          </div>
+      </div>
+    `;
+
+    ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.document.parent }),
+      flavor: `${this.document.name} Roll`,
+      content: resultText
     });
   }
 }

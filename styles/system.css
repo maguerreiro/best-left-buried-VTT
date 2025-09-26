@@ -1407,7 +1407,7 @@
     
     .best-left-buried .loot-table .table-header,
     .best-left-buried .loot-table .table-row {
-        grid-template-columns: 25px 30px 1fr 80px 60px 40px 70px;
+        grid-template-columns: 25px 30px 1fr 40px 70px;
     }
 }
 

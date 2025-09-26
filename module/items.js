@@ -1,4 +1,4 @@
-// module/items.js - Updated for slot values and refined types
+// module/items.js - Updated for new item requirements
 
 export class BLBWeaponData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
@@ -89,14 +89,11 @@ export class BLBAdvancementData extends foundry.abstract.TypeDataModel {
       description: new fields.StringField({ 
         initial: "" 
       }),
-      advancementType: new fields.StringField({
-        required: true,
-        initial: "special_ability",
-        choices: ["special_ability"]
-      }),
-      equipped: new fields.BooleanField({
-        required: true,
-        initial: false
+      // No advancementType field anymore
+      // No equipped field anymore
+      rollFormula: new fields.StringField({
+        required: false,
+        initial: "2d6"
       })
     };
   }
@@ -111,8 +108,8 @@ export class BLBConsequenceData extends foundry.abstract.TypeDataModel {
       }),
       consequenceType: new fields.StringField({
         required: true,
-        initial: "negative_ability",
-        choices: ["negative_ability"]
+        initial: "injury",
+        choices: ["injury", "affliction"]
       }),
       active: new fields.BooleanField({
         required: true,
@@ -126,19 +123,13 @@ export class BLBLootData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     const fields = foundry.data.fields;
     return {
-      description: new fields.StringField({ 
-        initial: "" 
-      }),
-      value: new fields.NumberField({
+      // No description field anymore
+      affluence: new fields.NumberField({
         required: false,
         initial: 0,
         min: 0
       }),
-      lootType: new fields.StringField({
-        required: true,
-        initial: "adventuring_gear",
-        choices: ["adventuring_gear", "treasure"]
-      }),
+      // No lootType field anymore
       slotValue: new fields.NumberField({
         required: true,
         initial: 1,
