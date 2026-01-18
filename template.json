@@ -119,7 +119,7 @@
       },
 
   "Item": {
-    "types": ["weapon", "armor", "advancement", "consequence", "loot"],
+    "types": ["weapon", "armor", "advancement", "treasure"],
     "templates": {
       "baseItem": {
         "description": {
@@ -132,7 +132,7 @@
 
     "weapon": {
       "templates": ["baseItem"],
-      "weaponType": {
+      "type": {
         "type": "String",
         "default": "hand"
       },
@@ -144,29 +144,10 @@
         "type": "Boolean",
         "default": false
       },
+
       "equipped": {
         "type": "Boolean",
         "default": false
-      },
-      "slotValue": {
-        "type": "Number",
-        "default": 1
-      },
-      "customDamageMod": {
-        "type": "Number",
-        "default": null
-      },
-      "customInitiative": {
-        "type": "Number",
-        "default": null
-      },
-      "customRange": {
-        "type": "String",
-        "default": null
-      },
-      "customAttackStat": {
-        "type": "String",
-        "default": null
       }
     },
 
@@ -204,18 +185,6 @@
       }
     },
 
-    "consequence": {
-      "templates": ["baseItem"],
-      "consequenceType": {
-        "type": "String",
-        "default": "injury"
-      },
-      "equipped": {
-        "type": "Boolean",
-        "default": false
-      }
-    },
-
     "loot": {
       "templates": ["baseItem"],
       "value": {
@@ -226,11 +195,6 @@
       "lootType": {
         "type": "String",
         "default": "misc"
-      },
-
-      "equipped": {
-        "type": "Boolean",
-        "default": false
       }
     }
   }
