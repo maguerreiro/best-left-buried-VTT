@@ -34,7 +34,7 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
       rollConsequence: BLBActorSheetV2.#onRollConsequence,
       openItem: BLBActorSheetV2.#onOpenItem,
       deleteItem: BLBActorSheetV2.#onDeleteItem,
-      toggleEquip: BLBActorSheetV2.#onToggleEquip,
+      toggleEquip: "toggleEquip",
       toggleActive: BLBActorSheetV2.#onToggleActive
     }
   };
@@ -788,7 +788,7 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     }
   }
 
-  static async #onToggleEquip(event, target) {
+  async toggleEquip(event, target) {
     event.preventDefault();
     event.stopPropagation();
     

@@ -1,5 +1,17 @@
 // helpers/weapons.js
 
+export const WEAPON_RANGES = {
+    melee: "Melee",
+    short: "Short Range",
+    long: "Long Range"
+};
+
+export const ATTACK_STATS = {
+    brawn: "Brawn",
+    wit: "Wit",
+    will: "Will"
+};
+
 export const WEAPON_TYPES = {
     hand: {
         label: "Hand Weapon",

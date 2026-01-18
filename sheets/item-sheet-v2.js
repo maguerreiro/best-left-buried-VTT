@@ -1,6 +1,6 @@
 // sheets/item-sheet-v2.js - Updated for new requirements
 
-import { WEAPON_TYPES } from "../module/helpers/weapons.js";
+import { WEAPON_TYPES, WEAPON_RANGES, ATTACK_STATS } from "../module/helpers/weapons.js";
 import { ARMOR_TYPES } from "../module/helpers/armor.js";
 import { CONSEQUENCE_TYPES } from "../module/helpers/new_items.js";
 
@@ -73,7 +73,9 @@ export class BLBItemSheetV2 extends foundry.applications.api.HandlebarsApplicati
       weaponProperties: weaponProperties,
       WEAPON_TYPES,
       ARMOR_TYPES,
-      CONSEQUENCE_TYPES
+      CONSEQUENCE_TYPES,
+      WEAPON_RANGES,
+      ATTACK_STATS
     };
   }
 
@@ -83,6 +85,12 @@ export class BLBItemSheetV2 extends foundry.applications.api.HandlebarsApplicati
         return "systems/best-left-buried/icons/weapon_1_hand.svg";
       } else if (weaponType === "heavy" || weaponType === "long") {
         return "systems/best-left-buried/icons/weapon_2_hand.svg";
+      } else if (weaponType === "light") {
+        return "systems/best-left-buried/icons/weapon_1_hand.svg";
+      } else if (weaponType === "ranged") {
+        return "systems/best-left-buried/icons/weapon_1_hand.svg";
+      } else if (weaponType === "throwing") {
+        return "systems/best-left-buried/icons/weapon_1_hand.svg";
       }
       // Default weapon icon for other types
       return "systems/best-left-buried/icons/weapon_1_hand.svg";
@@ -96,12 +104,10 @@ export class BLBItemSheetV2 extends foundry.applications.api.HandlebarsApplicati
   async _onRender(context, options) {
     await super._onRender(context, options);
     
-    // Set the default icon if needed
-    if (this.document.img === "icons/svg/item-bag.svg" || !this.document.img) {
-      const newIcon = this._getDefaultIcon(this.document.type, this.document.system.weaponType);
-      if (newIcon !== this.document.img) {
-        await this.document.update({ img: newIcon }, { render: false });
-      }
+    // Update the image element if the document has been updated
+    const imgElement = this.element?.querySelector('header.sheet-header img');
+    if (imgElement && this.document.img) {
+      imgElement.src = this.document.img;
     }
   }
 
@@ -117,12 +123,16 @@ export class BLBItemSheetV2 extends foundry.applications.api.HandlebarsApplicati
     // Get the appropriate icon for the new weapon type
     let newIcon = this._getDefaultIcon("weapon", newType);
     
+    console.log(`Updating weapon type to ${newType}, new icon: ${newIcon}`);
+    
     await this.document.update({
       "system.weaponType": newType,
       "system.isTwoHanded": false,
       "system.inMelee": false,
       "img": newIcon
     });
+    
+    console.log(`Document img after update: ${this.document.img}`);
   }
 
   static async #onUpdateArmorType(event, target) {

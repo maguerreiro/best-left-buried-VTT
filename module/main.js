@@ -28,18 +28,31 @@ Hooks.once("init", () => {
     return value ? 'checked' : '';
   });
 
-  Handlebars.registerHelper('getWeaponProperty', function(weaponType, property) {
+  Handlebars.registerHelper('getWeaponProperty', function(weaponType, property, item) {
+    // If custom property exists and is set, use it
+    if (item && item.system && property === 'range' && item.system.customRange) return item.system.customRange;
+    if (item && item.system && property === 'attackStat' && item.system.customAttackStat) return item.system.customAttackStat;
+    if (item && item.system && property === 'damageMod' && item.system.customDamageMod !== null && item.system.customDamageMod !== undefined) return item.system.customDamageMod;
+    if (item && item.system && property === 'initiative' && item.system.customInitiative !== null && item.system.customInitiative !== undefined) return item.system.customInitiative;
+    
     const weaponData = WEAPON_TYPES[weaponType];
     return weaponData ? weaponData[property] || '' : '';
   });
 
-  Handlebars.registerHelper('getWeaponDamage', function(weaponType, isTwoHanded, inMelee) {
-    const weaponData = WEAPON_TYPES[weaponType];
-    if (!weaponData) return 0;
+  Handlebars.registerHelper('getWeaponDamage', function(weaponType, isTwoHanded, inMelee, item) {
+    let damage;
     
-    let damage = weaponData.damageMod || 0;
-    if (inMelee && weaponData.meleePenalty) damage += -1;
-    if (isTwoHanded && weaponData.twoHandedBonus) damage += 1;
+    // Use custom damage mod if set, otherwise use default
+    if (item && item.system && item.system.customDamageMod !== null && item.system.customDamageMod !== undefined) {
+      damage = item.system.customDamageMod;
+    } else {
+      const weaponData = WEAPON_TYPES[weaponType];
+      if (!weaponData) return 0;
+      damage = weaponData.damageMod || 0;
+    }
+    
+    if (inMelee && WEAPON_TYPES[weaponType]?.meleePenalty) damage += -1;
+    if (isTwoHanded && WEAPON_TYPES[weaponType]?.twoHandedBonus) damage += 1;
 
     return damage >= 0 ? `+${damage}` : `${damage}`;
   });

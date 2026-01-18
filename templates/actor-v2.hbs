@@ -63,12 +63,8 @@
                 </div>
             </header>
 
-            {{! Tab content }}
-            <section class="sheet-body">
-                {{! Character Tab }}
-                <div class="tab {{#if (eq activeTab 'character')}}active{{/if}}" data-tab="character">
-                    {{! Main Stats Row with Roll Buttons }}
-                    <div class="main-stats-row">
+            {{! Main Stats Row with Roll Buttons - Always Visible }}
+            <div class="main-stats-row">
                         <div class="stat-item">
                             <div class="stat-name-row">
                                 <button type="button" data-action="rollStatKh2" data-stat="brawn" class="stat-arrow" title="Upper Hand">
@@ -110,7 +106,7 @@
                             <input type="number" name="system.affluence.base" value="{{system.affluence.base}}"/>
                         </div>
                         <div class="stat-item">
-                            <label>Observation</label>
+                            <button type="button" data-action="rollStat" data-stat="observation" class="stat-label-button" title="Roll Observation Check">Observation</button>
                             <input type="number" name="system.observation.base" value="{{system.observation.base}}"/>
                         </div>
                         <div class="stat-item">
@@ -119,6 +115,10 @@
                         </div>
                     </div>
 
+            {{! Tab content }}
+            <section class="sheet-body">
+                {{! Character Tab }}
+                <div class="tab {{#if (eq activeTab 'character')}}active{{/if}}" data-tab="character">
                     {{! Advancements List }}
                     <div class="list-section">
                         <h3>Advancements</h3>
@@ -195,13 +195,13 @@
                                 <div class="col-name">
                                     <span class="item-name" data-action="openItem">{{item.name}}</span>
                                 </div>
-                                <div class="col-type">{{getWeaponProperty item.system.weaponType "label"}}</div>
-                                <div class="col-range">{{getWeaponProperty item.system.weaponType "range"}}</div>
-                                <div class="col-stat">{{getWeaponProperty item.system.weaponType "attackStat"}}</div>
-                                <div class="col-damage">{{getWeaponDamage item.system.weaponType item.system.isTwoHanded item.system.inMelee}}</div>
+                                <div class="col-type">{{getWeaponProperty item.system.weaponType "label" item}}</div>
+                                <div class="col-range">{{getWeaponProperty item.system.weaponType "range" item}}</div>
+                                <div class="col-stat">{{getWeaponProperty item.system.weaponType "attackStat" item}}</div>
+                                <div class="col-damage">{{getWeaponDamage item.system.weaponType item.system.isTwoHanded item.system.inMelee item}}</div>
                                 <div class="col-initiative">
-                                    {{#if (getWeaponProperty item.system.weaponType "initiative")}}
-                                        {{getWeaponProperty item.system.weaponType "initiative"}}
+                                    {{#if (getWeaponProperty item.system.weaponType "initiative" item)}}
+                                        {{getWeaponProperty item.system.weaponType "initiative" item}}
                                     {{else}}
                                         0
                                     {{/if}}

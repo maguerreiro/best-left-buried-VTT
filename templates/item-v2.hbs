@@ -17,15 +17,43 @@
                 </select>
             </div>
 
-            {{! Display weapon properties }}
+            {{! Display/Edit weapon properties }}
             {{#if weaponProperties}}
             <div class="form-group">
                 <label>Weapon Properties</label>
                 <div style="background: var(--bg-tertiary); padding: 10px; border-radius: 5px; margin-top: 5px;">
-                    <p><strong>Range:</strong> {{weaponProperties.range}}</p>
-                    <p><strong>Attack Stat:</strong> {{weaponProperties.attackStat}}</p>
-                    <p><strong>Damage Modifier:</strong> {{weaponProperties.damageMod}}</p>
-                    <p><strong>Initiative:</strong> {{weaponProperties.initiative}}</p>
+                    <div class="property-row">
+                        <label>Range:</label>
+                        <select name="system.customRange">
+                            {{#each WEAPON_RANGES as |label id|}}
+                                {{#if system.customRange}}
+                                    <option value="{{id}}" {{#if (eq id system.customRange)}}selected{{/if}}>{{label}}</option>
+                                {{else}}
+                                    <option value="{{id}}" {{#if (eq id ../weaponProperties.range)}}selected{{/if}}>{{label}}</option>
+                                {{/if}}
+                            {{/each}}
+                        </select>
+                    </div>
+                    <div class="property-row">
+                        <label>Attack Stat:</label>
+                        <select name="system.customAttackStat">
+                            {{#each ATTACK_STATS as |label id|}}
+                                {{#if system.customAttackStat}}
+                                    <option value="{{id}}" {{#if (eq id system.customAttackStat)}}selected{{/if}}>{{label}}</option>
+                                {{else}}
+                                    <option value="{{id}}" {{#if (eq id ../weaponProperties.attackStat)}}selected{{/if}}>{{label}}</option>
+                                {{/if}}
+                            {{/each}}
+                        </select>
+                    </div>
+                    <div class="property-row">
+                        <label>Damage Modifier:</label>
+                        <input type="number" name="system.customDamageMod" value="{{system.customDamageMod}}" placeholder="{{weaponProperties.damageMod}}" step="1"/>
+                    </div>
+                    <div class="property-row">
+                        <label>Initiative:</label>
+                        <input type="number" name="system.customInitiative" value="{{system.customInitiative}}" placeholder="{{weaponProperties.initiative}}" step="1"/>
+                    </div>
                 </div>
             </div>
             {{/if}}
@@ -135,14 +163,6 @@
                         <option value="{{id}}" {{#if (eq ../system.consequenceType id)}}selected{{/if}}>{{type.label}}</option>
                     {{/each}}
                 </select>
-            </div>
-
-            <div class="form-group">
-                <label>
-                    <input type="checkbox" name="system.active" {{checked system.active}}/>
-                    Active
-                </label>
-                <span>This consequence is currently affecting the character</span>
             </div>
 
             {{! Description field for consequences }}
