@@ -1071,7 +1071,22 @@
     color: var(--accent-primary);
 }
 
-.best-left-buried .item-description,
+.best-left-buried .item-name {
+    text-justify: auto;
+    text-justify: inter-word;
+    text-align: justify;
+}
+
+.best-left-buried .item-description {
+    text-justify: inter-word;
+    text-align: justify;
+    font-family: 'Calibri';
+    font-style: normal;
+    font-size: 0.9em;
+    color: var(--text-secondary);
+    text-transform: none;
+}
+
 .best-left-buried .item-properties {
     font-size: 0.85em;
     color: var(--text-secondary);

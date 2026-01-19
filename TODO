@@ -1,3 +1,5 @@
+###### DONE ######
+
 **Character sheet**
 Observation + affluence 
 - add upper hand / against all odds
@@ -5,6 +7,10 @@ Observation + affluence 
 Advancements + consequences
 - description justified
 - change font of description to the same as in the header
+
+
+###### TO DO ######
+
 
 Advancements:
 - add roll button in the character sheet
@@ -32,3 +38,6 @@ Weapons:
 
 **Advancements sheet:**
 - Maximum and current of uses
+
+**Loot sheet:**
+- add description box
