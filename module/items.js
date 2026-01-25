@@ -28,6 +28,28 @@ export class BLBWeaponData extends foundry.abstract.TypeDataModel {
         required: true,
         initial: 1,
         min: 0
+      }),
+      customDamageMod: new fields.NumberField({
+        required: false,
+        initial: null,
+        nullable: true,
+        integer: true
+      }),
+      customInitiative: new fields.NumberField({
+        required: false,
+        initial: null,
+        nullable: true,
+        integer: true
+      }),
+      customRange: new fields.StringField({
+        required: false,
+        initial: null,
+        nullable: true
+      }),
+      customAttackStat: new fields.StringField({
+        required: false,
+        initial: null,
+        nullable: true
       })
     };
   }

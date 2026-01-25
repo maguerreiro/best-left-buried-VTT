@@ -25,6 +25,7 @@
                     <div class="property-row">
                         <label>Range:</label>
                         <select name="system.customRange">
+                        <option value="">Default ({{weaponProperties.range}})</option>
                             {{#each WEAPON_RANGES as |label id|}}
                                 {{#if system.customRange}}
                                     <option value="{{id}}" {{#if (eq id system.customRange)}}selected{{/if}}>{{label}}</option>
@@ -37,6 +38,7 @@
                     <div class="property-row">
                         <label>Attack Stat:</label>
                         <select name="system.customAttackStat">
+                        <option value="">Default ({{weaponProperties.attackStat}})</option>
                             {{#each ATTACK_STATS as |label id|}}
                                 {{#if system.customAttackStat}}
                                     <option value="{{id}}" {{#if (eq id system.customAttackStat)}}selected{{/if}}>{{label}}</option>
@@ -48,11 +50,11 @@
                     </div>
                     <div class="property-row">
                         <label>Damage Modifier:</label>
-                        <input type="number" name="system.customDamageMod" value="{{system.customDamageMod}}" placeholder="{{weaponProperties.damageMod}}" step="1"/>
+                        <input type="number" name="system.customDamageMod" value="{{#if (or (eq system.customDamageMod 0) system.customDamageMod)}}{{system.customDamageMod}}{{/if }}" placeholder="Default: {{weaponProperties.damageMod}}" step="1"/>
                     </div>
                     <div class="property-row">
                         <label>Initiative:</label>
-                        <input type="number" name="system.customInitiative" value="{{system.customInitiative}}" placeholder="{{weaponProperties.initiative}}" step="1"/>
+                        <input type="number" name="system.customInitiative" value="{{#if (or (eq system.customInitiative 0) system.customInitiative)}}{{system.customInitiative}}{{/if}}" placeholder="Default: {{weaponProperties.initiative}}" step="1"/>
                     </div>
                 </div>
             </div>
