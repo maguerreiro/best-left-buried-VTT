@@ -242,6 +242,67 @@
     box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.25);
 }
 
+/* Uses Input Styling - Similar to Vigour */
+.best-left-buried .uses-input {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    max-width: 350px;
+}
+
+.best-left-buried .uses-current,
+.best-left-buried .uses-max {
+    width: 60px !important;
+    max-width: 60px !important;
+    height: 32px;
+    padding: 6px !important;
+    text-align: center;
+    border: 2px solid var(--border-color) !important;
+    background: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+    border-radius: 4px !important;
+    font-weight: 600;
+    font-size: 0.95em;
+    box-sizing: border-box;
+}
+
+.best-left-buried .uses-current:focus,
+.best-left-buried .uses-max:focus {
+    outline: none !important;
+    border-color: var(--accent-primary) !important;
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.25) !important;
+}
+
+.best-left-buried .uses-separator {
+    color: var(--text-secondary);
+    font-size: 1.1em;
+    font-weight: 600;
+}
+
+/* Uses display in character sheet consequences list - shows only current uses */
+.best-left-buried .consequence-uses-display {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--accent-primary);
+    background: var(--bg-tertiary);
+    color: var(--accent-primary);
+    border-radius: 3px;
+    font-weight: 600;
+    font-size: 0.9em;
+}
+
+/* Styling for uses section in item sheet */
+.best-left-buried .uses-group {
+    background: var(--bg-tertiary);
+    padding: 12px;
+    border-radius: 5px;
+    border: 1px solid var(--border-color);
+}
+
+
 /* ========================================
    APPLICATION LAYOUT
    ======================================== */

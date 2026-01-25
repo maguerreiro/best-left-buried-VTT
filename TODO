@@ -41,7 +41,7 @@ Weapons:
 - [ ] after initiative in weapon sheet add text box with pre-loaded text but editable
 
 **Consequences sheet**
-- [ ] Maximum and current number of uses
+- [x] Maximum and current number of uses
 - [ ] add button to show or hide number of uses in the character sheet
 
 **Advancements sheet:**

@@ -164,12 +164,19 @@
                         <h3>Consequences</h3>
                         <div class="items-list">
                             {{#each items.consequence as |item|}}
-                            <div class="list-item" data-item-id="{{item._id}}">
+                            <div class="list-item consequence-item" data-item-id="{{item._id}}">
                                 <div class="col-icon">
                                     <img src="{{item.img}}" class="item-icon"/>
                                 </div>                                
-                                <div class="item-name" data-action="openItem">{{item.name}}</div>
-                                <div class="item-description">{{item.system.description}}</div>
+                                <div class="item-info">
+                                    <div class="item-name" data-action="openItem">{{item.name}}</div>
+                                    <div class="item-description">{{item.system.description}}</div>
+                                    {{#if item.system.hasUses}}
+                                    <div class="item-uses">
+                                        Uses: {{item.system.uses.current}} / {{item.system.uses.max}}
+                                    </div>
+                                    {{/if}}
+                                </div>
                                 <div class="item-controls">
                                     <a data-action="deleteItem" class="control-button delete" title="Delete">
                                         <i class="fas fa-trash"></i>
@@ -179,7 +186,6 @@
                             {{/each}}
                         </div>
                     </div>
-                </div>
 
                 {{! Equipment Tab }}
                 <div class="tab {{#if (eq activeTab 'equipment')}}active{{/if}}" data-tab="equipment">

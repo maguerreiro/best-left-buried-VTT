@@ -121,6 +121,8 @@ export class BLBAdvancementData extends foundry.abstract.TypeDataModel {
   }
 }
 
+
+
 export class BLBConsequenceData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     const fields = foundry.data.fields;
@@ -136,10 +138,31 @@ export class BLBConsequenceData extends foundry.abstract.TypeDataModel {
       active: new fields.BooleanField({
         required: true,
         initial: false
-      })
+      }),
+      // Flag to enable/disable uses tracking
+      hasUses: new fields.BooleanField({
+        required: true,
+        initial: false
+      }),
+      // New fields for number of uses
+      uses: new fields.SchemaField({
+        current: new fields.NumberField({
+          required: true,
+          integer: true,
+          initial: 0,
+          min: 0,
+        }),
+        max: new fields.NumberField({
+          required: true,
+          integer: true,
+          initial: 0,
+          min: 0,
+        }),
+      }),
     };
   }
 }
+
 
 export class BLBLootData extends foundry.abstract.TypeDataModel {
   static defineSchema() {

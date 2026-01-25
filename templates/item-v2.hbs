@@ -150,7 +150,7 @@
             </div>
         {{/if}}
 
-        {{! Consequence fields }}
+        {{! Consequence-specific fields }}
         {{#if (eq item.type "consequence")}}
             <div class="form-group">
                 <label>Consequence Type</label>
@@ -161,16 +161,25 @@
                 </select>
             </div>
 
-        {{! Consequence number of uses }}
             <div class="form-group">
-                <div class="consequence-uses">
-                    <label>Number of Uses</label>
-                    <input type="number" name="system.consequences.current" value="{{system.consequences.current}}" class="consequences-split-left"/>
-                    <span>/</span>
-                    <input type="number" name="system.consequences.max" value="{{system.consequences.max}}" class="consequences-split-right"/>
-                    <small>(Current / Maximum)</small>
-                </div>
+                <label>
+                    <input type="checkbox" name="system.hasUses" {{checked system.hasUses}}/>
+                    Track Number of Uses
+                </label>
+                <small>Enable this to track how many times this consequence can be used</small>
             </div>
+
+            {{#if system.hasUses}}
+            <div class="form-group uses-group">
+                <label>Number of Uses</label>
+                <div class="uses-input">
+                    <input type="number" name="system.uses.current" value="{{system.uses.current}}" min="0" class="uses-current" placeholder="0"/>
+                    <span class="uses-separator">/</span>
+                    <input type="number" name="system.uses.max" value="{{system.uses.max}}" min="0" class="uses-max" placeholder="0"/>
+                </div>
+                <small>Current / Maximum uses for this consequence</small>
+            </div>
+            {{/if}}
 
             {{! Description field for consequences }}
             <div class="form-group description-group">
@@ -179,6 +188,7 @@
                 <small>Describe this consequence's effects and impact on the character</small>
             </div>
         {{/if}}
+
 
         {{! Loot-specific fields - simplified }}
         {{#if (eq item.type "loot")}}
