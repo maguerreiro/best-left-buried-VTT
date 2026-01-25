@@ -147,7 +147,7 @@
                                 <div class="item-name" data-action="openItem">{{item.name}}</div>
                                 <div class="item-description">{{item.system.description}}</div>
                                 <div class="item-controls">
-                                    <button type="button" data-action="rollAdvancement" class="roll-button">
+                                    <button type="button" data-action="rollAdvancement" data-advancement-id="{{item._id}}" class="roll-button">
                                         <i class="fas fa-dice-d20"></i>
                                     </button>
                                     <a data-action="deleteItem" class="control-button delete" title="Delete">
