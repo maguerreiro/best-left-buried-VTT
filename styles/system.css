@@ -1129,17 +1129,6 @@
 }
 
 /* ========================================
-   ENCUMBRANCE STYLING
-   ======================================== */
-
-.best-left-buried .split-left.encumbrance-current,
-.best-left-buried .split-right.encumbrance-max {
-    background: var(--bg-tertiary);
-    border: 1px solid var(--border-light);
-    font-weight: 600;
-}
-
-/* ========================================
    ITEM SHEET STYLING
    ======================================== */
 
@@ -1292,6 +1281,7 @@
     color: var(--text-secondary);
     font-size: 0.95em;
 }
+
 
 /* ========================================
    FORM ELEMENTS

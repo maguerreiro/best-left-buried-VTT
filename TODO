@@ -2,46 +2,47 @@
 
 **Character sheet**
 Observation + affluence 
-- add upper hand / against all odds
+- [x] add upper hand / against all odds
 
 Advancements + consequences
-- description justified
-- change font of description to the same as in the header
+- [x] description justified
+- [x] change font of description to the same as in the header
 
 Advancements:
-- add roll button in the character sheet
-- remove roll button from advancement sheet
-- no upper hand/against odds
+- [x] add roll button in the character sheet
+- [x] remove roll button from advancement sheet
+- [x] no upper hand/against odds
 
 Weapons:
-- fix the editable numbers not saving
+- [x] fix the editable numbers not saving
 
 **Weapons sheet**
-- fix the editable numbers not saving
+- [x] fix the editable numbers not saving
 
 **Loot sheet:**
-- add description box
+- [x] add description box
 
 
 
 ###### TO DO ######
 
+**Character sheet**
 Consequences:
-- add Maximum and current of uses
-- only visible the current number of uses
-- number of uses can be hidden from the consequence sheet
-- editable
+- [ ] add Maximum and current of uses
+- [ ] only visible the current number of uses
+- [ ] number of uses can be hidden from the consequence sheet
+- [ ] editable
 
 Weapons:
-- add comment to character sheet for 2 handed
+- [ ] add comment to character sheet for 2 handed
 
 **Weapons sheet**
-- remove the 2 handed checkbox
-- after initiative in weapon sheet add text box with pre-loaded text but editable
+- [ ] remove the 2 handed checkbox
+- [ ] after initiative in weapon sheet add text box with pre-loaded text but editable
 
 **Consequences sheet**
-- Maximum and current number of uses
-- add button to show or hide number of uses in the character sheet
+- [ ] Maximum and current number of uses
+- [ ] add button to show or hide number of uses in the character sheet
 
 **Advancements sheet:**
-- Maximum and current of uses
+- [ ] Maximum and current of uses

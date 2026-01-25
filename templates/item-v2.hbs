@@ -150,7 +150,7 @@
             </div>
         {{/if}}
 
-        {{! Consequence-specific fields }}
+        {{! Consequence fields }}
         {{#if (eq item.type "consequence")}}
             <div class="form-group">
                 <label>Consequence Type</label>
@@ -159,6 +159,17 @@
                         <option value="{{id}}" {{#if (eq ../system.consequenceType id)}}selected{{/if}}>{{type.label}}</option>
                     {{/each}}
                 </select>
+            </div>
+
+        {{! Consequence number of uses }}
+            <div class="form-group">
+                <div class="consequence-uses">
+                    <label>Number of Uses</label>
+                    <input type="number" name="system.consequences.current" value="{{system.consequences.current}}" class="consequences-split-left"/>
+                    <span>/</span>
+                    <input type="number" name="system.consequences.max" value="{{system.consequences.max}}" class="consequences-split-right"/>
+                    <small>(Current / Maximum)</small>
+                </div>
             </div>
 
             {{! Description field for consequences }}
