@@ -57,6 +57,12 @@ Hooks.once("init", () => {
     return damage >= 0 ? `+${damage}` : `${damage}`;
   });
 
+  Handlebars.registerHelper('formatModifier', function(value) {
+    const num = parseInt(value);
+    if (isNaN(num)) return '0';
+    return num >= 0 ? `+${num}` : `${num}`;
+  });
+
   Handlebars.registerHelper('getArmorType', function(armorType) {
     const armorData = ARMOR_TYPES[armorType];
     return armorData ? armorData.label : armorType;

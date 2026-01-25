@@ -216,11 +216,7 @@
                                 <div class="col-stat">{{getWeaponProperty item.system.weaponType "attackStat" item}}</div>
                                 <div class="col-damage">{{getWeaponDamage item.system.weaponType item.system.isTwoHanded item.system.inMelee item}}</div>
                                 <div class="col-initiative">
-                                    {{#if (getWeaponProperty item.system.weaponType "initiative" item)}}
-                                        {{getWeaponProperty item.system.weaponType "initiative" item}}
-                                    {{else}}
-                                        0
-                                    {{/if}}
+                                    {{formatModifier (getWeaponProperty item.system.weaponType "initiative" item)}}
                                 </div>
                                 <div class="col-slots">{{item.system.slotValue}}</div>
                                 <div class="col-actions">
@@ -298,9 +294,10 @@
                                 <div class="col-equip"></div>
                                 <div class="col-icon"></div>
                                 <div class="col-name">Name</div>
+                                <div class="col-type"></div>
                                 <div class="col-value">Affluence</div>
                                 <div class="col-slots">Slots</div>
-                                <div class="col-actions"></div>
+                                <div class="col-delete"></div>
                             </div>
                             {{#each items.loot as |item|}}
                             <div class="table-row" data-item-id="{{item._id}}">
@@ -313,9 +310,10 @@
                                 <div class="col-name">
                                     <span class="item-name" data-action="openItem">{{item.name}}</span>
                                 </div>
+                                <div class="col-type"></div>
                                 <div class="col-value">{{item.system.affluence}}</div>
                                 <div class="col-slots">{{item.system.slotValue}}</div>
-                                <div class="col-actions">
+                                <div class="col-delete">
                                     <a data-action="deleteItem" class="control-button delete" title="Delete">
                                         <i class="fas fa-trash"></i>
                                     </a>

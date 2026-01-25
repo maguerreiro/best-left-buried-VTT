@@ -966,7 +966,7 @@
 
 .best-left-buried .loot-table .table-header {
     display: grid;
-    grid-template-columns: 25px 30px 1fr 110px 80px 50px 30px;
+    grid-template-columns: 25px 30px 1fr 110px 60px 50px 30px;
     gap: 8px;
     padding: 6px 12px;
     background: var(--bg-tertiary);
@@ -985,7 +985,7 @@
 
 .best-left-buried .loot-table .table-row {
     display: grid;
-    grid-template-columns: 25px 30px 1fr 110px 80px 50px 30px;
+    grid-template-columns: 25px 30px 1fr 110px 60px 50px 30px;
     gap: 8px;
     padding: 6px 12px;
     border-bottom: 1px solid var(--border-light);

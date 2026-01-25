@@ -8,14 +8,23 @@ Advancements + consequences
 - description justified
 - change font of description to the same as in the header
 
-
-###### TO DO ######
-
-
 Advancements:
 - add roll button in the character sheet
 - remove roll button from advancement sheet
 - no upper hand/against odds
+
+Weapons:
+- fix the editable numbers not saving
+
+**Weapons sheet**
+- fix the editable numbers not saving
+
+**Loot sheet:**
+- add description box
+
+
+
+###### TO DO ######
 
 Consequences:
 - add Maximum and current of uses
@@ -25,11 +34,9 @@ Consequences:
 
 Weapons:
 - add comment to character sheet for 2 handed
-- fix the editable numbers not saving
 
 **Weapons sheet**
 - remove the 2 handed checkbox
-- fix the editable numbers not saving
 - after initiative in weapon sheet add text box with pre-loaded text but editable
 
 **Consequences sheet**
@@ -38,6 +45,3 @@ Weapons:
 
 **Advancements sheet:**
 - Maximum and current of uses
-
-**Loot sheet:**
-- add description box
