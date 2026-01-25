@@ -1311,7 +1311,7 @@
 }
 
 .best-left-buried.sheet.item .form-group input[type="checkbox"]:checked::after {
-    content: 'âœ“' !important;
+    content: '✓' !important;
     position: absolute !important;
     top: -2px !important;
     left: 2px !important;
