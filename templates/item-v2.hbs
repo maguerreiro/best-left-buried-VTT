@@ -132,7 +132,7 @@
             </div>
         {{/if}}
 
-        {{! Advancement-specific fields - simplified }}
+        {{! Advancement fields }}
         {{#if (eq item.type "advancement")}}
             <div class="form-group">
                 <label>Roll Formula</label>
@@ -140,13 +140,7 @@
                 <small>Dice formula for this advancement's roll (e.g., 2d6, 1d20, 3d6kh2)</small>
             </div>
 
-            <div class="form-group">
-                <button type="button" data-action="rollAdvancement" class="roll-button" style="width: 100%; padding: 10px; margin-bottom: 10px;">
-                    <i class="fas fa-dice-d20"></i> Roll {{item.name}}
-                </button>
-            </div>
-
-            {{! Only description field for advancements }}
+            {{! Description field for advancements }}
             <div class="form-group description-group">
                 <label>Description</label>
                 <textarea name="system.description" rows="3" placeholder="Enter advancement description...">{{system.description}}</textarea>

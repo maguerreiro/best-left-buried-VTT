@@ -141,13 +141,15 @@
                         <div class="items-list">
                             {{#each items.advancement as |item|}}
                             <div class="list-item" data-item-id="{{item._id}}">
-                                <div class="col-equip"></div> {{! empty column for alignment }}
                                 <div class="col-icon">
                                     <img src="{{item.img}}" class="item-icon"/>
                                 </div>                                
                                 <div class="item-name" data-action="openItem">{{item.name}}</div>
                                 <div class="item-description">{{item.system.description}}</div>
                                 <div class="item-controls">
+                                    <button type="button" data-action="rollAdvancement" class="roll-button">
+                                        <i class="fas fa-dice-d20"></i>
+                                    </button>
                                     <a data-action="deleteItem" class="control-button delete" title="Delete">
                                         <i class="fas fa-trash"></i>
                                     </a>
@@ -163,9 +165,6 @@
                         <div class="items-list">
                             {{#each items.consequence as |item|}}
                             <div class="list-item" data-item-id="{{item._id}}">
-                                <div class="col-equip">
-                                    <input type="checkbox" data-action="toggleEquip" data-item-id="{{item._id}}" {{checked item.system.equipped}} title="Equipped"/>
-                                </div>
                                 <div class="col-icon">
                                     <img src="{{item.img}}" class="item-icon"/>
                                 </div>                                
