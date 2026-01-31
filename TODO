@@ -1,3 +1,62 @@
+
+###### TO DO ######
+
+
+**Character sheet**
+Weapons:
+- [ ] add comment to character sheet for 2 handed
+
+**Weapons sheet**
+- [ ] remove the 2 handed checkbox
+- [ ] after initiative in weapon sheet add text box with pre-loaded text but editable
+
+**Advancements sheet:**
+- [ ] Maximum and current of uses
+
+**Character sheet:**
+- [ ] allow paragraphs in the descriptions (new line)
+
+**Item sheets:**
+- [ ] text editor (allow formatting) instead of multivarchar
+- [ ] same font in the description as on the character sheet 
+
+**Advancements:**
+- [ ] add uses counter 
+- [ ] custom formula does not format the roll accordingly (upper hand formula, in the roll does not scratch the dice)
+
+**Consequences and advancements:**
+- [ ] counter should be editable in the character sheet 
+- [ ] "Type" text box above description. Only appears in the item sheet.
+
+**Armor:**
+- [ ] armor value not updating 
+
+**Weapons:**
+- [ ] attributes not changing and not included in the roll
+- [ ] custom modifiers not in the roll message 
+- [ ] note box after initiative in the item sheet 
+- [ ] upper hand and against all odds is not showing the attribute stat
+- [ ] remove "in melee range" 
+- [ ] note under initiative. Note should appear in the roll chat. Note is not in the character sheet 
+
+**Armor and Loot:**
+- [ ] add description to character sheet 
+
+**Loot:**
+- [ ] add counter (number of items of the same loot)
+- [ ] slots should multiple by slots*number of items 
+- [ ] in the character sheet replace tick box for equipping with text box for the number of items 
+
+**Roll messages:**
+- [ ] new lines on the comment 
+- [ ] attribute and damagemod in bold in new lines
+
+**Bugs**
+- [ ] Encumbrance only updates after closing/opening sheet
+
+
+
+
 ###### DONE ######
 
 **Character sheet**
@@ -7,6 +66,7 @@ Observation + affluence 
 Advancements + consequences
 - [x] description justified
 - [x] change font of description to the same as in the header
+- [x] remove alignment from advancements and consequences names
 
 Advancements:
 - [x] add roll button in the character sheet
@@ -32,18 +92,3 @@ Consequences:
 - [x] only visible the current number of uses
 - [x] number of uses can be hidden from the consequence sheet
 - [x] editable
-
-
-###### TO DO ######
-
-
-**Character sheet**
-Weapons:
-- [ ] add comment to character sheet for 2 handed
-
-**Weapons sheet**
-- [ ] remove the 2 handed checkbox
-- [ ] after initiative in weapon sheet add text box with pre-loaded text but editable
-
-**Advancements sheet:**
-- [ ] Maximum and current of uses

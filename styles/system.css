@@ -1125,9 +1125,9 @@
     color: var(--text-primary);
     cursor: pointer;
     transition: color 0.2s ease;
-        text-justify: auto;
+    text-justify: auto;
     text-justify: inter-word;
-    text-align: justify;
+    text-align: left;
 }
 
 .best-left-buried .item-name:hover {
