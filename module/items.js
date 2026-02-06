@@ -168,7 +168,9 @@ export class BLBLootData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     const fields = foundry.data.fields;
     return {
-      // No description field anymore
+      description: new fields.StringField({ 
+        initial: "" 
+      }),
       affluence: new fields.NumberField({
         required: false,
         initial: 0,

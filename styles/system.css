@@ -862,7 +862,7 @@
 
 .best-left-buried .armor-table .table-header {
     display: grid;
-    grid-template-columns: 25px 30px 1fr 110px 60px 50px 30px; /* Wider columns */
+    grid-template-columns: 25px 30px 1fr 4fr 110px 60px 50px 30px;
     gap: 8px;
     padding: 6px 12px;
     background: var(--bg-tertiary);
@@ -881,7 +881,7 @@
 
 .best-left-buried .armor-table .table-row {
     display: grid;
-    grid-template-columns: 25px 30px 1fr 110px 60px 50px 30px; /* Wider columns */
+    grid-template-columns: 25px 30px 1fr 4fr 110px 60px 50px 30px;
     gap: 8px;
     padding: 6px 12px;
     border-bottom: 1px solid var(--border-light);
@@ -904,6 +904,16 @@
     text-align: left;
     justify-self: start;
     font-weight: 500;
+}
+
+.best-left-buried .armor-table .item-description {
+    text-justify: inter-word;
+    text-align: justify;
+    font-family: 'Calibri';
+    font-style: normal;
+    font-size: 1em;
+    color: var(--text-secondary);
+    text-transform: none;
 }
 
 .best-left-buried .col-armor {
@@ -1026,7 +1036,7 @@
 
 .best-left-buried .loot-table .table-header {
     display: grid;
-    grid-template-columns: 25px 30px 1fr 110px 60px 50px 30px;
+    grid-template-columns: 25px 30px 1fr 4fr 60px 50px 30px;
     gap: 8px;
     padding: 6px 12px;
     background: var(--bg-tertiary);
@@ -1045,7 +1055,7 @@
 
 .best-left-buried .loot-table .table-row {
     display: grid;
-    grid-template-columns: 25px 30px 1fr 110px 60px 50px 30px;
+    grid-template-columns: 25px 30px 1fr 4fr 60px 50px 30px;
     gap: 8px;
     padding: 6px 12px;
     border-bottom: 1px solid var(--border-light);
@@ -1070,6 +1080,15 @@
     font-weight: 500;
 }
 
+.best-left-buried .loot-table .item-description {
+    text-justify: inter-word;
+    text-align: justify;
+    font-family: 'Calibri';
+    font-style: normal;
+    font-size: 1em;
+    color: var(--text-secondary);
+    text-transform: none;
+}
 /* ========================================
    REGULAR LISTS (for armor and loot)
    ======================================== */
