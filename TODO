@@ -39,9 +39,6 @@ Weapons:
 - [ ] remove "in melee range" 
 - [ ] note under initiative. Note should appear in the roll chat. Note is not in the character sheet 
 
-**Armor and Loot:**
-- [ ] add description to character sheet 
-
 **Loot:**
 - [ ] add counter (number of items of the same loot)
 - [ ] slots should multiple by slots*number of items 
@@ -56,9 +53,15 @@ Weapons:
 
 
 
-
 ###### DONE ######
 
+Change log :
+
+2026-02-06
+**Armor and Loot:**
+- [x] add description to character sheet 
+
+older
 **Character sheet**
 Observation + affluence 
 - [x] add upper hand / against all odds
