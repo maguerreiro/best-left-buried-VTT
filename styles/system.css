@@ -909,6 +909,7 @@
 .best-left-buried .armor-table .item-description {
     text-justify: inter-word;
     text-align: justify;
+    justify-self: start;
     font-family: 'Calibri';
     font-style: normal;
     font-size: 1em;
@@ -1083,6 +1084,7 @@
 .best-left-buried .loot-table .item-description {
     text-justify: inter-word;
     text-align: justify;
+    justify-self: start;
     font-family: 'Calibri';
     font-style: normal;
     font-size: 1em;
@@ -1156,6 +1158,7 @@
 .best-left-buried .item-description {
     text-justify: inter-word;
     text-align: justify;
+    justify-self: start;
     font-family: 'Calibri';
     font-style: normal;
     font-size: 0.9em;
