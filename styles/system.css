@@ -1460,6 +1460,118 @@
     text-decoration: line-through;
 }
 
+/* ProseMirror Editor for Best Left Buried */
+
+/* The menu that ProseMirror creates */
+.best-left-buried .description-group .editor-menu {
+    background: #2a2a2a;
+    border: 1px solid #4a4a4a;
+    border-bottom: none;
+    border-radius: 5px 5px 0 0;
+    padding: 6px;
+    margin: 0 0 -1px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    list-style: none;
+}
+
+/* Menu items */
+.best-left-buried .description-group .editor-menu > li {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+}
+
+/* Buttons */
+.best-left-buried .description-group .editor-menu button {
+    background: #3a3a3a;
+    border: 1px solid #4a4a4a;
+    color: #e0e0e0;
+    padding: 5px 10px;
+    margin: 0;
+    font-size: 13px;
+    height: 28px;
+    border-radius: 3px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.best-left-buried .description-group .editor-menu button:hover {
+    background: #4a90e2;
+    border-color: #4a90e2;
+    color: white;
+}
+
+/* Hide dropdown menus that are direct children of buttons */
+.best-left-buried .description-group .editor-menu button > ul {
+    position: absolute;
+    visibility: hidden;
+    opacity: 0;
+    height: 0;
+    width: 0;
+    overflow: hidden;
+}
+
+/* When dropdown is active (managed by ProseMirror JS), show it properly */
+.best-left-buried .description-group .editor-menu button.pm-active > ul {
+    visibility: visible;
+    opacity: 1;
+    height: auto;
+    width: auto;
+    overflow: visible;
+}
+
+/* The editor container */
+.best-left-buried .description-group .editor-container {
+    border: 1px solid #4a4a4a;
+    border-radius: 0 0 5px 5px;
+    background: #1a1a1a;
+    min-height: 80px;
+    max-height: 150px;
+    overflow: hidden;
+}
+
+/* The actual ProseMirror editor */
+.best-left-buried .description-group .editor.ProseMirror {
+    background: #1a1a1a;
+    color: #e0e0e0;
+    padding: 8px;
+    min-height: 80px;
+    max-height: 150px;
+    overflow-y: auto;
+    font-family: 'Calibri', sans-serif;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.best-left-buried .description-group .editor.ProseMirror p {
+    margin: 0 0 0.5em 0;
+    color: #e0e0e0;
+}
+
+.best-left-buried .description-group .editor.ProseMirror strong {
+    font-weight: bold;
+}
+
+.best-left-buried .description-group .editor.ProseMirror em {
+    font-style: italic;
+}
+
+/* Scrollbar */
+.best-left-buried .description-group .editor.ProseMirror::-webkit-scrollbar {
+    width: 6px;
+}
+
+.best-left-buried .description-group .editor.ProseMirror::-webkit-scrollbar-track {
+    background: #2a2a2a;
+}
+
+.best-left-buried .description-group .editor.ProseMirror::-webkit-scrollbar-thumb {
+    background: #4a4a4a;
+    border-radius: 3px;
+}
+
 /* ========================================
    RESPONSIVE DESIGN
    ======================================== */

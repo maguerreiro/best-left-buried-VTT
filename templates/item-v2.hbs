@@ -94,10 +94,10 @@
                 <small>How many inventory slots this weapon occupies</small>
             </div>
 
-            {{! Description field for weapons }}
+            {{! Rich text editor for weapon description }}
             <div class="form-group description-group">
                 <label>Description</label>
-                <textarea name="system.description" rows="3" placeholder="Enter weapon description...">{{system.description}}</textarea>
+                <div class="editor" data-edit="system.description"></div>
                 <small>Describe this weapon's properties, effects, and special characteristics</small>
             </div>
         {{/if}}
@@ -126,10 +126,10 @@
                 <small>How many inventory slots this {{#if (eq system.armorType "shield")}}shield{{else}}armor{{/if}} occupies</small>
             </div>
 
-            {{! Description field for armor }}
+            {{! Rich text editor for armor description }}
             <div class="form-group description-group">
                 <label>Description</label>
-                <textarea name="system.description" rows="3" placeholder="Enter armor description...">{{system.description}}</textarea>
+                <div class="editor" data-edit="system.description"></div>
                 <small>Describe this armor's properties, effects, and special characteristics</small>
             </div>
         {{/if}}
@@ -142,10 +142,10 @@
                 <small>Dice formula for this advancement's roll (e.g., 2d6, 1d20, 3d6kh2)</small>
             </div>
 
-            {{! Description field for advancements }}
+            {{! Rich text editor for advancement description }}
             <div class="form-group description-group">
                 <label>Description</label>
-                <textarea name="system.description" rows="3" placeholder="Enter advancement description...">{{system.description}}</textarea>
+                <div class="editor" data-edit="system.description"></div>
                 <small>Describe this advancement's effects, benefits, and special characteristics</small>
             </div>
         {{/if}}
@@ -181,10 +181,10 @@
             </div>
             {{/if}}
 
-            {{! Description field for consequences }}
+            {{! Rich text editor for consequence description }}
             <div class="form-group description-group">
                 <label>Description</label>
-                <textarea name="system.description" rows="3" placeholder="Enter consequence description...">{{system.description}}</textarea>
+                <div class="editor" data-edit="system.description"></div>
                 <small>Describe this consequence's effects and impact on the character</small>
             </div>
         {{/if}}
@@ -204,10 +204,10 @@
                 <small>How many inventory slots this item occupies</small>
             </div>
             
-            {{! Description field for loot }}
+            {{! Rich text editor for loot description }}
             <div class="form-group description-group">
                 <label>Description</label>
-                <textarea name="system.description" rows="3" placeholder="Enter loot description...">{{system.description}}</textarea>
+                <div class="editor" data-edit="system.description"></div>
                 <small>Describe this loot's properties, effects, and special characteristics</small>
             </div>
 

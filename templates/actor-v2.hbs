@@ -145,7 +145,7 @@
                                     <img src="{{item.img}}" class="item-icon"/>
                                 </div>                                
                                 <div class="item-name" data-action="openItem">{{item.name}}</div>
-                                <div class="item-description">{{item.system.description}}</div>
+                                <div class="item-description">{{{item.enrichedDescription}}}</div>
                                 <div class="item-controls">
                                     <button type="button" data-action="rollAdvancement" data-advancement-id="{{item._id}}" class="roll-button">
                                         <i class="fas fa-dice-d20"></i>
@@ -169,7 +169,7 @@
                                     <img src="{{item.img}}" class="item-icon"/>
                                 </div>                                
                                 <div class="item-name" data-action="openItem">{{item.name}}</div>
-                                <div class="item-description">{{item.system.description}}</div>
+                                <div class="item-description">{{{item.enrichedDescription}}}</div>
                                 <div class="item-controls">
                                     {{#if item.system.hasUses}}
                                     <span class="consequence-uses-display">{{item.system.uses.current}}</span>
@@ -273,7 +273,7 @@
                                 <div class="col-name">
                                     <span class="item-name" data-action="openItem">{{item.name}}</span>
                                 </div>
-                                <div class="item-description">{{item.system.description}}</div>
+                                <div class="item-description">{{{item.enrichedDescription}}}</div>
                                 <div class="col-type">
                                     {{#if (eq item.system.armorType "basic")}}Basic{{/if}}
                                     {{#if (eq item.system.armorType "plate")}}Plate{{/if}}
@@ -319,7 +319,7 @@
                                 <div class="col-name">
                                     <span class="item-name" data-action="openItem">{{item.name}}</span>
                                 </div>
-                                <div class="item-description">{{item.system.description}}</div>
+                                <div class="item-description">{{{item.enrichedDescription}}}</div>
                                 <div class="col-value">{{item.system.affluence}}</div>
                                 <div class="col-slots">{{item.system.slotValue}}</div>
                                 <div class="col-actions">

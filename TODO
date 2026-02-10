@@ -13,13 +13,6 @@ Weapons:
 **Advancements sheet:**
 - [ ] Maximum and current of uses
 
-**Character sheet:**
-- [ ] allow paragraphs in the descriptions (new line)
-
-**Item sheets:**
-- [ ] text editor (allow formatting) instead of multivarchar
-- [ ] same font in the description as on the character sheet 
-
 **Advancements:**
 - [ ] add uses counter 
 - [ ] custom formula does not format the roll accordingly (upper hand formula, in the roll does not scratch the dice)
@@ -57,7 +50,18 @@ Weapons:
 
 Change log :
 
-2026-02-06
+<span style="color:red">**2026-02-20**</span>
+
+**Character sheet:**
+- [x] allow paragraphs in the descriptions (new line)
+
+**Item sheets:**
+- [x] text editor (allow formatting) instead of multivarchar
+- [x] same font in the description as on the character sheet 
+
+
+<span style="color:red">**2026-02-06**</span>
+
 **Armor and Loot:**
 - [x] add description to character sheet 
 

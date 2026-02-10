@@ -54,32 +54,32 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
   }
 
   /** @override */
-  async _prepareContext(options) {
-    const doc = this.document;
-    const src = doc.toObject();
-    const rollData = doc.getRollData();
+async _prepareContext(options) {
+  const doc = this.document;
+  const src = doc.toObject();
+  const rollData = doc.getRollData();
+  
+  const context = {
+    actor: doc,
+    source: src,
+    system: doc.system,
+    rollData: rollData,
     
-    const context = {
-      actor: doc,
-      source: src,
-      system: doc.system,
-      rollData: rollData,
-      
-      // Helper constants
-      WEAPON_TYPES,
-      ARMOR_TYPES,
-      CONSEQUENCE_TYPES,
+    // Helper constants
+    WEAPON_TYPES,
+    ARMOR_TYPES,
+    CONSEQUENCE_TYPES,
 
-      // Items
-      items: this._prepareItems(doc.items),
+    // Items - now awaited since _prepareItems is async
+    items: await this._prepareItems(doc.items),
 
-      // Tab state
-      activeTab: this.activeTab
-    };
-    
-    this._prepareArmor(context);
-    return context;
-  }
+    // Tab state
+    activeTab: this.activeTab
+  };
+  
+  this._prepareArmor(context);
+  return context;
+}
 
   /** @override */
   async _onRender(context, options) {
@@ -101,6 +101,10 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
         // Check if slot value changed
         if (changes.system?.slotValue !== undefined) {
           this._updateEncumbranceDisplay();
+        }
+        // Re-render if description changed
+        if (changes.system?.description !== undefined) {
+          this.render(false);
         }
       }
     });
@@ -251,30 +255,36 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
     return super.close(options);
   }
 
-  _prepareItems(items) {
-    const organized = {
-      weapon: [],
-      armor: [],
-      advancement: [],
-      consequence: [],
-      loot: []
-    };
-    
-    for (const item of items) {
-      if (item.type in organized) {
-        organized[item.type].push(item);
-      }
+async _prepareItems(items) {
+  const organized = {
+    weapon: [],
+    armor: [],
+    advancement: [],
+    consequence: [],
+    loot: []
+  };
+  
+  for (const item of items) {
+    if (item.type in organized) {
+      // Enrich the description HTML for proper display with formatting
+      item.enrichedDescription = await foundry.applications.ux.TextEditor.implementation.enrichHTML(item.system.description || "", {
+        async: true,
+        secrets: item.isOwner,
+        relativeTo: item
+      });
+      organized[item.type].push(item);
     }
-    
-    // Sort items
-    organized.weapon.sort((a, b) => a.name.localeCompare(b.name));
-    organized.armor.sort((a, b) => a.name.localeCompare(b.name));
-    organized.advancement.sort((a, b) => a.name.localeCompare(b.name));
-    organized.consequence.sort((a, b) => a.name.localeCompare(b.name));
-    organized.loot.sort((a, b) => a.name.localeCompare(b.name));
-    
-    return organized;
   }
+  
+  // Sort items
+  organized.weapon.sort((a, b) => a.name.localeCompare(b.name));
+  organized.armor.sort((a, b) => a.name.localeCompare(b.name));
+  organized.advancement.sort((a, b) => a.name.localeCompare(b.name));
+  organized.consequence.sort((a, b) => a.name.localeCompare(b.name));
+  organized.loot.sort((a, b) => a.name.localeCompare(b.name));
+  
+  return organized;
+}
 
   _prepareArmor(context) {
     const system = context.system;

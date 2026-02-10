@@ -1,4 +1,4 @@
-// sheets/item-sheet-v2.js - Updated for new requirements
+// sheets/item-sheet-v2.js - Updated with ProseMirror API (non-deprecated)
 
 import { WEAPON_TYPES, WEAPON_RANGES, ATTACK_STATS } from "../module/helpers/weapons.js";
 import { ARMOR_TYPES } from "../module/helpers/armor.js";
@@ -65,12 +65,22 @@ export class BLBItemSheetV2 extends foundry.applications.api.HandlebarsApplicati
       }
     }
 
+    // Enrich the description HTML for display
+    const enrichedDescription = await foundry.applications.ux.TextEditor.implementation.enrichHTML(doc.system.description || "", {
+      async: true,
+      secrets: doc.isOwner,
+      relativeTo: doc
+    });
+
     return {
       item: doc,
       source: src,
       system: doc.system,
       defaultIcon: defaultIcon,
       weaponProperties: weaponProperties,
+      enrichedDescription: enrichedDescription,
+      editable: this.isEditable,
+      owner: doc.isOwner,
       WEAPON_TYPES,
       ARMOR_TYPES,
       CONSEQUENCE_TYPES,
@@ -145,6 +155,85 @@ export class BLBItemSheetV2 extends foundry.applications.api.HandlebarsApplicati
         }
       });
     }
+
+    // Activate ProseMirror editors - only once
+    if (!this._editorActivated) {
+      this._editorActivated = true;
+      await this._activateEditors();
+    }
+  }
+
+  /**
+   * Activate ProseMirror editors for all description fields
+   */
+  async _activateEditors() {
+    const editorDiv = this.element?.querySelector('.editor[data-edit="system.description"]');
+    if (!editorDiv) return;
+    
+    // Don't create editor if it already exists
+    if (this._editor) return;
+
+    // Create the editor with ONLY required parameters
+    try {
+      this._editor = await foundry.applications.ux.TextEditor.implementation.create({
+        target: editorDiv,
+        engine: "prosemirror"
+      }, this.document.system.description || "");
+      
+      // Auto-save on blur
+      editorDiv.addEventListener('blur', async () => {
+        await this._saveEditor();
+      }, true);
+      
+      console.log("Editor created successfully");
+    } catch (err) {
+      console.error("Error creating editor:", err);
+    }
+  }
+
+  /**
+   * Save editor content
+   */
+  async _saveEditor() {
+    if (this._editor?.view) {
+      try {
+        const content = ProseMirror.dom.serializeString(this._editor.view.state.doc);
+        if (content !== this.document.system.description) {
+          await this.document.update({ "system.description": content }, { render: false });
+          console.log("Editor content saved:", content);
+        }
+      } catch (err) {
+        console.error("Error saving editor:", err);
+      }
+    }
+  }
+
+  /**
+   * Override close to save editor content
+   */
+  async close(options = {}) {
+    await this._saveEditor();
+    this._editor = null;
+    this._editorActivated = false;
+    return super.close(options);
+  }
+
+  /**
+   * Override close to save editor content
+   */
+  async close(options = {}) {
+    if (this._editor?.active) {
+      try {
+        const content = this._editor.instance.getData();
+        if (content !== this.document.system.description) {
+          await this.document.update({ "system.description": content }, { render: false });
+        }
+      } catch (err) {
+        console.error("Error saving editor:", err);
+      }
+    }
+    this._editor = null;
+    return super.close(options);
   }
 
   // Event Handlers
