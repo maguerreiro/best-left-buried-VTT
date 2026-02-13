@@ -43,7 +43,10 @@ Weapons:
 
 **Bugs**
 - [ ] Encumbrance only updates after closing/opening sheet
-
+- [ ] When equipping a weapon, armor or loot, appears in the console: 
+                        foundry.mjs:28185 Uncaught (in promise) TypeError: handler?.call is not a function
+                            at #onClickAction (foundry.mjs:28185:56)
+                            at #onClick (foundry.mjs:28138:51)
 
 
 ###### DONE ######
