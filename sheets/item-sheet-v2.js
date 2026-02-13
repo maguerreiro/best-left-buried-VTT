@@ -156,11 +156,8 @@ export class BLBItemSheetV2 extends foundry.applications.api.HandlebarsApplicati
       });
     }
 
-    // Activate ProseMirror editors - only once
-    if (!this._editorActivated) {
-      this._editorActivated = true;
-      await this._activateEditors();
-    }
+    // Always try to activate editor on render
+    await this._activateEditors();
   }
 
   /**
@@ -170,8 +167,13 @@ export class BLBItemSheetV2 extends foundry.applications.api.HandlebarsApplicati
     const editorDiv = this.element?.querySelector('.editor[data-edit="system.description"]');
     if (!editorDiv) return;
     
-    // Don't create editor if it already exists
-    if (this._editor) return;
+    // If editor already exists and is active, don't recreate
+    if (this._editor?.view && document.body.contains(this._editor.view.dom)) {
+      return;
+    }
+
+    // Clear any existing editor reference
+    this._editor = null;
 
     // Create the editor with ONLY required parameters
     try {
@@ -180,10 +182,19 @@ export class BLBItemSheetV2 extends foundry.applications.api.HandlebarsApplicati
         engine: "prosemirror"
       }, this.document.system.description || "");
       
-      // Auto-save on blur
-      editorDiv.addEventListener('blur', async () => {
-        await this._saveEditor();
-      }, true);
+      // Auto-save on content change (using ProseMirror's update event)
+      if (this._editor.view) {
+        const view = this._editor.view;
+        const originalDispatch = view.dispatch.bind(view);
+        view.dispatch = (tr) => {
+          originalDispatch(tr);
+          // Debounced save after content changes
+          if (tr.docChanged) {
+            clearTimeout(this._saveTimeout);
+            this._saveTimeout = setTimeout(() => this._saveEditor(), 1000);
+          }
+        };
+      }
       
       console.log("Editor created successfully");
     } catch (err) {
@@ -200,7 +211,7 @@ export class BLBItemSheetV2 extends foundry.applications.api.HandlebarsApplicati
         const content = ProseMirror.dom.serializeString(this._editor.view.state.doc);
         if (content !== this.document.system.description) {
           await this.document.update({ "system.description": content }, { render: false });
-          console.log("Editor content saved:", content);
+          console.log("Editor content saved");
         }
       } catch (err) {
         console.error("Error saving editor:", err);
@@ -212,9 +223,13 @@ export class BLBItemSheetV2 extends foundry.applications.api.HandlebarsApplicati
    * Override close to save editor content
    */
   async close(options = {}) {
+    // Clear any pending save
+    if (this._saveTimeout) {
+      clearTimeout(this._saveTimeout);
+    }
+    
     await this._saveEditor();
     this._editor = null;
-    this._editorActivated = false;
     return super.close(options);
   }
 
