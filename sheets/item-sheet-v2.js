@@ -66,7 +66,7 @@ export class BLBItemSheetV2 extends foundry.applications.api.HandlebarsApplicati
     }
 
     // Enrich the description HTML for display
-    const enrichedDescription = await foundry.applications.ux.TextEditor.implementation.enrichHTML(doc.system.description || "", {
+    const enrichedDescription = await foundry.applications.ux.TextEditor.enrichHTML(doc.system.description || "", {
       async: true,
       secrets: doc.isOwner,
       relativeTo: doc
@@ -79,8 +79,6 @@ export class BLBItemSheetV2 extends foundry.applications.api.HandlebarsApplicati
       defaultIcon: defaultIcon,
       weaponProperties: weaponProperties,
       enrichedDescription: enrichedDescription,
-      editable: this.isEditable,
-      owner: doc.isOwner,
       WEAPON_TYPES,
       ARMOR_TYPES,
       CONSEQUENCE_TYPES,
@@ -141,114 +139,18 @@ export class BLBItemSheetV2 extends foundry.applications.api.HandlebarsApplicati
       imgElement.src = this.document.img;
     }
     
-    // Add change event listener to weapon type dropdown for immediate icon preview
+    // Weapon type dropdown handler
     const weaponTypeSelect = this.element?.querySelector('select[name="system.weaponType"]');
     if (weaponTypeSelect) {
       weaponTypeSelect.addEventListener('change', (event) => {
         const newType = event.target.value;
         const newIcon = BLBItemSheetV2._getDefaultIconStatic("weapon", newType);
-        
-        // Update icon immediately in DOM
         const img = this.element?.querySelector('header.sheet-header img');
         if (img) {
           img.src = newIcon;
         }
       });
     }
-
-    // Always try to activate editor on render
-    await this._activateEditors();
-  }
-
-  /**
-   * Activate ProseMirror editors for all description fields
-   */
-  async _activateEditors() {
-    const editorDiv = this.element?.querySelector('.editor[data-edit="system.description"]');
-    if (!editorDiv) return;
-    
-    // If editor already exists and is active, don't recreate
-    if (this._editor?.view && document.body.contains(this._editor.view.dom)) {
-      return;
-    }
-
-    // Clear any existing editor reference
-    this._editor = null;
-
-    // Create the editor with ONLY required parameters
-    try {
-      this._editor = await foundry.applications.ux.TextEditor.implementation.create({
-        target: editorDiv,
-        engine: "prosemirror"
-      }, this.document.system.description || "");
-      
-      // Auto-save on content change (using ProseMirror's update event)
-      if (this._editor.view) {
-        const view = this._editor.view;
-        const originalDispatch = view.dispatch.bind(view);
-        view.dispatch = (tr) => {
-          originalDispatch(tr);
-          // Debounced save after content changes
-          if (tr.docChanged) {
-            clearTimeout(this._saveTimeout);
-            this._saveTimeout = setTimeout(() => this._saveEditor(), 1000);
-          }
-        };
-      }
-      
-      console.log("Editor created successfully");
-    } catch (err) {
-      console.error("Error creating editor:", err);
-    }
-  }
-
-  /**
-   * Save editor content
-   */
-  async _saveEditor() {
-    if (this._editor?.view) {
-      try {
-        const content = ProseMirror.dom.serializeString(this._editor.view.state.doc);
-        if (content !== this.document.system.description) {
-          await this.document.update({ "system.description": content }, { render: false });
-          console.log("Editor content saved");
-        }
-      } catch (err) {
-        console.error("Error saving editor:", err);
-      }
-    }
-  }
-
-  /**
-   * Override close to save editor content
-   */
-  async close(options = {}) {
-    // Clear any pending save
-    if (this._saveTimeout) {
-      clearTimeout(this._saveTimeout);
-    }
-    
-    await this._saveEditor();
-    this._editor = null;
-    return super.close(options);
-  }
-
-  /**
-   * Override close to save editor content
-   */
-  async close(options = {}) {
-    if (this._editor?.active) {
-      try {
-        const content = this._editor.instance.getData();
-        if (content !== this.document.system.description) {
-          await this.document.update({ "system.description": content }, { render: false });
-        }
-      } catch (err) {
-        console.error("Error saving editor:", err);
-      }
-    }
-    this._editor = null;
-    return super.close(options);
   }
 
   // Event Handlers

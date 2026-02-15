@@ -1462,6 +1462,15 @@
 
 /* ProseMirror Editor for Best Left Buried */
 
+/* Paragraphs inside editor */
+.best-left-buried .description-group prose-mirror .ProseMirror p,
+.best-left-buried .description-group prose-mirror .editor-content p {
+    margin: 0 0 0.5em 0;
+    color: #e0e0e0;
+    font-family: 'Calibri', sans-serif;
+    font-size: 13px;
+}
+
 /* The menu that ProseMirror creates */
 .best-left-buried .description-group .editor-menu {
     background: #2a2a2a;
