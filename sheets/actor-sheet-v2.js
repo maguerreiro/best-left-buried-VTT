@@ -54,10 +54,16 @@ export class BLBActorSheetV2 extends foundry.applications.api.HandlebarsApplicat
   }
 
   /** @override */
-async _prepareContext(options) {
-  const doc = this.document;
-  const src = doc.toObject();
-  const rollData = doc.getRollData();
+  async _prepareContext(options) {
+    // Save current scroll position before re-rendering
+    const container = this.element?.querySelector('.sheet-container');
+    if (container) {
+      this._scrollPosition = container.scrollTop;
+    }
+    
+    const doc = this.document;
+    const src = doc.toObject();
+    const rollData = doc.getRollData();
   
   const context = {
     actor: doc,
@@ -84,6 +90,16 @@ async _prepareContext(options) {
   /** @override */
   async _onRender(context, options) {
     await super._onRender(context, options);
+    
+    // Restore scroll position if we saved it
+    if (this._scrollPosition !== undefined) {
+      const container = this.element?.querySelector('.sheet-container');
+      if (container) {
+        container.scrollTop = this._scrollPosition;
+        this._scrollPosition = undefined; // Clear after restoring
+      }
+    }
+    
     this._activateTab(this.activeTab);
     setTimeout(() => this._createExternalTabs(), 100);
     
@@ -102,7 +118,7 @@ async _prepareContext(options) {
         if (changes.system?.slotValue !== undefined) {
           this._updateEncumbranceDisplay();
         }
-        // Re-render if description changed
+        // Re-render if description changed (scroll position will be preserved)
         if (changes.system?.description !== undefined) {
           this.render(false);
         }
@@ -267,7 +283,7 @@ async _prepareItems(items) {
   for (const item of items) {
     if (item.type in organized) {
       // Enrich the description HTML for proper display with formatting
-      item.enrichedDescription = await foundry.applications.ux.TextEditor.implementation.enrichHTML(item.system.description || "", {
+      item.enrichedDescription = await TextEditor.enrichHTML(item.system.description || "", {
         async: true,
         secrets: item.isOwner,
         relativeTo: item
