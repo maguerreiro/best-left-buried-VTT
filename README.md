@@ -4,7 +4,9 @@ Change log :
 
 <span style="color:red">**2026-02-15**</span>
 
-
+**Description editor:**
+- [x] Fixed editor bugs
+- [x] Fixed scroll position after re-rendering
 
 
 <span style="color:red">**2026-02-10**</span>
