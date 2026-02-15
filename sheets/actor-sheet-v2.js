@@ -283,7 +283,7 @@ async _prepareItems(items) {
   for (const item of items) {
     if (item.type in organized) {
       // Enrich the description HTML for proper display with formatting
-      item.enrichedDescription = await TextEditor.enrichHTML(item.system.description || "", {
+      item.enrichedDescription = await foundry.applications.ux.TextEditor.enrichHTML(item.system.description || "", {
         async: true,
         secrets: item.isOwner,
         relativeTo: item
