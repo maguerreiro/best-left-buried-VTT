@@ -11,7 +11,7 @@ Change log :
 - [x] Fixed scroll position after re-rendering
 
 **Bugs:**
-- [x] When equipping a weapon, armor or loot, appears in the console: 
+- [x] Fixed when equipping a weapon, armor or loot, appears in the console: 
                         foundry.mjs:28185 Uncaught (in promise) TypeError: handler?.call is not a function
                             at #onClickAction (foundry.mjs:28185:56)
                             at #onClick (foundry.mjs:28138:51)
