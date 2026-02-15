@@ -2,6 +2,8 @@
 
 Change log :
 
+
+
 <span style="color:red">**2026-02-15**</span>
 
 **Description editor:**
@@ -17,6 +19,8 @@ Change log :
 **Character sheet:**
 - [x] Fixed header position in equipment tab
 
+
+
 <span style="color:red">**2026-02-10**</span>
 
 **Character sheet:**
@@ -27,10 +31,13 @@ Change log :
 - [x] same font in the description as on the character sheet 
 
 
+
 <span style="color:red">**2026-02-06**</span>
 
 **Armor and Loot:**
 - [x] add description to character sheet 
+
+
 
 older
 **Character sheet**
