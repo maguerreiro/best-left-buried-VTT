@@ -34,8 +34,9 @@ Weapons:
 
 **Loot:**
 - [ ] add counter (number of items of the same loot)
-- [ ] slots should multiple by slots*number of items 
+- [ ] slots should multiple by slots*number of items + rounding up (3 torches are 1 slot, each torch is 0.33 but rounding up is 1 torch is 1 slot)
 - [ ] in the character sheet replace tick box for equipping with text box for the number of items 
+- [ ] add counter for number of uses
 
 **Roll messages:**
 - [ ] new lines on the comment 
