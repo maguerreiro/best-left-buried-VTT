@@ -14,6 +14,8 @@ Change log :
                             at #onClickAction (foundry.mjs:28185:56)
                             at #onClick (foundry.mjs:28138:51)
 
+**Character sheet:**
+- [x] Fixed header position in equipment tab
 
 <span style="color:red">**2026-02-10**</span>
 
