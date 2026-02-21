@@ -2,8 +2,8 @@
 
 Change log :
 
-<div></div>
-<span style="color:red">**2026-02-21*</span>
+<div>
+<span style="color:red">**2026-02-21**</span>
 
 - [x] Migration to v3
 - [x] New file structure
@@ -12,7 +12,7 @@ Change log :
 **Bugs**
 - [x] Fixed Encumbrance only updating after closing/opening sheet
 
-<div></div>
+</div>
 <span style="color:red">**2026-02-15**</span>
 
 **Description editor:**
