@@ -3,7 +3,7 @@
 Change log :
 
 
-<span style="color:red">**2026-02-21**</span>
+# **2026-02-21**
 
 -  Migration to v3
 -  New file structure
@@ -13,7 +13,8 @@ Change log :
 -  Fixed Encumbrance only updating after closing/opening sheet
 
 
-<span style="color:red">**2026-02-15**</span>
+
+# **2026-02-15**
 
 **Description editor:**
 -  Fixed editor bugs
@@ -29,8 +30,8 @@ Change log :
 -  Fixed header position in equipment tab
 
 
-<div></div>
-<span style="color:red">**2026-02-10**</span>
+
+# **2026-02-10**
 
 **Character sheet:**
 -  allow paragraphs in the descriptions (new line)
@@ -41,14 +42,14 @@ Change log :
 
 
 
-<span style="color:red">**2026-02-06**</span>
+# **2026-02-06**
 
 **Armor and Loot:**
 -  add description to character sheet 
 
 
 
-older
+# Older changes
 **Character sheet**
 Observation + affluence 
 -  add upper hand / against all odds
