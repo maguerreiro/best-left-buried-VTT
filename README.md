@@ -5,7 +5,7 @@ Change log :
 
 <span style="color:red">**2026-02-21**</span>
 
-- [x] Migration to v3
+- (x) Migration to v3
 - [x] New file structure
 - [x] Code modularized
 
