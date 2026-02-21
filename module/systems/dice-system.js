@@ -62,9 +62,9 @@ export class DiceSystem {
     
     // Calculate total damage modifier
     const damageModifier = this._calculateWeaponDamage(weapon, weaponProperties);
-    
+     
     // Get appropriate dice formula
-    const { formula, modeLabel } = this._getWeaponAttackFormula(attackValue, rollMode);
+    const { formula, modeLabel } = this._getWeaponAttackFormula(attackValue, damageModifier, rollMode);
     
     // Execute the roll
     const roll = await new Roll(formula).evaluate();
@@ -74,7 +74,7 @@ export class DiceSystem {
     
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: character }),
-      flavor: `${weapon.name}${modeLabel}: ${attackAttribute}: ${attackValue}, Damage: ${damageModifier >= 0 ? '+' : ''}${damageModifier}`,
+      flavor: `${weapon.name}${modeLabel}: <br> <span style="color: #000000;font-size: 2em;"><strong>${this._capitalizeText(attackAttribute)}:</strong> ${attackValue} </span> <br> <span style="color: #ff0000;font-size: 2em;"><strong>Damage Mod:</strong> ${damageModifier >= 0 ? '+' : ''}${damageModifier}</span> `,
       content: messageContent
     });
     
@@ -131,7 +131,7 @@ export class DiceSystem {
    * Get dice formula for weapon attacks
    * @private
    */
-  static _getWeaponAttackFormula(attackValue, rollMode) {
+  static _getWeaponAttackFormula(attackValue, damageModifier, rollMode) {
     let diceFormula, modeLabel = '';
     
     switch (rollMode) {
@@ -147,7 +147,19 @@ export class DiceSystem {
         diceFormula = SystemConstants.DICE_FORMULAS.WEAPON_ATTACK_STANDARD;
     }
     
-    const formula = `${diceFormula} + ${attackValue}`;
+    let formula = `${diceFormula} `;
+
+    // Only append the attackValue if it's not zero 
+    if (attackValue !== 0) {
+      formula += ` + ${attackValue}`;
+     }
+
+    // Only append the modifier if it's not zero 
+    if (damageModifier !== 0) {
+      formula += ` + ${damageModifier}`;
+     }
+
+
     return { formula, modeLabel };
   }
 

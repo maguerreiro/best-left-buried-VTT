@@ -25,10 +25,8 @@ Weapons:
 - [ ] armor value not updating 
 
 **Weapons:**
-- [ ] attributes not changing and not included in the roll
-- [ ] custom modifiers not in the roll message 
+
 - [ ] note box after initiative in the item sheet 
-- [ ] upper hand and against all odds is not showing the attribute stat
 - [ ] remove "in melee range" 
 - [ ] note under initiative. Note should appear in the roll chat. Note is not in the character sheet 
 
@@ -38,9 +36,7 @@ Weapons:
 - [ ] in the character sheet replace tick box for equipping with text box for the number of items 
 - [ ] add counter for number of uses
 
-**Roll messages:**
-- [ ] new lines on the comment 
-- [ ] attribute and damagemod in bold in new lines
+
 
 
 

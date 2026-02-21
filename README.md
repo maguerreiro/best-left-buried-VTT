@@ -12,7 +12,12 @@ Change log :
 **Bugs**
 -  Fixed Encumbrance only updating after closing/opening sheet
 
-
+**Roll messages:**
+-  New lines on the comment 
+-  Attribute and damagemod in bold in new lines
+-  Fixed attributes not changing and not included in the roll
+-  Fixed custom modifiers not in the roll message 
+-  Fixed upper hand and against all odds is not showing the attribute stat
 
 # **2026-02-15**
 
