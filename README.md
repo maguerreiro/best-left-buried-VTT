@@ -2,7 +2,7 @@
 
 Change log :
 
-<div>
+
 <span style="color:red">**2026-02-21**</span>
 
 - [x] Migration to v3
@@ -12,7 +12,7 @@ Change log :
 **Bugs**
 - [x] Fixed Encumbrance only updating after closing/opening sheet
 
-</div>
+
 <span style="color:red">**2026-02-15**</span>
 
 **Description editor:**
