@@ -1,23 +1,35 @@
-// module/actor.js - Updated for new sheet layout and encumbrance
+// module/models/character-data.js
+// Data model for Best Left Buried characters
 
-export class BLBActorData extends foundry.abstract.TypeDataModel {
+/**
+ * CharacterData - Data model defining the structure and behavior of characters
+ * Extends Foundry's TypeDataModel to provide character-specific functionality
+ */
+export class CharacterData extends foundry.abstract.TypeDataModel {
+  
+  /**
+   * Define the data schema for character actors
+   * @returns {Object} Schema definition with all character fields
+   */
   static defineSchema() {
     const fields = foundry.data.fields;
     
     return {
-      // Character portrait
+      // ===== CHARACTER PORTRAIT =====
       portrait: new fields.StringField({
         required: false,
         initial: ""
       }),
 
-      // Basic attack dice
+      // ===== BASIC ATTACK DICE =====
       attack: new fields.StringField({
         required: true,
         initial: "1d6",
       }),
 
-      // Main stats
+      // ===== PRIMARY ATTRIBUTES =====
+      // Each attribute has a base value and a bonus modifier
+      
       brawn: new fields.SchemaField({
         base: new fields.NumberField({
           required: true,
@@ -103,7 +115,9 @@ export class BLBActorData extends foundry.abstract.TypeDataModel {
         }),
       }),
 
-      // Sub-stats
+      // ===== RESOURCE POOLS =====
+      
+      // Vigour represents physical health and stamina
       vigour: new fields.SchemaField({
         current: new fields.NumberField({
           required: true,
@@ -119,6 +133,7 @@ export class BLBActorData extends foundry.abstract.TypeDataModel {
         }),
       }),
 
+      // Grip represents mental fortitude and sanity
       grip: new fields.SchemaField({
         base: new fields.NumberField({
           required: true,
@@ -129,7 +144,8 @@ export class BLBActorData extends foundry.abstract.TypeDataModel {
         }),
       }),
 
-      // Encumbrance
+      // ===== CARRYING CAPACITY =====
+      // Tracks how much the character can carry
       encumbrance: new fields.SchemaField({
         current: new fields.NumberField({
           required: true,
@@ -145,7 +161,8 @@ export class BLBActorData extends foundry.abstract.TypeDataModel {
         }),
       }),
 
-      // Armor (base value before modifiers)
+      // ===== ARMOR =====
+      // Base armor value (equipment provides bonuses on top)
       armor: new fields.SchemaField({
         base: new fields.NumberField({
           required: true,
@@ -155,20 +172,24 @@ export class BLBActorData extends foundry.abstract.TypeDataModel {
         }),
       }),
 
-      // Character progression
+      // ===== CHARACTER PROGRESSION =====
+      
+      // Experience points earned
       xp: new fields.NumberField({
         required: true,
         initial: 0,
         min: 0
       }),
 
+      // Advancement points available
       advancement: new fields.NumberField({
         required: true,
         initial: 0,
         min: 0
       }),
 
-      // Race and archetype
+      // ===== CHARACTER IDENTITY =====
+      
       race: new fields.StringField({
         required: false,
         initial: ""
@@ -181,53 +202,67 @@ export class BLBActorData extends foundry.abstract.TypeDataModel {
     }  
   }
 
-  // Add computed properties (getters)
+  /**
+   * Prepare derived data for the character
+   * Calculates values based on base data (totals, bonuses, etc.)
+   * Called automatically after data is loaded but before rendering
+   */
   prepareDerivedData() {
-    // Calculate total stats scores, formula: base + bonus
+    // ===== CALCULATE ATTRIBUTE TOTALS =====
+    // Formula: base + bonus
     this.brawnTotal = this.brawn.base + this.brawn.bonus;
     this.witTotal = this.wit.base + this.wit.bonus;
     this.willTotal = this.will.base + this.will.bonus;
     this.affluenceTotal = this.affluence.base + this.affluence.bonus;
     this.observationTotal = this.observation.base + this.observation.bonus;
+    
+    // ===== INITIALIZE ARMOR VALUES =====
     this.armorTotal = this.armor.base;
     this.armorBonus = 0;
 
-    // Calculate encumbrance maximum
+    // ===== CALCULATE CARRYING CAPACITY =====
+    // Formula: 12 + (2 × Brawn) + max(Wit, Will)
     this.encumbranceMax = 12 + (2 * this.brawnTotal) + Math.max(this.witTotal, this.willTotal);
     
-    // Calculate current encumbrance from items
+    // Initialize current encumbrance (calculated from items below)
     this.encumbranceCurrent = 0;
 
-    const actor = this.parent;
-    if (actor) {
-      // Calculate armor bonuses
-      const armorItems = actor.items.filter(item => item.type === "armor");
-      for (let armor of armorItems) {
-        if (armor.system.equipped) {
-          if (armor.system.armorType === "basic") {
+    // Get reference to the parent actor
+    const character = this.parent;
+    if (!character) return;
+
+    // ===== CALCULATE ARMOR BONUSES FROM EQUIPMENT =====
+    const armorItems = character.items.filter(item => item.type === "armor");
+    for (let armor of armorItems) {
+      if (armor.system.equipped) {
+        // Add bonus based on armor type
+        switch (armor.system.armorType) {
+          case "basic":
             this.armorTotal += 1;
             this.armorBonus += 1;
-          } else if (armor.system.armorType === "plate") {
+            break;
+          case "plate":
             this.armorTotal += 2;
             this.armorBonus += 2;
-          } else if (armor.system.armorType === "shield") {
+            break;
+          case "shield":
             this.armorTotal += 1;
             this.armorBonus += 1;
-          }
+            break;
         }
       }
+    }
 
-      // Calculate encumbrance from all items with slot values
-      const itemsWithSlots = actor.items.filter(item => 
-        item.system.slotValue !== undefined && item.system.slotValue > 0
-      );
-      
-      for (let item of itemsWithSlots) {
-        this.encumbranceCurrent += item.system.slotValue;
-      }
+    // ===== CALCULATE CURRENT ENCUMBRANCE FROM ITEMS =====
+    const carriedItems = character.items.filter(item => 
+      item.system.slotValue !== undefined && item.system.slotValue > 0
+    );
+    
+    for (let item of carriedItems) {
+      this.encumbranceCurrent += item.system.slotValue;
     }
     
-    // Update the encumbrance fields in the system data
+    // Update the encumbrance data
     this.encumbrance.current = this.encumbranceCurrent;
     this.encumbrance.max = this.encumbranceMax;
   }

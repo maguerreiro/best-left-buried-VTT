@@ -1,17 +1,28 @@
-// helpers/weapons.js
+// module/helpers/weapon-properties.js
+// Weapon type definitions and properties
 
+/**
+ * Range categories for weapons
+ */
 export const WEAPON_RANGES = {
     melee: "Melee",
     short: "Short Range",
     long: "Long Range"
 };
 
-export const ATTACK_STATS = {
+/**
+ * Attributes that can be used for weapon attacks
+ */
+export const ATTACK_ATTRIBUTES = {
     brawn: "Brawn",
     wit: "Wit",
     will: "Will"
 };
 
+/**
+ * Weapon type definitions
+ * Each type defines default properties that can be overridden per weapon
+ */
 export const WEAPON_TYPES = {
     hand: {
         label: "Hand Weapon",
@@ -19,7 +30,7 @@ export const WEAPON_TYPES = {
         attackStat: "brawn",
         damageMod: 0,
         initiative: 0,
-        twoHandedBonus: true
+        twoHandedBonus: true  // Can be wielded two-handed for +1 damage
     },
     
     heavy: {
@@ -44,7 +55,7 @@ export const WEAPON_TYPES = {
         attackStat: "brawn",
         damageMod: 0,
         initiative: -1,
-        twoHandedBonus: true
+        twoHandedBonus: true  // Can be wielded two-handed for +1 damage
     },
 
     ranged: {
@@ -61,7 +72,6 @@ export const WEAPON_TYPES = {
         attackStat: "wit",
         damageMod: 0,
         initiative: 0,
-        meleePenalty: true
+        meleePenalty: true  // -1 damage when used in melee
     }
-
 };

@@ -1,6 +1,6 @@
 {
-  "id": "best-left-buried",
-  "title": "Best Left Buried",
+  "id": "best-left-buried_V3",
+  "title": "Best Left Buried V3",
   "description": "Best Left Buried system (Foundry V13 compatible).",
   "version": "0.4.1",
   
@@ -32,7 +32,7 @@
   },
 
   "scripts": [],
-  "esmodules": ["module/main.js"],
+  "esmodules": ["module/system-init.js"],
   "styles": ["styles/system.css"],
   "packs": [],
 
