@@ -1,0 +1,132 @@
+/* styles/responsive/breakpoints.css - Responsive design breakpoints */
+
+/* Desktop (default styles apply) */
+
+/* Tablet landscape */
+@media (max-width: 1200px) {
+    .best-left-buried.application {
+        min-width: 800px;
+    }
+    
+    .best-left-buried .sheet-layout {
+        min-width: 780px;
+    }
+    
+    .best-left-buried .sheet-main {
+        min-width: 760px;
+    }
+    
+    .best-left-buried .character-info {
+        min-width: 500px;
+    }
+}
+
+/* Tablet portrait */
+@media (max-width: 1024px) {
+    .blb-external-tabs {
+        display: none !important;
+    }
+    
+    .best-left-buried.application .sheet-tabs {
+        display: flex !important;
+        position: static;
+        transform: none;
+        width: 100%;
+        height: auto;
+        border-bottom: 2px solid var(--color-border);
+        padding: var(--spacing-lg) 0;
+        flex-direction: row;
+        justify-content: center;
+        background: var(--color-bg-secondary);
+    }
+    
+    .best-left-buried.application .sheet-tabs .item {
+        transform: none;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        margin: 0 var(--spacing-sm);
+        padding: var(--spacing-md) var(--spacing-lg);
+        font-size: 0.9em;
+        background: var(--color-bg-tertiary);
+        color: var(--color-text-primary);
+    }
+    
+    .best-left-buried .main-stats-row {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .best-left-buried .weapons-table .table-header,
+    .best-left-buried .weapons-table .table-row {
+        grid-template-columns: 25px 30px 1fr 80px 50px 60px 60px 60px 40px 70px 25px;
+    }
+    
+    .best-left-buried .armor-table .table-header,
+    .best-left-buried .armor-table .table-row {
+        grid-template-columns: 25px 30px 1fr 80px 50px 40px 70px;
+    }
+    
+    .best-left-buried .loot-table .table-header,
+    .best-left-buried .loot-table .table-row {
+        grid-template-columns: 25px 30px 1fr 40px 70px;
+    }
+}
+
+/* Mobile landscape */
+@media (max-width: 768px) {
+    .best-left-buried .character-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .best-left-buried .character-portrait {
+        width: 60px;
+        height: 80px;
+    }
+    
+    .best-left-buried .main-stats-row {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-md);
+    }
+    
+    .best-left-buried .info-row {
+        flex-direction: column;
+        gap: var(--spacing-md);
+        text-align: center;
+    }
+    
+    .best-left-buried .list-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-md);
+    }
+    
+    .best-left-buried .item-controls {
+        align-self: flex-end;
+    }
+    
+    .best-left-buried .weapons-table .table-header,
+    .best-left-buried .weapons-table .table-row {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-sm);
+    }
+    
+    .best-left-buried .armor-table .table-header,
+    .best-left-buried .armor-table .table-row {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-sm);
+    }
+    
+    .best-left-buried .loot-table .table-header,
+    .best-left-buried .loot-table .table-row {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-sm);
+    }
+}
+
+/* Mobile portrait */
+@media (max-width: 600px) {
+    .best-left-buried .main-stats-row {
+        grid-template-columns: 1fr;
+    }
+}

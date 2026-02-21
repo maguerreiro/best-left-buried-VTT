@@ -1,0 +1,29 @@
+/* styles/elements/dice-display.css - Dice roll result display */
+
+.dice-results-box {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    justify-content: center;
+}
+
+.dice-result-box {
+    border: 1px solid #7a7971;
+    border-radius: var(--radius-sm);
+    padding: 0;
+    background: rgba(255, 255, 240, 0.8);
+    color: #444444;
+    font-weight: bold;
+    font-size: 1.2em;
+    height: 30px;
+    min-width: 30px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dice-result-box.discarded {
+    opacity: 0.5;
+    text-decoration: line-through;
+}

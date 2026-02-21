@@ -1,0 +1,364 @@
+/* styles/components/tables.css - Table layouts for weapons, armor, loot */
+
+/* ========================================
+   SHARED TABLE STYLES
+   ======================================== */
+
+.best-left-buried .table-section {
+    margin-bottom: var(--spacing-xxl);
+    margin-left: calc(var(--spacing-xl) * -1);
+    margin-right: -25px;
+}
+
+.best-left-buried .table-section h3 {
+    font-size: var(--font-size-large);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    font-weight: var(--font-weight-semibold);
+}
+
+.best-left-buried .table-header {
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-small);
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    align-items: center;
+    line-height: 1;
+    background: var(--color-bg-tertiary);
+    border-bottom: 2px solid var(--color-border);
+}
+
+.best-left-buried .table-row {
+    align-items: center;
+    border-bottom: 1px solid var(--color-border-light);
+    transition: background-color var(--transition-base);
+    font-size: 0.9em;
+}
+
+.best-left-buried .table-row:last-child {
+    border-bottom: none;
+}
+
+.best-left-buried .table-row:hover {
+    background: var(--color-bg-tertiary);
+}
+
+/* ========================================
+   WEAPONS TABLE
+   ======================================== */
+
+.best-left-buried .weapons-table {
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    overflow: hidden;
+}
+
+.best-left-buried .weapons-table .table-header {
+    display: grid;
+    grid-template-columns: 25px 30px 1fr 110px 60px 80px 80px 80px 50px 90px 30px;
+    gap: var(--spacing-md);
+    padding: var(--spacing-xs) var(--spacing-lg);
+    position: relative;
+    bottom: -2px;
+}
+
+/* original
+.best-left-buried .weapons-table .table-header {
+    display: grid;
+    grid-template-columns: 25px 30px 1fr 110px 60px 80px 80px 80px 50px 90px 30px; 
+    gap: 8px;
+    padding: 2px 12px;
+    background: var(--bg-tertiary);
+    border-bottom: 2px solid var(--border-color);
+    font-weight: 600;
+    font-size: 0.85em;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    align-items: center; 
+    line-height: 1;
+    position: relative;
+    bottom: -2px;
+} 
+*/
+
+.best-left-buried .weapons-table .table-row {
+    display: grid;
+    grid-template-columns: 25px 30px 1fr 110px 60px 80px 80px 80px 50px 90px 30px;
+    gap: var(--spacing-md);
+    padding: 6px var(--spacing-lg);
+}
+
+/* original
+.best-left-buried .weapons-table .table-row {
+    display: grid;
+    grid-template-columns: 25px 30px 1fr 110px 60px 80px 80px 80px 50px 90px 30px; 
+    gap: 8px;
+    align-items: center;
+    padding: 6px 12px;
+    border-bottom: 1px solid var(--border-light);
+    transition: background-color 0.2s ease;
+    font-size: 0.9em;
+}
+*/
+
+/* ========================================
+   ARMOR TABLE
+   ======================================== */
+
+.best-left-buried .armor-table {
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    overflow: hidden;
+}
+
+.best-left-buried .armor-table .table-header {
+    display: grid;
+    grid-template-columns: 25px 30px 1fr 4fr 110px 60px 50px 30px;
+    gap: var(--spacing-md);
+    padding: 6px var(--spacing-lg);
+    min-height: 32px;
+    box-sizing: border-box;
+}
+
+
+/* original
+.best-left-buried .armor-table .table-header {
+    display: grid;
+    grid-template-columns: 25px 30px 1fr 4fr 110px 60px 50px 30px;
+    gap: 8px;
+    padding: 6px 12px;
+    background: var(--bg-tertiary);
+    border-bottom: 2px solid var(--border-color);
+    font-weight: 600;
+    font-size: 0.85em;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    align-items: center; 
+    line-height: 1;
+    position: relative;    
+    min-height: 32px;
+    box-sizing: border-box;
+}
+*/
+
+.best-left-buried .armor-table .table-row {
+    display: grid;
+    grid-template-columns: 25px 30px 1fr 4fr 110px 60px 50px 30px;
+    gap: var(--spacing-md);
+    padding: 6px var(--spacing-lg);
+    min-height: 32px;
+    box-sizing: border-box;
+}
+
+/* original
+.best-left-buried .armor-table .table-row {
+    display: grid;
+    grid-template-columns: 25px 30px 1fr 4fr 110px 60px 50px 30px;
+    gap: 8px;
+    padding: 6px 12px;
+    border-bottom: 1px solid var(--border-light);
+    transition: background-color 0.2s ease;
+    font-size: 0.9em;
+    min-height: 32px;
+    box-sizing: border-box;
+}
+*/
+
+.best-left-buried .armor-table .table-header > div,
+.best-left-buried .armor-table .table-row > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    line-height: 1;
+}
+
+/* ========================================
+   LOOT TABLE
+   ======================================== */
+
+.best-left-buried .loot-table {
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    overflow: hidden;
+}
+
+.best-left-buried .loot-table .table-header {
+    display: grid;
+    grid-template-columns: 25px 30px 1fr 4fr 110px 60px 50px 30px;
+    gap: var(--spacing-md);
+    padding: 6px var(--spacing-lg);
+    min-height: 32px;
+    box-sizing: border-box;
+}
+
+/* original
+.best-left-buried .loot-table .table-header {
+    display: grid;
+    grid-template-columns: 25px 30px 1fr 4fr 110px 60px 50px 30px;
+    gap: 8px;
+    padding: 6px 12px;
+    background: var(--bg-tertiary);
+    border-bottom: 2px solid var(--border-color);
+    font-weight: 600;
+    font-size: 0.85em;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    align-items: center; 
+    line-height: 1;
+    position: relative;    
+    min-height: 32px;
+    box-sizing: border-box;
+}
+*/
+
+.best-left-buried .loot-table .table-row {
+    display: grid;
+    grid-template-columns: 25px 30px 1fr 4fr 110px 60px 50px 30px;
+    gap: var(--spacing-md);
+    padding: 6px var(--spacing-lg);
+    min-height: 32px;
+    box-sizing: border-box;
+}
+
+/* original
+.best-left-buried .loot-table .table-row {
+    display: grid;
+    grid-template-columns: 25px 30px 1fr 4fr 110px 60px 50px 30px;
+    gap: 8px;
+    padding: 6px 12px;
+    border-bottom: 1px solid var(--border-light);
+    transition: background-color 0.2s ease;
+    font-size: 0.9em;
+    min-height: 32px;
+    box-sizing: border-box;
+}
+*/
+
+.best-left-buried .loot-table .table-header > div,
+.best-left-buried .loot-table .table-row > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    line-height: 1;
+}
+
+/* ========================================
+   TABLE COLUMN STYLES
+   ======================================== */
+
+.best-left-buried .col-equip {
+    display: flex;
+    justify-content: center;
+}
+
+.best-left-buried .col-equip input[type="checkbox"] {
+    transform: scale(1.1);
+    margin: 0;
+}
+
+/* original
+.best-left-buried .col-controls input[type="checkbox"] {
+    transform: scale(1.1);
+    margin: 0;
+}
+*/
+
+.best-left-buried .col-icon {
+    display: flex;
+    justify-content: center;
+}
+
+.best-left-buried .col-name {
+    text-align: left;
+    justify-self: start;
+    font-weight: var(--font-weight-medium);
+}
+
+.best-left-buried .col-type,
+.best-left-buried .col-range,
+.best-left-buried .col-stat,
+.best-left-buried .col-damage,
+.best-left-buried .col-initiative,
+.best-left-buried .col-armor,
+.best-left-buried .col-slots,
+.best-left-buried .col-value {
+    text-align: center;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-small);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--input-height-sm);
+}
+
+/* original
+.best-left-buried .col-type,
+.best-left-buried .col-range,
+.best-left-buried .col-stat,
+.best-left-buried .col-damage,
+.best-left-buried .col-initiative {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.85em;
+}
+
+.best-left-buried .col-value {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.85em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 20px;
+}
+*/
+
+.best-left-buried .col-actions {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-xs);
+}
+
+.best-left-buried .col-delete {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 6px;
+    margin-right: 6px;
+    width: var(--button-height-base);
+    height: var(--button-height-base);
+}
+
+/* original
+.best-left-buried .col-delete {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 6px;
+    margin-right: 6px;
+    width: 24px;
+    height: 24px;
+}
+*/
+
+
+.best-left-buried .item-description {
+    text-justify: inter-word;
+    text-align: justify;
+    justify-self: start;
+    font-family: var(--font-family-secondary);
+    font-style: normal;
+    font-size: 1em;
+    color: var(--color-text-secondary);
+    text-transform: none;
+}

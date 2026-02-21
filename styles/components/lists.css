@@ -1,0 +1,74 @@
+/* styles/components/lists.css - List layouts for advancements, consequences */
+
+.best-left-buried .list-section {
+    margin-bottom: var(--spacing-xxl);
+    margin-left: calc(var(--spacing-xl) * -1);
+    margin-right: -25px;
+}
+
+.best-left-buried .list-section h3 {
+    font-size: var(--font-size-large);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    font-weight: var(--font-weight-semibold);
+}
+
+.best-left-buried .items-list {
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    overflow: hidden;
+}
+
+.best-left-buried .list-item {
+    display: grid;
+    grid-template-columns: 30px 1fr 3fr 60px;
+    align-items: center;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-bottom: 1px solid var(--color-border-light);
+    transition: background-color var(--transition-base);
+}
+
+.best-left-buried .list-item:last-child {
+    border-bottom: none;
+}
+
+.best-left-buried .list-item:hover {
+    background: var(--color-bg-tertiary);
+}
+
+.best-left-buried .item-name {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    cursor: pointer;
+    transition: color var(--transition-base);
+    text-align: left;
+}
+
+.best-left-buried .item-name:hover {
+    color: var(--color-accent-primary);
+}
+
+.best-left-buried .item-controls {
+    display: flex;
+    gap: 6px;
+    justify-content: flex-end;
+}
+
+.best-left-buried .consequence-uses-display {
+    width: var(--button-height-base);
+    height: var(--button-height-base);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-accent-primary);
+    background: var(--color-bg-tertiary);
+    color: var(--color-accent-primary);
+    border-radius: var(--radius-md);
+    font-weight: var(--font-weight-semibold);
+    font-size: 0.9em;
+}

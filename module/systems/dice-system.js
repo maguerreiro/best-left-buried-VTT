@@ -56,7 +56,8 @@ export class DiceSystem {
       return null;
     }
     
-    const attackAttribute = weaponProperties.attackStat;
+    // Check for custom attack stat first, then use weapon type default
+    const attackAttribute = weapon.system.customAttackStat || weaponProperties.attackStat;
     const attackValue = character.system[attackAttribute + "Total"] || character.system[attackAttribute]?.base || 0;
     
     // Calculate total damage modifier
@@ -68,8 +69,8 @@ export class DiceSystem {
     // Execute the roll
     const roll = await new Roll(formula).evaluate();
     
-    // Generate and send chat message
-    const messageContent = await this._buildWeaponAttackMessage(roll, rollMode);
+    // Generate and send chat message (include note if present)
+    const messageContent = await this._buildWeaponAttackMessage(roll, rollMode, weapon.system.note);
     
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: character }),
@@ -155,15 +156,18 @@ export class DiceSystem {
    * @private
    */
   static _calculateWeaponDamage(weapon, weaponProperties) {
-    let damage = weaponProperties.damageMod || 0;
+    // Check for custom damage mod first, then use weapon type default
+    let damage = (weapon.system.customDamageMod !== null && weapon.system.customDamageMod !== undefined)
+      ? weapon.system.customDamageMod
+      : (weaponProperties.damageMod || 0);
     
-    // Apply two-handed bonus
-    if (weapon.system.isTwoHanded && weaponProperties.twoHandedBonus) {
+    // Apply two-handed bonus (only if not using custom damage)
+    if (weapon.system.isTwoHanded && weaponProperties.twoHandedBonus && weapon.system.customDamageMod === null) {
       damage += 1;
     }
     
-    // Apply melee penalty for thrown weapons
-    if (weapon.system.inMelee && weaponProperties.meleePenalty) {
+    // Apply melee penalty for thrown weapons (only if not using custom damage)
+    if (weapon.system.inMelee && weaponProperties.meleePenalty && weapon.system.customDamageMod === null) {
       damage -= 1;
     }
     
@@ -204,10 +208,12 @@ export class DiceSystem {
    * Build HTML for weapon attack chat message
    * @private
    */
-  static async _buildWeaponAttackMessage(roll, rollMode) {
+  static async _buildWeaponAttackMessage(roll, rollMode, note) {
     const diceResults = this._extractDiceResults(roll, rollMode);
     const diceHtml = this._formatDiceResultsHtml(diceResults);
     const tooltip = await roll.getTooltip();
+    
+    const noteHtml = note ? `<div style="margin-top: 8px; font-style: italic; color: #b0b0b0;">${note}</div>` : '';
     
     return `
       <div class="dice-roll">
@@ -217,6 +223,7 @@ export class DiceSystem {
             ${diceHtml}
           </h4>
           <div class="dice-tooltip">${tooltip}</div>
+          ${noteHtml}
         </div>
       </div>
     `;

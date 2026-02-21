@@ -1,0 +1,331 @@
+/* styles/components/forms.css - Form inputs and controls */
+
+/* ========================================
+   TEXT INPUTS & SELECTS
+   ======================================== */
+
+.best-left-buried input[type="text"],
+.best-left-buried input[type="number"],
+.best-left-buried select,
+.best-left-buried textarea {
+    border: 1px solid var(--color-border);
+    padding: 6px 8px;
+    border-radius: var(--radius-md);
+    background: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    font-family: inherit;
+}
+
+.best-left-buried input[type="text"]:focus,
+.best-left-buried input[type="number"]:focus,
+.best-left-buried select:focus,
+.best-left-buried textarea:focus {
+    outline: none;
+    border-color: var(--color-accent-primary);
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.25);
+}
+
+/* ========================================
+   FORM GROUPS
+   ======================================== */
+
+.best-left-buried .form-group {
+    margin-bottom: var(--spacing-xl);
+}
+
+.best-left-buried .form-group label {
+    display: block;
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: var(--spacing-md);
+    color: var(--color-text-primary);
+    font-size: 1em;
+}
+
+.best-left-buried .form-group label input[type="checkbox"] {
+    margin-right: var(--spacing-md);
+    width: auto;
+    max-width: none;
+}
+
+.best-left-buried .form-group small {
+    display: block;
+    font-size: var(--font-size-small);
+    color: var(--color-text-secondary);
+    margin-top: var(--spacing-sm);
+}
+
+.best-left-buried .form-group select,
+.best-left-buried .form-group input[type="text"],
+.best-left-buried .form-group input[type="number"] {
+    width: 100%;
+    max-width: 350px;
+    padding: var(--spacing-md);
+    border: 2px solid var(--color-border);
+    background: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-base);
+    transition: border-color var(--transition-base);
+}
+
+.best-left-buried .form-group select:focus,
+.best-left-buried .form-group input[type="text"]:focus,
+.best-left-buried .form-group input[type="number"]:focus {
+    outline: none;
+    border-color: var(--color-accent-primary);
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.25);
+}
+
+/* ========================================
+   PROPERTY ROWS (Label + Input pairs)
+   ======================================== */
+
+.best-left-buried .property-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+    gap: var(--spacing-lg);
+}
+
+.best-left-buried .property-row label {
+    display: inline;
+    min-width: 140px;
+    margin-bottom: 0;
+    font-weight: var(--font-weight-semibold);
+}
+
+.best-left-buried .property-row input,
+.best-left-buried .property-row select {
+    flex: 1;
+    max-width: 200px;
+    padding: var(--spacing-md);
+    border: 2px solid var(--color-border);
+    background: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-base);
+    transition: border-color var(--transition-base);
+}
+
+.best-left-buried .property-row select {
+    cursor: pointer;
+}
+
+.best-left-buried .property-row input:focus,
+.best-left-buried .property-row select:focus {
+    outline: none;
+    border-color: var(--color-accent-primary);
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.25);
+}
+
+/* ========================================
+   CHECKBOXES
+   ======================================== */
+
+.best-left-buried.sheet.item .form-group input[type="checkbox"] {
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    width: 18px !important;
+    height: 18px !important;
+    border: 2px solid var(--color-border) !important;
+    border-radius: var(--radius-md) !important;
+    background: #666 !important;
+    margin-right: var(--spacing-md) !important;
+    position: relative !important;
+    cursor: pointer !important;
+    transition: all var(--transition-base) !important;
+}
+
+.best-left-buried.sheet.item .form-group input[type="checkbox"]:checked {
+    background: var(--color-accent-primary) !important;
+    border-color: var(--color-accent-secondary) !important;
+}
+
+.best-left-buried.sheet.item .form-group input[type="checkbox"]:checked::after {
+    content: '✓' !important;
+    position: absolute !important;
+    top: -2px !important;
+    left: 2px !important;
+    color: white !important;
+    font-size: 12px !important;
+    font-weight: bold !important;
+}
+
+.best-left-buried.sheet.item .form-group input[type="checkbox"]:not(:checked)::before {
+    display: none;
+}
+
+.best-left-buried.sheet.item .form-group input[type="checkbox"]:not(:checked) {
+    background: #666666;
+    border-color: #555555;
+}
+
+/* ========================================
+   USES INPUT (Current/Max with separator)
+   ======================================== */
+
+.best-left-buried .uses-input {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    max-width: 350px;
+}
+
+.best-left-buried .uses-current,
+.best-left-buried .uses-max {
+    width: 60px !important;
+    max-width: 60px !important;
+    height: 32px;
+    padding: 6px !important;
+    text-align: center;
+    border: 2px solid var(--color-border) !important;
+    background: var(--color-bg-primary) !important;
+    color: var(--color-text-primary) !important;
+    border-radius: var(--radius-sm) !important;
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-base);
+    box-sizing: border-box;
+}
+
+.best-left-buried .uses-current:focus,
+.best-left-buried .uses-max:focus {
+    outline: none !important;
+    border-color: var(--color-accent-primary) !important;
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.25) !important;
+}
+
+.best-left-buried .uses-separator {
+    color: var(--color-text-secondary);
+    font-size: 1.1em;
+    font-weight: var(--font-weight-semibold);
+}
+
+.best-left-buried .uses-group {
+    background: var(--color-bg-tertiary);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+}
+
+/* ========================================
+   INFO INPUTS (Character header inputs)
+   ======================================== */
+
+.best-left-buried .info-item input[type="text"],
+.best-left-buried .info-item input[type="number"] {
+    padding: var(--spacing-xs) 6px;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    border-radius: var(--radius-md);
+    font-size: 0.9em;
+    height: var(--input-height-sm);
+    box-sizing: border-box;
+    width: var(--stat-column-width);
+    height: var(--input-height-base);
+}
+
+/* original 
+.best-left-buried .info-item input[type="text"],
+.best-left-buried .info-item input[type="number"] {
+    padding: 4px 6px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border-radius: 3px;
+    font-size: 0.9em;
+}
+*/
+
+.best-left-buried .character-name {
+    font-size: var(--font-size-header);
+    font-weight: bold;
+    border: 2px solid var(--color-border);
+    padding: 6px;
+    background: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    border-radius: var(--radius-md);
+    width: 100%;
+}
+
+/* ========================================
+   SPLIT & SINGLE INPUTS
+   ======================================== */
+
+.best-left-buried .split-input {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.best-left-buried .split-left,
+.best-left-buried .split-right {
+    width: var(--stat-column-width);
+    height: var(--input-height-base);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    border-radius: var(--radius-sm);
+    text-align: center;
+    font-size: 0.9em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.best-left-buried .split-left.encumbrance-current,
+.best-left-buried .split-right.encumbrance-max {
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border-light);
+    font-weight: var(--font-weight-semibold);
+}
+
+.best-left-buried .single-input {
+    width: var(--stat-column-width);
+    height: var(--input-height-base);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    border-radius: var(--radius-sm);
+    text-align: center;
+    font-size: 0.9em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+/* ========================================
+   STAT ITEM INPUTS
+   ======================================== */
+
+.best-left-buried .stat-item input {
+    width: var(--stat-column-width);
+    height: var(--input-height-base);
+    padding: var(--spacing-sm);
+    text-align: center;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    border-radius: var(--radius-md);
+    font-weight: var(--font-weight-semibold);
+}
+
+.best-left-buried .stat-item span {
+    width: var(--stat-column-width);
+    height: var(--input-height-base);
+    padding: var(--spacing-sm);
+    text-align: center;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    border-radius: var(--radius-md);
+    font-weight: var(--font-weight-semibold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

@@ -1,0 +1,115 @@
+/* styles/core/variables.css - Design tokens and CSS custom properties */
+:root {
+
+    /* Typography */
+    --font-family-primary: 'Cinzel', serif;
+    --font-family-secondary: 'Calibri', sans-serif;
+    
+    --font-size-base: 0.95em;
+    --font-size-small: 0.85em;
+    --font-size-large: 1.2em;
+    --font-size-header: 1.4em;
+    
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    
+    /* Spacing */
+    --spacing-xs: 2px;
+    --spacing-sm: 4px;
+    --spacing-md: 8px;
+    --spacing-lg: 12px;
+    --spacing-xl: 15px;
+    --spacing-xxl: 20px;
+    
+    /* Border Radius */
+    --radius-sm: 2px;
+    --radius-md: 3px;
+    --radius-lg: 5px;
+    
+    /* Transitions */
+    --transition-fast: 0.15s ease;
+    --transition-base: 0.2s ease;
+    
+    /* Z-Index Layers */
+    --z-base: 1;
+    --z-dropdown: 10;
+    --z-overlay: 100;
+    --z-modal: 1000;
+    
+    /* Component Sizes */
+    --input-height-sm: 20px;
+    --input-height-base: 30px;
+    --input-height-lg: 40px;
+    
+    --button-height-sm: 20px;
+    --button-height-base: 24px;
+    --button-height-lg: 32px;
+    
+    --icon-size-sm: 20px;
+    --icon-size-base: 24px;
+    --icon-size-lg: 64px;
+    
+    /* Layout */
+    --sheet-width: 870px;
+    --sheet-height: 700px;
+    --stat-column-width: 40px;
+            
+    --color-success: #4caf50;
+    --color-warning: #ff9800;
+    --color-danger: #f44336;
+    
+    --color-upper-hand: #77DD77;
+    --color-against-odds: #FF6B6B;
+
+    /* Color Palette */
+    --color-bg-primary: #1e1e1e;
+    --color-bg-secondary: #2a2a2a;
+    --color-bg-tertiary: #353535;
+    
+    --color-text-primary: #e0e0e0;
+    --color-text-secondary: #b0b0b0;
+    
+    --color-accent-primary: #4a90e2;
+    --color-accent-secondary: #357abd;
+    
+    --color-border: #555;
+    --color-border-light: #666;
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+    --shadow-md: 0 2px 4px rgba(0,0,0,0.3);
+    --shadow-lg: 0 4px 8px rgba(0,0,0,0.4);
+    --shadow-xl: 0 4px 12px rgba(0,0,0,0.6);
+    
+}
+
+
+.themed.theme-light {
+    /* Backgrounds: Parchment tones instead of pure grey */
+    --color-bg-primary: #f3e9d9;   /* Warmer parchment base */
+    --color-bg-secondary: #e4d6b7; /* Slightly darker for headers/groups */
+    --color-bg-tertiary: #dbd5c5;  /* Deepest depth for wells/slots */
+    
+    /* Text: Deep "Iron Ink" for better readability */
+    --color-text-primary: #000000;   /* Very dark brown-grey (easier on eyes than black) */
+    --color-text-secondary: #1d1a1a; /* Muted stone grey */
+    
+    /* Accents: "Old Gold" and "Burnt Sienna" */
+    --color-accent-primary: #967e62;   /* Deeper, more saturated ochre */
+    --color-accent-secondary: #bba78d; /* Soft leather tone */
+    
+    /* Borders & Lines */
+    --color-border: #b8b09d;       /* Muted parchment edge */
+    --color-border-light: #d1c9b8;
+    
+    --color-upper-hand: #00dd00;
+    --color-against-odds: #ff0000;
+
+    /* Shadows: Softened for light backgrounds */
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.1);
+    --shadow-md: 0 2px 4px rgba(44, 41, 36, 0.15);
+    --shadow-lg: 0 4px 8px rgba(44, 41, 36, 0.2);
+    --shadow-xl: 0 4px 12px rgba(44, 41, 36, 0.25);
+}

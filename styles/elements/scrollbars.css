@@ -1,0 +1,32 @@
+/* styles/elements/scrollbars.css - Custom scrollbar styling */
+
+.best-left-buried .sheet-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.best-left-buried .sheet-container::-webkit-scrollbar-track {
+    border-radius: var(--radius-sm);
+    background: var(--color-bg-secondary);
+}
+
+.best-left-buried .sheet-container::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: var(--radius-sm);
+}
+
+.best-left-buried .sheet-container::-webkit-scrollbar-thumb:hover {
+    background: var(--color-accent-primary);
+}
+
+.best-left-buried .description-group .editor.ProseMirror::-webkit-scrollbar {
+    width: 6px;
+}
+
+.best-left-buried .description-group .editor.ProseMirror::-webkit-scrollbar-track {
+    background: var(--color-bg-secondary);
+}
+
+.best-left-buried .description-group .editor.ProseMirror::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: var(--radius-md);
+}

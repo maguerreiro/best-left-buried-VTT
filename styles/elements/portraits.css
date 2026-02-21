@@ -1,0 +1,26 @@
+/* styles/elements/portraits.css - Character portrait styling */
+
+.best-left-buried .character-portrait {
+    width: 80px;
+    height: 100px;
+    object-fit: cover;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-base);
+    background: var(--color-bg-tertiary);
+    position: relative;
+}
+
+.best-left-buried .character-portrait:hover {
+    border-color: var(--color-accent-primary);
+    box-shadow: var(--shadow-lg);
+    transform: scale(1.02);
+}
+
+.best-left-buried .character-portrait[src*="mystery-man"] {
+    background: var(--color-bg-tertiary);
+    border-style: dashed;
+    opacity: 0.8;
+}

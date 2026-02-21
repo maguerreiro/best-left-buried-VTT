@@ -1,0 +1,33 @@
+/* styles/core/base.css - Base element styling */
+
+.best-left-buried {
+    font-family: var(--font-family-primary);
+    background: var(--color-bg-primary);
+    color: var(--color-text-primary);
+}
+
+.best-left-buried.application {
+    background: var(--color-bg-primary);
+    border: 2px solid var(--color-border);
+    box-shadow: var(--shadow-xl);
+    height: 100%;
+    width: 100%;
+}
+
+.best-left-buried.application .window-header {
+    background: rgba(0,0,0,0.6);
+}
+
+/* Hide internal tabs (external tabs are used instead) */
+.best-left-buried.application .sheet-tabs {
+    display: none;
+}
+
+/* Tab content */
+.best-left-buried .tab {
+    display: none;
+}
+
+.best-left-buried .tab.active {
+    display: block;
+}

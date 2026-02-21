@@ -1,0 +1,61 @@
+/* styles/layout/character-header.css - Character sheet header section */
+
+.best-left-buried .character-header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-xl);
+    padding: var(--spacing-xl);
+    border-bottom: 2px solid var(--color-border);
+    background: var(--color-bg-secondary);
+    margin: calc(var(--spacing-xl) * -1) -25px var(--spacing-xl) calc(var(--spacing-xl) * -1);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.best-left-buried .portrait-section {
+    display: flex;
+    align-items: center;
+}
+
+.best-left-buried .character-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    flex: 1;
+    min-width: 600px;
+}
+
+.best-left-buried .info-char {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    flex: 1;
+}
+
+.best-left-buried .info-char label {
+    font-size: 0.9em;
+    color: var(--color-text-secondary);
+    font-weight: var(--font-weight-medium);
+    margin-bottom: var(--spacing-xs);
+}
+
+.best-left-buried .info-row {
+    display: flex;
+    gap: var(--spacing-xl);
+    flex-wrap: nowrap;
+}
+
+.best-left-buried .info-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    flex: 1;
+    text-align: center;
+    align-items: center;
+}
+
+.best-left-buried .info-item label {
+    font-size: 0.9em;
+    color: var(--color-text-secondary);
+    font-weight: var(--font-weight-medium);
+    margin-bottom: var(--spacing-xs);
+}

@@ -1,0 +1,181 @@
+/* styles/components/buttons.css - Button styles */
+
+/* ========================================
+   BASE BUTTON
+   ======================================== */
+
+.best-left-buried button {
+    padding: 6px var(--spacing-lg);
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+    cursor: pointer;
+    font-weight: var(--font-weight-medium);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-base);
+}
+
+.best-left-buried button:hover {
+    background: var(--color-accent-primary);
+    border-color: var(--color-accent-secondary);
+}
+
+/* ========================================
+   COUNTER BUTTONS (+ / -)
+   ======================================== */
+
+.best-left-buried .counter-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.best-left-buried .counter-button {
+    width: var(--button-height-sm);
+    height: var(--button-height-sm);
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-primary);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    font-size: 0.8em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.best-left-buried .counter-button:hover {
+    background: var(--color-accent-primary);
+}
+
+.best-left-buried .counter-value {
+    width: var(--stat-column-width);
+    text-align: center;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    border-radius: var(--radius-sm);
+    font-size: 0.9em;
+}
+
+/* ========================================
+   ROLL BUTTONS (Dice icons)
+   ======================================== */
+
+.best-left-buried .roll-button,
+.best-left-buried .control-button {
+    width: var(--button-height-base);
+    height: var(--button-height-base);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-primary);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    font-size: 0.8em;
+}
+
+.best-left-buried .roll-button:hover,
+.best-left-buried .control-button:hover {
+    background: var(--color-accent-primary);
+    border-color: var(--color-accent-secondary);
+}
+
+.best-left-buried .control-button.delete:hover {
+    background: var(--color-danger);
+    border-color: #d32f2f;
+}
+
+/* ========================================
+   MINI ROLL BUTTONS (Weapon table)
+   ======================================== */
+
+.best-left-buried .roll-button-mini {
+    width: var(--button-height-base);
+    height: var(--button-height-base);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-primary);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    font-size: 0.8em;
+}
+
+.best-left-buried .roll-button-mini:hover {
+    background: var(--color-accent-primary);
+    border-color: var(--color-accent-secondary);
+}
+
+.best-left-buried button[data-action="rollWeaponKl2"] i {
+    color: var(--color-against-odds);
+}
+
+.best-left-buried button[data-action="rollWeaponKh2"] i {
+    color: var(--color-upper-hand);
+}
+
+/* ========================================
+   STAT ARROW BUTTONS
+   ======================================== */
+
+.best-left-buried .stat-label-button {
+    background: none;
+    border: none;
+    color: var(--color-text-secondary);
+    font-size: 0.9em;
+    font-weight: var(--font-weight-semibold);
+    text-transform: none;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-base);
+    font-family: inherit;
+    height: var(--button-height-base);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    white-space: nowrap;
+}
+
+.best-left-buried .stat-label-button:hover {
+    background: var(--color-accent-primary);
+    color: white;
+}
+
+.best-left-buried .stat-arrow {
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-primary);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    font-size: 0.7em;
+}
+
+.best-left-buried .stat-arrow:hover {
+    background: var(--color-accent-primary);
+    border-color: var(--color-accent-secondary);
+}
+
+.best-left-buried .stat-arrow[data-action="rollStatKl2"] i {
+    color: var(--color-against-odds);
+}
+
+.best-left-buried .stat-arrow[data-action="rollStatKh2"] i {
+    color: var(--color-upper-hand);
+}

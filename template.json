@@ -1,238 +1,111 @@
 {
   "Actor": {
     "types": ["character"],
-    "templates": {
-
     "character": {
-
-
-          "xp": {
-            "type": "Number",
-            "default": 0,
-            "min": 0
-          },
-
-          "attack": {
-            "type": "String",
-            "default": "1d6"
-          },
-
-          "brawn": {
-            "base": {
-              "type": "Number",
-              "default": 0
-            },
-
-            "bonus": {
-              "type": "Number", 
-              "default": 0
-            }
-          },
-
-
-          "wit": {
-            "base": {
-              "type": "Number",
-              "default": 0
-            }
-          },
-
-
-          "will": {
-            "base": {
-              "type": "Number",
-              "default": 0
-            }
-          },
-
-
-          "affluence": {
-            "base": {
-              "type": "Number",
-              "default": 10
-            },
-
-            "bonus": {
-              "type": "Number",
-              "default": 0
-            }
-          },
-
-
-          "vigour": {
-            "base": {
-              "type": "Number",
-              "default": 0
-            }
-          },
-
-
-          "grip": {
-            "base": {
-              "type": "Number",
-              "default": 4
-            },
-
-            "bonus": {
-              "type": "Number",
-              "default": 0
-            }
-          },
-
-
-          "health": {
-            "value": {
-              "type": "Number",
-              "default": 10
-            },
-
-            "max": {
-              "type": "Number", 
-              "default": 10
-            }
-          },
-
-          
-          "armor": {
-            "base": {
-              "type": "Number",
-              "default": 7
-            }
-          },
-
-          "race": {
-            "type": "String",
-            "default": ""
-          },
-
-          "archetype": {
-            "type": "String",
-            "default": ""
-          },
-
-          "advquantity": {
-            "type": "Number",
-            "default": 10,
-            "min": 0
-          }
-        }
+      "portrait": "",
+      "attack": "1d6",
+      
+      "brawn": {
+        "base": 0,
+        "bonus": 0
       },
-
+      
+      "wit": {
+        "base": 0,
+        "bonus": 0
+      },
+      
+      "will": {
+        "base": 0,
+        "bonus": 0
+      },
+      
+      "affluence": {
+        "base": 10,
+        "bonus": 0
+      },
+      
+      "observation": {
+        "base": 0,
+        "bonus": 0
+      },
+      
+      "vigour": {
+        "current": 10,
+        "max": 10
+      },
+      
+      "grip": {
+        "base": 4
+      },
+      
+      "encumbrance": {
+        "current": 0,
+        "max": 12
+      },
+      
+      "armor": {
+        "base": 7
+      },
+      
+      "xp": 0,
+      "advancement": 0,
+      
+      "race": "",
+      "archetype": ""
+    }
+  },
+  
   "Item": {
     "types": ["weapon", "armor", "advancement", "consequence", "loot"],
-    "templates": {
-      "baseItem": {
-        "description": {
-          "type": "String",
-          "default": ""
-        }
-      }
-    },
-
-
+    
     "weapon": {
-      "templates": ["baseItem"],
-      "weaponType": {
-        "type": "String",
-        "default": "hand"
-      },
-      "isTwoHanded": {
-        "type": "Boolean",
-        "default": false
-      },
-      "inMelee": {
-        "type": "Boolean",
-        "default": false
-      },
-      "equipped": {
-        "type": "Boolean",
-        "default": false
-      },
-      "slotValue": {
-        "type": "Number",
-        "default": 1
-      },
-      "customDamageMod": {
-        "type": "Number",
-        "default": null
-      },
-      "customInitiative": {
-        "type": "Number",
-        "default": null
-      },
-      "customRange": {
-        "type": "String",
-        "default": null
-      },
-      "customAttackStat": {
-        "type": "String",
-        "default": null
-      }
+      "description": "",
+      "weaponType": "hand",
+      "isTwoHanded": false,
+      "inMelee": false,
+      "equipped": false,
+      "slotValue": 1,
+      "customDamageMod": null,
+      "customInitiative": null,
+      "customRange": null,
+      "customAttackStat": null,
+      "note": ""
     },
-
+    
     "armor": {
-      "templates": ["baseItem"],
-      "armorType": {
-        "type": "String",
-        "default": "none"
-      },
-
-      "equipped": {
-        "type": "Boolean",
-        "default": false
-      }
+      "description": "",
+      "armorType": "basic",
+      "equipped": false,
+      "slotValue": 1
     },
-
-
+    
     "advancement": {
-      "templates": ["baseItem"],
-      "rollFormula": {
-        "type": "String",
-        "default": "1d20"
-      },
-      "usesAttribute": {
-        "type": "String",
-        "default": "none"
-      },
-      "advancementType": {
-        "type": "String",
-        "default": "ability"
-      },
-      "equipped": {
-        "type": "Boolean",
-        "default": true
+      "description": "",
+      "rollFormula": "2d6",
+      "hasUses": false,
+      "uses": {
+        "current": 0,
+        "max": 0
       }
     },
-
+    
     "consequence": {
-      "templates": ["baseItem"],
-      "consequenceType": {
-        "type": "String",
-        "default": "injury"
-      },
-      "equipped": {
-        "type": "Boolean",
-        "default": false
+      "description": "",
+      "consequenceType": "injury",
+      "active": false,
+      "hasUses": false,
+      "uses": {
+        "current": 0,
+        "max": 0
       }
     },
-
+    
     "loot": {
-      "templates": ["baseItem"],
-      "value": {
-        "type": "Number",
-        "default": 0
-      },
-
-      "lootType": {
-        "type": "String",
-        "default": "misc"
-      },
-
-      "equipped": {
-        "type": "Boolean",
-        "default": false
-      }
+      "description": "",
+      "affluence": 0,
+      "slotValue": 1,
+      "quantity": 1
     }
   }
-}
 }

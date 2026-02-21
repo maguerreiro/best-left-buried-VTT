@@ -80,6 +80,12 @@ export class WeaponData extends foundry.abstract.TypeDataModel {
         required: false,
         initial: null,
         nullable: true
+      }),
+      
+      // Note displayed in chat message when weapon is used
+      note: new fields.StringField({
+        required: false,
+        initial: ""
       })
     };
   }
@@ -160,6 +166,30 @@ export class AdvancementData extends foundry.abstract.TypeDataModel {
       rollFormula: new fields.StringField({
         required: false,
         initial: "2d6"
+      }),
+      
+      // ===== USAGE TRACKING =====
+      
+      // Whether to track limited uses for this advancement
+      hasUses: new fields.BooleanField({
+        required: true,
+        initial: false
+      }),
+      
+      // Current and maximum uses (when hasUses is enabled)
+      uses: new fields.SchemaField({
+        current: new fields.NumberField({
+          required: true,
+          integer: true,
+          initial: 0,
+          min: 0,
+        }),
+        max: new fields.NumberField({
+          required: true,
+          integer: true,
+          initial: 0,
+          min: 0,
+        }),
       })
     };
   }
@@ -250,11 +280,19 @@ export class LootData extends foundry.abstract.TypeDataModel {
         min: 0
       }),
       
-      // Inventory slots occupied
+      // Inventory slots occupied (per item)
       slotValue: new fields.NumberField({
         required: true,
         initial: 1,
         min: 0
+      }),
+      
+      // Number of items (for stackable items)
+      quantity: new fields.NumberField({
+        required: true,
+        integer: true,
+        initial: 1,
+        min: 1
       })
     };
   }
