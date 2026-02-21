@@ -2,11 +2,17 @@
 
 Change log :
 
+<div></div>
 <span style="color:red">**2026-02-21*</span>
+
 - [x] Migration to v3
 - [x] New file structure
 - [x] Code modularized
 
+**Bugs**
+- [x] Fixed Encumbrance only updating after closing/opening sheet
+
+<div></div>
 <span style="color:red">**2026-02-15**</span>
 
 **Description editor:**
@@ -23,7 +29,7 @@ Change log :
 - [x] Fixed header position in equipment tab
 
 
-
+<div></div>
 <span style="color:red">**2026-02-10**</span>
 
 **Character sheet:**
