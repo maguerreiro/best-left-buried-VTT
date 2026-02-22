@@ -40,6 +40,7 @@ Change log :
 
 **Character sheet:**
 -  allow paragraphs in the descriptions (new line)
+- Added Prosemirror editor
 
 **Item sheets:**
 -  text editor (allow formatting) instead of multivarchar

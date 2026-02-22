@@ -63,26 +63,25 @@
     --color-upper-hand: #77DD77;
     --color-against-odds: #FF6B6B;
 
+    --color-accent-primary: #4a90e2;
+    --color-accent-secondary: #357abd;
+
     /* Color Palette */
     --color-bg-primary: #141414;
     --color-bg-secondary: #2a2a2a;
     --color-bg-tertiary: #1a1a1a;
     
-    --color-text-primary: #e0e0e0;
-    --color-text-secondary: #b0b0b0;
+    --color-text-primary: #f0e1d7;
+    --color-text-secondary: #eed2b7;
     
-    --color-accent-primary: #4a90e2;
-    --color-accent-secondary: #357abd;
-    
-    --color-border: #555;
-    --color-border-light: #666;
+    --color-border: #292929;
+    --color-border-light: #292929;
     
     /* Shadows */
     --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
     --shadow-md: 0 2px 4px rgba(0,0,0,0.3);
     --shadow-lg: 0 4px 8px rgba(0,0,0,0.4);
     --shadow-xl: 0 4px 12px rgba(0,0,0,0.6);
-    
 }
 
 

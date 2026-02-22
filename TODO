@@ -28,6 +28,8 @@ Weapons:
 - [ ] note box after initiative in the item sheet 
 - [ ] remove "in melee range" 
 - [ ] note under initiative. Note should appear in the roll chat. Note is not in the character sheet 
+- [ ] Throwing weapon - Range selection does not work
+- [ ] Takes long time to drop the weapon on the character sheet
 
 **Loot:**
 - [ ] add counter (number of items of the same loot)
