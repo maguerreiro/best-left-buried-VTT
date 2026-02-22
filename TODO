@@ -1,7 +1,6 @@
 
 ###### TO DO ######
 
-
 **Character sheet**
 Weapons:
 - [ ] add comment to character sheet for 2 handed
@@ -10,15 +9,7 @@ Weapons:
 - [ ] remove the 2 handed checkbox
 - [ ] after initiative in weapon sheet add text box with pre-loaded text but editable
 
-**Advancements sheet:**
-- [ ] Maximum and current of uses
-
-**Advancements:**
-- [ ] add uses counter 
-- [ ] custom formula does not format the roll accordingly (upper hand formula, in the roll does not scratch the dice)
-
 **Consequences and advancements:**
-- [ ] counter should be editable in the character sheet 
 - [ ] "Type" text box above description. Only appears in the item sheet.
 
 **Weapons:**

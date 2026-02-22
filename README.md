@@ -2,6 +2,16 @@
 
 Change log :
 
+# **2026-02-22**
+
+**Advancements sheet:**
+- Added maximum and current of uses
+- Add uses counter to the character sheet
+- Fixed custom formula not formatting the roll accordingly (upper hand formula, in the roll did not scratch the lowest dice)
+
+**Consequences and advancements:**
+- Counter is now editable in the character sheet 
+
 
 # **2026-02-21**
 

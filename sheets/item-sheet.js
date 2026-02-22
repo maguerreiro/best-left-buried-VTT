@@ -38,7 +38,7 @@ export class ItemSheet extends foundry.applications.api.HandlebarsApplicationMix
   /** @override */
   static PARTS = {
     form: {
-      template: "systems/best-left-buried/templates/item-v2.hbs"
+      template: "systems/best-left-buried_V3/templates/item.hbs"
     }
   };
 

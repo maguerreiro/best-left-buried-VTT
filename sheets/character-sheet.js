@@ -51,7 +51,7 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
   /** @override */
   static PARTS = {
     form: {
-      template: "systems/best-left-buried/templates/actor-v2.hbs"
+      template: "systems/best-left-buried_V3/templates/actor.hbs"
     }
   };
 
@@ -70,7 +70,8 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
     const doc = this.document;
     const src = doc.toObject();
     const rollData = doc.getRollData();
-  
+    const items = await this._prepareItems(doc.items);
+
     const context = {
       actor: doc,
       source: src,
@@ -79,8 +80,11 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
       WEAPON_TYPES,
       ARMOR_TYPES,
       CONSEQUENCE_TYPES,
-      items: await this._prepareItems(doc.items),
-      activeTab: this.activeTab
+      items: items, 
+      activeTab: this.activeTab,
+      // Alignment Logic: Check if ANY item in these specific lists has uses enabled
+      hasAnyAdvancementUses: items.advancement.some(i => i.system.hasUses === true),
+      hasAnyConsequenceUses: items.consequence.some(i => i.system.hasUses === true),
     };
   
     this._prepareArmor(context);

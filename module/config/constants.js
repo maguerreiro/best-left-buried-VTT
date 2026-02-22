@@ -91,8 +91,8 @@ export const ThemeColors = {
  */
 export const AssetPaths = {
   ICONS: {
-    WEAPON_ONE_HANDED: "systems/best-left-buried/icons/weapon_1_hand.svg",
-    WEAPON_TWO_HANDED: "systems/best-left-buried/icons/weapon_2_hand.svg",
+    WEAPON_ONE_HANDED: "systems/best-left-buried_V3/icons/weapon_1_hand.svg",
+    WEAPON_TWO_HANDED: "systems/best-left-buried_V3/icons/weapon_2_hand.svg",
     ITEM_GENERIC: "icons/svg/item-bag.svg"
   }
 };

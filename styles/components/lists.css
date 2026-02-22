@@ -60,52 +60,33 @@
     align-items: center;
 }
 
-.best-left-buried .list-item .uses-input {
+.best-left-buried .list-item .uses-input,
+.best-left-buried .list-item .uses-placeholder {
+    width: 25px;
+    min-width: 25px;
+    height: 24px;
     display: flex;
     align-items: center;
-    gap: 4px;
-    max-width: 80px;
+    justify-content: center;
+}
+
+/* The placeholder is invisible but preserves the layout width */
+.best-left-buried .list-item .uses-placeholder {
+    visibility: hidden;
+    pointer-events: none;
 }
 
 .best-left-buried .list-item .uses-current {
-    width: 35px !important;
-    max-width: 35px !important;
+    width: 25px !important;
+    max-width: 25px !important;
     height: 24px;
     padding: 2px 4px !important;
     text-align: center;
-    border: 1px solid var(--color-border) !important;
+    border: 1px solid var(--color-accent-secondary) !important;
     background: var(--color-bg-primary) !important;
-    color: var(--color-text-primary) !important;
+    color: var(--color-accent-primary) !important;
     border-radius: var(--radius-sm) !important;
     font-weight: var(--font-weight-semibold);
     font-size: 0.85em;
     box-sizing: border-box;
-}
-
-.best-left-buried .list-item .uses-separator {
-    color: var(--color-text-secondary);
-    font-size: 0.9em;
-    font-weight: var(--font-weight-semibold);
-}
-
-.best-left-buried .list-item .uses-max-display {
-    color: var(--color-text-secondary);
-    font-size: 0.85em;
-    font-weight: var(--font-weight-semibold);
-    min-width: 20px;
-    text-align: center;
-}
-
-.best-left-buried .consequence-uses-display {
-    width: var(--button-height-base);
-    height: var(--button-height-base);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid var(--color-accent-primary);
-    background: var(--color-bg-tertiary);
-    color: var(--color-accent-primary);
-    border-radius: var(--radius-md);
-    font-weight: var(--font-weight-semibold);
-    font-size: 0.9em;
 }
