@@ -21,7 +21,7 @@
             {{#if weaponProperties}}
             <div class="form-group">
                 <label>Weapon Properties</label>
-                <div style="background: var(--bg-tertiary); padding: 10px; border-radius: 5px; margin-top: 5px;">
+                <div style="background: var(--color-bg-tertiary); padding: 10px; border-radius: 5px; margin-top: 5px;">
                     <div class="property-row">
                         <label>Range:</label>
                         <select name="system.customRange">
@@ -141,6 +141,26 @@
                 <input type="text" name="system.rollFormula" value="{{system.rollFormula}}" placeholder="2d6"/>
                 <small>Dice formula for this advancement's roll (e.g., 2d6, 1d20, 3d6kh2)</small>
             </div>
+
+            <div class="form-group">
+                <label style="display: flex; align-items: center;">
+                    <input type="checkbox" name="system.hasUses" {{checked system.hasUses}} style="margin-right: 8px;"/>
+                    <span>Track Number of Uses</span>
+                </label>
+                <small>Enable this to track how many times this advancement can be used</small>
+            </div>
+
+            {{#if system.hasUses}}
+            <div class="form-group uses-group">
+                <label>Number of Uses</label>
+                <div class="uses-input">
+                    <input type="number" name="system.uses.current" value="{{system.uses.current}}" min="0" class="uses-current" placeholder="0"/>
+                    <span class="uses-separator">/</span>
+                    <input type="number" name="system.uses.max" value="{{system.uses.max}}" min="0" class="uses-max" placeholder="0"/>
+                </div>
+                <small>Current / Maximum uses for this advancement</small>
+            </div>
+            {{/if}}
 
             {{! Rich text editor for advancement description }}
             <div class="form-group description-group">

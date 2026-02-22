@@ -91,11 +91,14 @@ export class DiceSystem {
     const rollFormula = item.system.rollFormula || "2d6";
     const roll = await new Roll(rollFormula).evaluate();
     
-    const messageContent = await this._buildGenericRollMessage(roll);
+    // Determine roll mode from formula
+    const rollMode = this._detectRollModeFromFormula(rollFormula);
+    
+    const messageContent = await this._buildGenericRollMessage(roll, rollMode);
     
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: character }),
-      flavor: `${item.name} Roll`,
+      flavor: `${item.name}`,
       content: messageContent
     });
     
@@ -103,6 +106,19 @@ export class DiceSystem {
   }
 
   // ===== PRIVATE HELPER METHODS =====
+
+  /**
+   * Detect roll mode from formula string
+   * @private
+   */
+  static _detectRollModeFromFormula(formula) {
+    if (formula.includes('kh')) {
+      return SystemConstants.ROLL_MODES.UPPER_HAND;
+    } else if (formula.includes('kl')) {
+      return SystemConstants.ROLL_MODES.AGAINST_ODDS;
+    }
+    return SystemConstants.ROLL_MODES.STANDARD;
+  }
 
   /**
    * Get dice formula for attribute checks
@@ -193,7 +209,6 @@ export class DiceSystem {
   static async _buildAttributeCheckMessage(roll, rollMode, isSuccess) {
     const diceResults = this._extractDiceResults(roll, rollMode);
     const diceHtml = this._formatDiceResultsHtml(diceResults);
-    const tooltip = await roll.getTooltip();
     const total = roll.total;
     
     const successColor = isSuccess ? ThemeColors.SUCCESS : ThemeColors.FAILURE;
@@ -203,11 +218,9 @@ export class DiceSystem {
     return `
       <div class="dice-roll">
         <div class="dice-result">
-          <div class="dice-formula">${roll.formula}</div>
           <h4 class="dice-total dice-results-box">
             ${diceHtml}
           </h4>
-          <div class="dice-tooltip">${tooltip}</div>
           <div style="margin-top: 8px; font-weight: bold; color: ${successColor};">
             ${successText} (${total}/${threshold})
           </div>
@@ -223,18 +236,15 @@ export class DiceSystem {
   static async _buildWeaponAttackMessage(roll, rollMode, note) {
     const diceResults = this._extractDiceResults(roll, rollMode);
     const diceHtml = this._formatDiceResultsHtml(diceResults);
-    const tooltip = await roll.getTooltip();
     
     const noteHtml = note ? `<div style="margin-top: 8px; font-style: italic; color: #b0b0b0;">${note}</div>` : '';
     
     return `
       <div class="dice-roll">
         <div class="dice-result">
-          <div class="dice-formula">${roll.formula}</div>
           <h4 class="dice-total dice-results-box">
             ${diceHtml}
           </h4>
-          <div class="dice-tooltip">${tooltip}</div>
           ${noteHtml}
         </div>
       </div>
@@ -245,22 +255,16 @@ export class DiceSystem {
    * Build HTML for generic item roll chat message
    * @private
    */
-  static async _buildGenericRollMessage(roll) {
-    const diceResults = roll.dice[0]?.results?.map(r => ({ 
-      value: r.result, 
-      isDiscarded: false 
-    })) || [];
+  static async _buildGenericRollMessage(roll, rollMode = SystemConstants.ROLL_MODES.STANDARD) {
+    const diceResults = this._extractDiceResults(roll, rollMode);
     const diceHtml = this._formatDiceResultsHtml(diceResults);
-    const tooltip = await roll.getTooltip();
     
     return `
       <div class="dice-roll">
         <div class="dice-result">
-          <div class="dice-formula">${roll.formula}</div>
           <h4 class="dice-total dice-results-box">
             ${diceHtml}
           </h4>
-          <div class="dice-tooltip">${tooltip}</div>
         </div>
       </div>
     `;
@@ -268,39 +272,34 @@ export class DiceSystem {
 
   /**
    * Extract dice results and mark discarded dice
+   * Relies on Foundry's built-in keep/drop evaluation
    * @private
    */
   static _extractDiceResults(roll, rollMode) {
-    const allResults = roll.dice[0].results;
+    const firstDiceTerm = roll.dice[0];
+    if (!firstDiceTerm) return [];
     
-    // Standard rolls have no discarded dice
+    const allResults = firstDiceTerm.results;
+    
+    // For standard rolls, nothing is discarded
     if (rollMode === SystemConstants.ROLL_MODES.STANDARD) {
       return allResults.map(r => ({ value: r.result, isDiscarded: false }));
     }
     
-    // For upper hand (keep highest), discard the lowest
-    if (rollMode === SystemConstants.ROLL_MODES.UPPER_HAND) {
-      const lowestValue = Math.min(...allResults.map(r => r.result));
-      const discardedIndex = allResults.findIndex(r => r.result === lowestValue);
-      
-      return allResults.map((r, index) => ({
-        value: r.result,
-        isDiscarded: index === discardedIndex
-      }));
+    // Check if this die term has keep/drop modifiers
+    const hasKeepModifier = firstDiceTerm.modifiers?.some(m => m.startsWith('k'));
+    
+    if (!hasKeepModifier) {
+      // No keep modifier, all dice are active
+      return allResults.map(r => ({ value: r.result, isDiscarded: false }));
     }
     
-    // For against the odds (keep lowest), discard the highest
-    if (rollMode === SystemConstants.ROLL_MODES.AGAINST_ODDS) {
-      const highestValue = Math.max(...allResults.map(r => r.result));
-      const discardedIndex = allResults.findIndex(r => r.result === highestValue);
-      
-      return allResults.map((r, index) => ({
-        value: r.result,
-        isDiscarded: index === discardedIndex
-      }));
-    }
-    
-    return allResults.map(r => ({ value: r.result, isDiscarded: false }));
+    // Mark discarded dice based on the roll's own evaluation
+    // Foundry automatically sets the 'discarded' flag on dice results
+    return allResults.map(r => ({
+      value: r.result,
+      isDiscarded: r.discarded || false
+    }));
   }
 
   /**

@@ -288,4 +288,26 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
   static async #onToggleActive(event, target) {
     await ItemBehavior.handleToggleActive(event, target, this.document);
   }
+
+  /** @override */
+  _attachPartListeners(partId, htmlElement, options) {
+    super._attachPartListeners(partId, htmlElement, options);
+    
+    // Handle uses input changes for advancements and consequences
+    const usesInputs = htmlElement.querySelectorAll('.uses-current[data-item-id]');
+    usesInputs.forEach(input => {
+      input.addEventListener('change', async (event) => {
+        const itemId = event.target.dataset.itemId;
+        const item = this.document.items.get(itemId);
+        if (item) {
+          const newValue = parseInt(event.target.value) || 0;
+          const maxValue = item.system.uses.max || 0;
+          const clampedValue = Math.max(0, Math.min(newValue, maxValue));
+          
+          await item.update({ "system.uses.current": clampedValue }, { render: false });
+          event.target.value = clampedValue;
+        }
+      });
+    });
+  }
 }

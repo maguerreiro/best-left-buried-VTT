@@ -147,6 +147,13 @@
                                 <div class="item-name" data-action="openItem">{{item.name}}</div>
                                 <div class="item-description">{{{item.enrichedDescription}}}</div>
                                 <div class="item-controls">
+                                    {{#if item.system.hasUses}}
+                                    <div class="uses-input">
+                                        <input type="number" name="items.{{item._id}}.system.uses.current" value="{{item.system.uses.current}}" min="0" max="{{item.system.uses.max}}" class="uses-current" data-item-id="{{item._id}}" data-field="system.uses.current"/>
+                                        <span class="uses-separator">/</span>
+                                        <span class="uses-max-display">{{item.system.uses.max}}</span>
+                                    </div>
+                                    {{/if}}
                                     <button type="button" data-action="rollAdvancement" data-advancement-id="{{item._id}}" class="roll-button">
                                         <i class="fas fa-dice-d20"></i>
                                     </button>
@@ -172,7 +179,11 @@
                                 <div class="item-description">{{{item.enrichedDescription}}}</div>
                                 <div class="item-controls">
                                     {{#if item.system.hasUses}}
-                                    <span class="consequence-uses-display">{{item.system.uses.current}}</span>
+                                    <div class="uses-input">
+                                        <input type="number" name="items.{{item._id}}.system.uses.current" value="{{item.system.uses.current}}" min="0" max="{{item.system.uses.max}}" class="uses-current" data-item-id="{{item._id}}" data-field="system.uses.current"/>
+                                        <span class="uses-separator">/</span>
+                                        <span class="uses-max-display">{{item.system.uses.max}}</span>
+                                    </div>
                                     {{/if}}
                                     <a data-action="deleteItem" class="control-button delete" title="Delete">
                                         <i class="fas fa-trash"></i>

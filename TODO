@@ -21,9 +21,6 @@ Weapons:
 - [ ] counter should be editable in the character sheet 
 - [ ] "Type" text box above description. Only appears in the item sheet.
 
-**Armor:**
-- [ ] armor value not updating 
-
 **Weapons:**
 - [ ] note box after initiative in the item sheet 
 - [ ] remove "in melee range" 

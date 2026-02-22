@@ -19,6 +19,9 @@ Change log :
 -  Fixed custom modifiers not in the roll message 
 -  Fixed upper hand and against all odds is not showing the attribute stat
 
+**Armor:**
+- Fixed armor value not updating 
+
 # **2026-02-15**
 
 **Description editor:**
