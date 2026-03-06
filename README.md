@@ -2,6 +2,14 @@
 
 Change log :
 
+# **2026-03-06**
+- Fixed upper hand and against the odds rolls removing 2 dice instead of 1.
+- Fixed bug with weapon's attributes not displaying correctly.
+
+**Consequences and advancements:**
+- Added "Type" text box above description. Only appears in the item sheet.
+
+
 # **2026-02-22**
 
 **Advancements sheet:**

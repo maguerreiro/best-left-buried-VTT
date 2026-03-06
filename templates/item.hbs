@@ -154,6 +154,13 @@
             </div>
             {{/if}}
 
+            {{! Type text box - only in item sheet }}
+            <div class="form-group">
+                <label>Type</label>
+                <input type="text" name="system.advancementType" value="{{system.advancementType}}" placeholder="e.g., Skill, Feat, Ability"/>
+                <small>Type of this advancement</small>
+            </div>
+
             {{! Rich text editor for advancement description }}
             <div class="form-group description-group">
                 <label>Description</label>
@@ -192,6 +199,13 @@
                 <small>Current / Maximum uses for this consequence</small>
             </div>
             {{/if}}
+
+            {{! Type text box - only in item sheet }}
+            <div class="form-group">
+                <label>Type</label>
+                <input type="text" name="system.typeLabel" value="{{system.typeLabel}}" placeholder="e.g., Broken Leg, Cursed, Phobia"/>
+                <small>Type of this consequence</small>
+            </div>
 
             {{! Rich text editor for consequence description }}
             <div class="form-group description-group">
