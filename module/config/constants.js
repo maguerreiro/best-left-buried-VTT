@@ -31,8 +31,8 @@ export const SystemConstants = {
     
     // Weapon attacks
     WEAPON_ATTACK_STANDARD: '3d6',
-    WEAPON_ATTACK_ADVANTAGE: '4d6kh2',
-    WEAPON_ATTACK_DISADVANTAGE: '4d6kl2'
+    WEAPON_ATTACK_ADVANTAGE: '4d6kh3',
+    WEAPON_ATTACK_DISADVANTAGE: '4d6kl3'
   },
 
   // Encumbrance calculation constants
