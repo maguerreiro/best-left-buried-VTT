@@ -124,7 +124,7 @@
 /* Table header without uses column */
 .best-left-buried .loot-table .table-header {
     display: grid;
-    grid-template-columns: 40px 30px 1fr 4fr 60px 50px 30px;
+    grid-template-columns: 25px 30px 1fr 4fr 60px 50px 30px;
     gap: var(--spacing-md);
     padding: 6px var(--spacing-lg);
     min-height: 32px;
@@ -133,13 +133,13 @@
 
 /* Table header WITH uses column */
 .best-left-buried .loot-table .table-header:has(.col-uses) {
-    grid-template-columns: 40px 30px 1fr 4fr 35px 60px 50px 30px;
+    grid-template-columns: 25px 30px 1fr 4fr 35px 60px 50px 30px;
 }
 
 /* Table row without uses column */
 .best-left-buried .loot-table .table-row {
     display: grid;
-    grid-template-columns: 40px 30px 1fr 4fr 60px 50px 30px;
+    grid-template-columns: 25px 30px 1fr 4fr 60px 50px 30px;
     gap: var(--spacing-md);
     padding: 6px var(--spacing-lg);
     min-height: 32px;
@@ -149,7 +149,7 @@
 
 /* Table row WITH uses column */
 .best-left-buried .loot-table .table-row:has(.col-uses) {
-    grid-template-columns: 40px 30px 1fr 4fr 35px 60px 50px 30px;
+    grid-template-columns: 25px 30px 1fr 4fr 35px 60px 50px 30px;
 }
 
 .best-left-buried .loot-table .table-header > div,
