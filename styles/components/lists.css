@@ -40,10 +40,6 @@
     bottom: -2px;
 }
 
-.best-left-buried .list-header .col-icon {
-    /* Empty space for icon column */
-}
-
 .best-left-buried .list-header .col-name {
     text-align: left;
 }
