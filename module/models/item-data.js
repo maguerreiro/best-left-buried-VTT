@@ -190,6 +190,12 @@ export class AdvancementData extends foundry.abstract.TypeDataModel {
           initial: 0,
           min: 0,
         }),
+      }),
+      
+      // Type label for this advancement
+      advancementType: new fields.StringField({
+        required: false,
+        initial: ""
       })
     };
   }
@@ -250,6 +256,12 @@ export class ConsequenceData extends foundry.abstract.TypeDataModel {
           min: 0,
         }),
       }),
+      
+      // Type label for this consequence
+      typeLabel: new fields.StringField({
+        required: false,
+        initial: ""
+      })
     };
   }
 }
@@ -293,6 +305,30 @@ export class LootData extends foundry.abstract.TypeDataModel {
         integer: true,
         initial: 1,
         min: 1
+      }),
+      
+      // ===== USAGE TRACKING =====
+      
+      // Whether to track limited uses for this item
+      hasUses: new fields.BooleanField({
+        required: true,
+        initial: false
+      }),
+      
+      // Current and maximum uses (when hasUses is enabled)
+      uses: new fields.SchemaField({
+        current: new fields.NumberField({
+          required: true,
+          integer: true,
+          initial: 0,
+          min: 0,
+        }),
+        max: new fields.NumberField({
+          required: true,
+          integer: true,
+          initial: 0,
+          min: 0,
+        }),
       })
     };
   }

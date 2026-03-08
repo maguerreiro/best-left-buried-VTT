@@ -316,19 +316,19 @@
                         <h3>Loot</h3>
                         <div class="loot-table">
                             <div class="table-header">
-                                <div class="col-equip"></div>
+                                <div class="col-quantity">Qty</div>
                                 <div class="col-icon"></div>
                                 <div class="col-name">Name</div>
                                 <div class="col-description">Description</div>
-                                <div></div>
+                                {{#if hasAnyLootUses}}<div class="col-uses">Uses</div>{{/if}}
                                 <div class="col-value">Affluence</div>
                                 <div class="col-slots">Slots</div>
-                                <div class="col-actions"></div>
+                                <div class="col-delete"></div>
                             </div>
                             {{#each items.loot as |item|}}
                             <div class="table-row" data-item-id="{{item._id}}">
-                                <div class="col-equip">
-                                    <input type="checkbox" data-action="toggleEquip" data-item-id="{{item._id}}" {{checked item.system.equipped}} title="Equipped"/>
+                                <div class="col-quantity">
+                                    <input type="number" name="items.{{item._id}}.system.quantity" value="{{item.system.quantity}}" min="1" class="quantity-input" data-item-id="{{item._id}}" data-field="system.quantity"/>
                                 </div>
                                 <div class="col-icon">
                                     <img src="{{item.img}}" class="item-icon"/>
@@ -336,11 +336,17 @@
                                 <div class="col-name">
                                     <span class="item-name" data-action="openItem">{{item.name}}</span>
                                 </div>
-                                    <span class="item-description">{{{item.enrichedDescription}}}</span>
-                                <div class="col-type"></div>
+                                <span class="item-description">{{{item.enrichedDescription}}}</span>
+                                {{#if ../hasAnyLootUses}}
+                                <div class="col-uses">
+                                    {{#if item.system.hasUses}}
+                                        <input type="number" name="items.{{item._id}}.system.uses.current" value="{{item.system.uses.current}}" min="0" max="{{item.system.uses.max}}" class="uses-current" data-item-id="{{item._id}}" data-field="system.uses.current"/>
+                                    {{/if}}
+                                </div>
+                                {{/if}}
                                 <div class="col-value">{{item.system.affluence}}</div>
                                 <div class="col-slots">{{item.system.slotValue}}</div>
-                                <div class="col-actions">
+                                <div class="col-delete">
                                     <a data-action="deleteItem" class="control-button delete" title="Delete">
                                         <i class="fas fa-trash"></i>
                                     </a>

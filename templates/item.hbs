@@ -52,6 +52,13 @@
             </div>
             {{/if}}
 
+            {{! Note field - appears in roll chat only }}
+            <div class="form-group">
+                <label>Note</label>
+                <input type="text" name="system.note" value="{{system.note}}" placeholder="Optional note (appears in roll chat)"/>
+                <small>This note will appear in the chat message when this weapon is used</small>
+            </div>
+
             {{#if (or (eq system.weaponType "hand") (eq system.weaponType "long"))}}
             <div class="form-group">
                 <label>
@@ -157,8 +164,8 @@
             {{! Type text box - only in item sheet }}
             <div class="form-group">
                 <label>Type</label>
-                <input type="text" name="system.advancementType" value="{{system.advancementType}}"/>
-                <small>Type of this advancement</small>
+                <input type="text" name="system.advancementType" value="{{system.advancementType}}" placeholder="e.g., Skill, Feat, Ability"/>
+                <small>Category or type of this advancement (optional)</small>
             </div>
 
             {{! Rich text editor for advancement description }}
@@ -203,8 +210,8 @@
             {{! Type text box - only in item sheet }}
             <div class="form-group">
                 <label>Type</label>
-                <input type="text" name="system.typeLabel" value="{{system.typeLabel}}"/>
-                <small>Type of this consequence</small>
+                <input type="text" name="system.typeLabel" value="{{system.typeLabel}}" placeholder="e.g., Broken Leg, Cursed, Phobia"/>
+                <small>Specific type or name for this consequence (optional)</small>
             </div>
 
             {{! Rich text editor for consequence description }}
@@ -219,6 +226,12 @@
         {{! Loot-specific fields - simplified }}
         {{#if (eq item.type "loot")}}
             <div class="form-group">
+                <label>Quantity</label>
+                <input type="number" name="system.quantity" value="{{system.quantity}}" min="1" step="1"/>
+                <small>Number of items</small>
+            </div>
+
+            <div class="form-group">
                 <label>Affluence</label>
                 <input type="number" name="system.affluence" value="{{system.affluence}}" min="0" step="1"/>
                 <small>Affluence value of this item</small>
@@ -227,8 +240,28 @@
             <div class="form-group">
                 <label>Slot Value</label>
                 <input type="number" name="system.slotValue" value="{{system.slotValue}}" min="0" step="1"/>
-                <small>How many inventory slots this item occupies</small>
+                <small>How many inventory slots this item occupies (will be multiplied by quantity)</small>
             </div>
+
+            <div class="form-group">
+                <label style="display: flex; align-items: center;">
+                    <input type="checkbox" name="system.hasUses" {{checked system.hasUses}} style="margin-right: 8px;"/>
+                    <span>Track Number of Uses</span>
+                </label>
+                <small>Enable this to track how many times this item can be used</small>
+            </div>
+
+            {{#if system.hasUses}}
+            <div class="form-group uses-group">
+                <label>Number of Uses</label>
+                <div class="uses-input">
+                    <input type="number" name="system.uses.current" value="{{system.uses.current}}" min="0" class="uses-current" placeholder="0"/>
+                    <span class="uses-separator">/</span>
+                    <input type="number" name="system.uses.max" value="{{system.uses.max}}" min="0" class="uses-max" placeholder="0"/>
+                </div>
+                <small>Current / Maximum uses for this item</small>
+            </div>
+            {{/if}}
             
             {{! Rich text editor for loot description }}
             <div class="form-group description-group">

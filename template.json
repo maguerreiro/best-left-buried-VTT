@@ -87,7 +87,8 @@
       "uses": {
         "current": 0,
         "max": 0
-      }
+      },
+      "advancementType": ""
     },
     
     "consequence": {
@@ -98,14 +99,20 @@
       "uses": {
         "current": 0,
         "max": 0
-      }
+      },
+      "typeLabel": ""
     },
     
     "loot": {
       "description": "",
       "affluence": 0,
       "slotValue": 1,
-      "quantity": 1
+      "quantity": 1,
+      "hasUses": false,
+      "uses": {
+        "current": 0,
+        "max": 0
+      }
     }
   }
 }

@@ -2,7 +2,19 @@
 
 Change log :
 
+# **2026-03-08**
+
+**Weapons sheet**
+- Added note box after initiative in the item sheet. Note is not in the character sheet. Note appears in the roll chat. 
+
+**Loot**
+- Added counter for number of items of the same loot.
+- Replaced in the character sheet the tick box for equipping with the number of items.
+- Added counter for number of uses. Also appears in the character sheet.
+- Number of slots is added manually.
+
 # **2026-03-06**
+
 - Fixed upper hand and against the odds rolls removing 2 dice instead of 1.
 - Fixed bug with weapon's attributes not displaying correctly.
 

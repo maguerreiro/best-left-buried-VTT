@@ -10,7 +10,7 @@
 }
 
 .best-left-buried .sheet-container::-webkit-scrollbar-thumb {
-    background: var(--color-border);
+    background: var(--color-burgundy);
     border-radius: var(--radius-sm);
 }
 
@@ -27,6 +27,6 @@
 }
 
 .best-left-buried .description-group .editor.ProseMirror::-webkit-scrollbar-thumb {
-    background: var(--color-border);
+    background: var(--color-burgundy);
     border-radius: var(--radius-md);
 }

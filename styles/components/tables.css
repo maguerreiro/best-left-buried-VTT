@@ -67,45 +67,12 @@
     bottom: -2px;
 }
 
-/* original
-.best-left-buried .weapons-table .table-header {
-    display: grid;
-    grid-template-columns: 25px 30px 1fr 110px 60px 80px 80px 80px 50px 90px 30px; 
-    gap: 8px;
-    padding: 2px 12px;
-    background: var(--bg-tertiary);
-    border-bottom: 2px solid var(--border-color);
-    font-weight: 600;
-    font-size: 0.85em;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    align-items: center; 
-    line-height: 1;
-    position: relative;
-    bottom: -2px;
-} 
-*/
-
 .best-left-buried .weapons-table .table-row {
     display: grid;
     grid-template-columns: 25px 30px 1fr 110px 60px 80px 80px 80px 50px 90px 30px;
     gap: var(--spacing-md);
     padding: 6px var(--spacing-lg);
 }
-
-/* original
-.best-left-buried .weapons-table .table-row {
-    display: grid;
-    grid-template-columns: 25px 30px 1fr 110px 60px 80px 80px 80px 50px 90px 30px; 
-    gap: 8px;
-    align-items: center;
-    padding: 6px 12px;
-    border-bottom: 1px solid var(--border-light);
-    transition: background-color 0.2s ease;
-    font-size: 0.9em;
-}
-*/
 
 /* ========================================
    ARMOR TABLE
@@ -126,28 +93,6 @@
     box-sizing: border-box;
 }
 
-
-/* original
-.best-left-buried .armor-table .table-header {
-    display: grid;
-    grid-template-columns: 25px 30px 1fr 4fr 110px 60px 50px 30px;
-    gap: 8px;
-    padding: 6px 12px;
-    background: var(--bg-tertiary);
-    border-bottom: 2px solid var(--border-color);
-    font-weight: 600;
-    font-size: 0.85em;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    align-items: center; 
-    line-height: 1;
-    position: relative;    
-    min-height: 32px;
-    box-sizing: border-box;
-}
-*/
-
 .best-left-buried .armor-table .table-row {
     display: grid;
     grid-template-columns: 25px 30px 1fr 4fr 110px 60px 50px 30px;
@@ -156,20 +101,6 @@
     min-height: 32px;
     box-sizing: border-box;
 }
-
-/* original
-.best-left-buried .armor-table .table-row {
-    display: grid;
-    grid-template-columns: 25px 30px 1fr 4fr 110px 60px 50px 30px;
-    gap: 8px;
-    padding: 6px 12px;
-    border-bottom: 1px solid var(--border-light);
-    transition: background-color 0.2s ease;
-    font-size: 0.9em;
-    min-height: 32px;
-    box-sizing: border-box;
-}
-*/
 
 .best-left-buried .armor-table .table-header > div,
 .best-left-buried .armor-table .table-row > div {
@@ -190,66 +121,53 @@
     overflow: hidden;
 }
 
+/* Table header without uses column */
 .best-left-buried .loot-table .table-header {
     display: grid;
-    grid-template-columns: 25px 30px 1fr 4fr 110px 60px 50px 30px;
+    grid-template-columns: 40px 30px 1fr 4fr 60px 50px 30px;
     gap: var(--spacing-md);
     padding: 6px var(--spacing-lg);
     min-height: 32px;
     box-sizing: border-box;
 }
 
-/* original
-.best-left-buried .loot-table .table-header {
-    display: grid;
-    grid-template-columns: 25px 30px 1fr 4fr 110px 60px 50px 30px;
-    gap: 8px;
-    padding: 6px 12px;
-    background: var(--bg-tertiary);
-    border-bottom: 2px solid var(--border-color);
-    font-weight: 600;
-    font-size: 0.85em;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    align-items: center; 
-    line-height: 1;
-    position: relative;    
-    min-height: 32px;
-    box-sizing: border-box;
+/* Table header WITH uses column */
+.best-left-buried .loot-table .table-header:has(.col-uses) {
+    grid-template-columns: 40px 30px 1fr 4fr 35px 60px 50px 30px;
 }
-*/
 
+/* Table row without uses column */
 .best-left-buried .loot-table .table-row {
     display: grid;
-    grid-template-columns: 25px 30px 1fr 4fr 110px 60px 50px 30px;
+    grid-template-columns: 40px 30px 1fr 4fr 60px 50px 30px;
     gap: var(--spacing-md);
     padding: 6px var(--spacing-lg);
     min-height: 32px;
     box-sizing: border-box;
+    align-items: center;
 }
 
-/* original
-.best-left-buried .loot-table .table-row {
-    display: grid;
-    grid-template-columns: 25px 30px 1fr 4fr 110px 60px 50px 30px;
-    gap: 8px;
-    padding: 6px 12px;
-    border-bottom: 1px solid var(--border-light);
-    transition: background-color 0.2s ease;
-    font-size: 0.9em;
-    min-height: 32px;
-    box-sizing: border-box;
+/* Table row WITH uses column */
+.best-left-buried .loot-table .table-row:has(.col-uses) {
+    grid-template-columns: 40px 30px 1fr 4fr 35px 60px 50px 30px;
 }
-*/
 
 .best-left-buried .loot-table .table-header > div,
-.best-left-buried .loot-table .table-row > div {
+.best-left-buried .loot-table .table-row > div,
+.best-left-buried .loot-table .table-row > span {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100%;
     line-height: 1;
+}
+
+.best-left-buried .loot-table .col-name {
+    justify-content: flex-start;
+}
+
+.best-left-buried .loot-table .item-description {
+    justify-content: flex-start;
 }
 
 /* ========================================
@@ -265,13 +183,6 @@
     transform: scale(1.1);
     margin: 0;
 }
-
-/* original
-.best-left-buried .col-controls input[type="checkbox"] {
-    transform: scale(1.1);
-    margin: 0;
-}
-*/
 
 .best-left-buried .col-icon {
     display: flex;
@@ -291,7 +202,8 @@
 .best-left-buried .col-initiative,
 .best-left-buried .col-armor,
 .best-left-buried .col-slots,
-.best-left-buried .col-value {
+.best-left-buried .col-value,
+.best-left-buried .col-uses {
     text-align: center;
     color: var(--color-text-secondary);
     font-size: var(--font-size-small);
@@ -300,28 +212,6 @@
     justify-content: center;
     min-height: var(--input-height-sm);
 }
-
-/* original
-.best-left-buried .col-type,
-.best-left-buried .col-range,
-.best-left-buried .col-stat,
-.best-left-buried .col-damage,
-.best-left-buried .col-initiative {
-    text-align: center;
-    color: var(--text-secondary);
-    font-size: 0.85em;
-}
-
-.best-left-buried .col-value {
-    text-align: center;
-    color: var(--text-secondary);
-    font-size: 0.85em;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 20px;
-}
-*/
 
 .best-left-buried .col-actions {
     display: flex;
@@ -339,19 +229,6 @@
     height: var(--button-height-base);
 }
 
-/* original
-.best-left-buried .col-delete {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: 6px;
-    margin-right: 6px;
-    width: 24px;
-    height: 24px;
-}
-*/
-
-
 .best-left-buried .item-description {
     text-justify: inter-word;
     text-align: justify;
@@ -361,4 +238,54 @@
     font-size: 12px;
     color: var(--color-text-secondary);
     text-transform: none;
+}
+
+/* ========================================
+   LOOT QUANTITY INPUT
+   ======================================== */
+
+.best-left-buried .col-quantity {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.best-left-buried .quantity-input {
+    width: 25px !important;
+    max-width: 25px !important;
+    height: 24px;
+    padding: 2px 4px !important;
+    text-align: center;
+    border: 1px solid var(--color-border) !important;
+    background: var(--color-bg-primary) !important;
+    color: var(--color-text-primary) !important;
+    border-radius: var(--radius-sm) !important;
+    font-weight: var(--font-weight-semibold);
+    font-size: 0.85em;
+    box-sizing: border-box;
+}
+
+.best-left-buried .quantity-input:focus {
+    outline: none !important;
+    border-color: var(--color-accent-primary) !important;
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.25) !important;
+}
+
+/* ========================================
+   LOOT USES INPUT (in table)
+   ======================================== */
+
+.best-left-buried .loot-table .col-uses .uses-current {
+    width: 25px !important;
+    max-width: 25px !important;
+    height: 24px;
+    padding: 2px 4px !important;
+    text-align: center;
+    border: 1px solid var(--color-accent-secondary) !important;
+    background: var(--color-bg-primary) !important;
+    color: var(--color-accent-primary) !important;
+    border-radius: var(--radius-sm) !important;
+    font-weight: var(--font-weight-semibold);
+    font-size: 0.85em;
+    box-sizing: border-box;
 }

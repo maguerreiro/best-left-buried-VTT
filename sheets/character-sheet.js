@@ -85,6 +85,7 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
       // Alignment Logic: Check if ANY item in these specific lists has uses enabled
       hasAnyAdvancementUses: items.advancement.some(i => i.system.hasUses === true),
       hasAnyConsequenceUses: items.consequence.some(i => i.system.hasUses === true),
+      hasAnyLootUses: items.loot.some(i => i.system.hasUses === true),
     };
   
     this._prepareArmor(context);
@@ -297,7 +298,7 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
   _attachPartListeners(partId, htmlElement, options) {
     super._attachPartListeners(partId, htmlElement, options);
     
-    // Handle uses input changes for advancements and consequences
+    // Handle uses input changes for advancements, consequences, and loot
     const usesInputs = htmlElement.querySelectorAll('.uses-current[data-item-id]');
     usesInputs.forEach(input => {
       input.addEventListener('change', async (event) => {
@@ -309,6 +310,22 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
           const clampedValue = Math.max(0, Math.min(newValue, maxValue));
           
           await item.update({ "system.uses.current": clampedValue }, { render: false });
+          event.target.value = clampedValue;
+        }
+      });
+    });
+    
+    // Handle quantity input changes for loot
+    const quantityInputs = htmlElement.querySelectorAll('.quantity-input[data-item-id]');
+    quantityInputs.forEach(input => {
+      input.addEventListener('change', async (event) => {
+        const itemId = event.target.dataset.itemId;
+        const item = this.document.items.get(itemId);
+        if (item) {
+          const newValue = parseInt(event.target.value) || 1;
+          const clampedValue = Math.max(1, newValue);
+          
+          await item.update({ "system.quantity": clampedValue }, { render: false });
           event.target.value = clampedValue;
         }
       });

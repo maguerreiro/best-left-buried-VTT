@@ -74,7 +74,7 @@ export class DiceSystem {
     
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: character }),
-      flavor: `${weapon.name}${modeLabel}: <br> <span style="color: #000000;font-size: 2em;"><strong>${this._capitalizeText(attackAttribute)}:</strong> ${attackValue} </span> <br> <span style="color: #ff0000;font-size: 2em;"><strong>Damage Mod:</strong> ${damageModifier >= 0 ? '+' : ''}${damageModifier}</span> `,
+      flavor: `${weapon.name}${modeLabel}: <br> <span style="color: #000000;font-size: 2em;"><strong>${this._capitalizeText(attackAttribute)}:</strong> ${attackValue} </span> <br> <span style="color: rgb(156, 21, 64);font-size: 2em;"><strong>Damage Mod:</strong> ${damageModifier >= 0 ? '+' : ''}${damageModifier}</span> `,
       content: messageContent
     });
     
@@ -237,7 +237,7 @@ export class DiceSystem {
     const diceResults = this._extractDiceResults(roll, rollMode);
     const diceHtml = this._formatDiceResultsHtml(diceResults);
     
-    const noteHtml = note ? `<div style="margin-top: 8px; font-style: italic; color: #b0b0b0;">${note}</div>` : '';
+    const noteHtml = note ? `<div style="margin-top: 8px; font-style: italic; color: #2a2a2a;">${note}</div>` : '';
     
     return `
       <div class="dice-roll">
