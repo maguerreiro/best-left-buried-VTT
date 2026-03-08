@@ -15,12 +15,30 @@ export class DisplayManager {
    * @returns {string} Path to the weapon icon
    */
   static getWeaponIcon(weaponType) {
-    const twoHandedTypes = ['heavy', 'long'];
+    const twoHandedTypes = ['heavy'];
     
     if (twoHandedTypes.includes(weaponType)) {
       return AssetPaths.ICONS.WEAPON_TWO_HANDED;
     }
     
+    const ThrowingTypes = ['throwing'];
+    
+    if (ThrowingTypes.includes(weaponType)) {
+      return AssetPaths.ICONS.THROWING_WEAPON;
+    }
+
+    const RangedTypes = ['ranged'];
+    
+    if (RangedTypes.includes(weaponType)) {
+      return AssetPaths.ICONS.RANGED_WEAPON;
+    }
+
+    const LongTypes = ['long'];
+    
+    if (LongTypes.includes(weaponType)) {
+      return AssetPaths.ICONS.LONG_WEAPON;
+    }
+
     return AssetPaths.ICONS.WEAPON_ONE_HANDED;
   }
 

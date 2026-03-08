@@ -93,6 +93,9 @@ export const AssetPaths = {
   ICONS: {
     WEAPON_ONE_HANDED: "systems/best-left-buried_V3/icons/weapon_1_hand.svg",
     WEAPON_TWO_HANDED: "systems/best-left-buried_V3/icons/weapon_2_hand.svg",
+    THROWING_WEAPON: "systems/best-left-buried_V3/icons/throwing_weapon.svg",
+    RANGED_WEAPON: "systems/best-left-buried_V3/icons/ranged_weapon.svg",
+    LONG_WEAPON: "systems/best-left-buried_V3/icons/long_weapon.svg",
     ITEM_GENERIC: "icons/svg/item-bag.svg"
   }
 };
