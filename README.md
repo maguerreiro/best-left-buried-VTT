@@ -2,6 +2,15 @@
 
 Change log :
 
+# **2026-03-13**
+
+**Weapons:**
+- Removed "in melee range" 
+- Fixed Throwing weapon - Range selection not working
+
+**Weapons sheet**
+- Removed the 2 handed checkbox
+
 # **2026-03-08**
 
 **Weapons sheet**

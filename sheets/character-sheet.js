@@ -179,6 +179,13 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
 
     Hooks.on('updateItem', (item, changes, options, userId) => {
       if (item.parent === this.document) {
+        // Re-render if weapon properties changed (affects damage display)
+        if (changes.system?.isTwoHanded !== undefined || 
+            changes.system?.customRange !== undefined ||
+            changes.system?.customDamageMod !== undefined) {
+          this.render(false);
+        }
+        
         if (changes.system?.slotValue !== undefined) {
           DisplayManager.refreshEncumbranceDisplay(this.document, this.element);
         }

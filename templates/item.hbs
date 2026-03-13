@@ -8,6 +8,16 @@
     <section class="sheet-body">
         {{! Weapon-specific fields }}
         {{#if (eq item.type "weapon")}}
+
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" name="system.equipped" {{checked system.equipped}}/>
+                    Equipped
+                </label>
+                <span>Equip this weapon</span>
+            </div>
+
+
             <div class="form-group">
                 <label>Weapon Type</label>
                 <select name="system.weaponType" data-action="updateWeaponType">
@@ -59,33 +69,6 @@
                 <small>This note will appear in the chat message when this weapon is used</small>
             </div>
 
-            {{#if (or (eq system.weaponType "hand") (eq system.weaponType "long"))}}
-            <div class="form-group">
-                <label>
-                    <input type="checkbox" name="system.isTwoHanded" {{checked system.isTwoHanded}}/>
-                    Two-Handed
-                </label>
-                <span>Use weapon with both hands for +1 damage</span>
-            </div>
-            {{/if}}
-
-            {{#if (eq system.weaponType "throwing")}}
-            <div class="form-group">
-                <label>
-                    <input type="checkbox" name="system.inMelee" {{checked system.inMelee}}/>
-                    In Melee Range
-                </label>
-                <span>Weapon is being used in melee combat (-1 damage penalty)</span>
-            </div>
-            {{/if}}
-
-            <div class="form-group">
-                <label>
-                    <input type="checkbox" name="system.equipped" {{checked system.equipped}}/>
-                    Equipped
-                </label>
-                <span>Equip this weapon</span>
-            </div>
 
             <div class="form-group">
                 <label>Slot Value</label>

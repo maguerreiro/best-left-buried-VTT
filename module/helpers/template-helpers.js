@@ -49,26 +49,35 @@ export function registerTemplateHelpers() {
   /**
    * Calculate and format weapon damage modifier
    * Takes into account two-handed bonus and melee penalty
-   * Usage: {{getWeaponDamage weaponType isTwoHanded inMelee item}}
+   * Usage: {{getWeaponDamage weaponType isTwoHanded customRange item}}
    */
-  Handlebars.registerHelper('getWeaponDamage', function(weaponType, isTwoHanded, inMelee, item) {
+  Handlebars.registerHelper('getWeaponDamage', function(weaponType, isTwoHanded, customRange, item) {
+    const weaponDefinition = WEAPON_TYPES[weaponType];
+    if (!weaponDefinition) return '+0';
+    
     let damageModifier;
     
-    // Use custom damage if set, otherwise use weapon type default
+    // Check if using custom damage modifier
     if (item && item.system && item.system.customDamageMod !== null && item.system.customDamageMod !== undefined) {
+      // Use custom damage directly (no bonuses/penalties apply)
       damageModifier = item.system.customDamageMod;
     } else {
-      const weaponDefinition = WEAPON_TYPES[weaponType];
-      if (!weaponDefinition) return 0;
+      // Start with base damage from weapon type
       damageModifier = weaponDefinition.damageMod || 0;
-    }
-    
-    // Apply situational modifiers
-    if (inMelee && WEAPON_TYPES[weaponType]?.meleePenalty) {
-      damageModifier -= 1;
-    }
-    if (isTwoHanded && WEAPON_TYPES[weaponType]?.twoHandedBonus) {
-      damageModifier += 1;
+      
+      // Apply two-handed bonus if applicable
+      if (isTwoHanded && weaponDefinition.twoHandedBonus) {
+        damageModifier += 1;
+      }
+      
+      // Apply melee penalty for throwing weapons when range is set to melee
+      if (weaponDefinition.meleePenalty) {
+        // Check if custom range is melee, or if no custom range, check default range
+        const effectiveRange = customRange || weaponDefinition.range;
+        if (effectiveRange === 'melee') {
+          damageModifier -= 1;
+        }
+      }
     }
 
     // Format with sign

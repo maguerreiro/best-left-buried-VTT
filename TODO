@@ -1,13 +1,11 @@
-
 ###### TO DO ######
 
-**Character sheet**
-Weapons:
-- [ ] add comment to character sheet for 2 handed
+**NPC sheet**
+- Icon
+- Name
+- Vigour, Grip
+- Brawn, Wit, Will, Observation, Armor (input) -> normal roll and modified roll
+- Equipment
+- Advancements -> Adaptations
 
-**Weapons sheet**
-- [ ] remove the 2 handed checkbox
-
-**Weapons:**
-- [ ] remove "in melee range" 
-- [ ] Throwing weapon - Range selection does not work
+**Combat tracker**

@@ -74,7 +74,7 @@ export class DiceSystem {
     
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: character }),
-      flavor: `${weapon.name}${modeLabel}: <br> <span style="color: #000000;font-size: 2em;"><strong>${this._capitalizeText(attackAttribute)}:</strong> ${attackValue} </span> <br> <span style="color: rgb(156, 21, 64);font-size: 2em;"><strong>Damage Mod:</strong> ${damageModifier >= 0 ? '+' : ''}${damageModifier}</span> `,
+      flavor: `${weapon.name}${modeLabel}: <br> <span style="color: #000000;font-size: 2em;"><strong>${this._capitalizeText(attackAttribute)}:</strong> ${attackValue} </span> <br> <span style="color: rgb(93, 20, 43);font-size: 2em;"><strong>Damage Mod:</strong> ${damageModifier >= 0 ? '+' : ''}${damageModifier}</span> `,
       content: messageContent
     });
     
@@ -194,9 +194,12 @@ export class DiceSystem {
       damage += 1;
     }
     
-    // Apply melee penalty for thrown weapons (only if not using custom damage)
-    if (weapon.system.inMelee && weaponProperties.meleePenalty && weapon.system.customDamageMod === null) {
-      damage -= 1;
+    // Apply melee penalty for thrown weapons when range is melee (only if not using custom damage)
+    if (weaponProperties.meleePenalty && weapon.system.customDamageMod === null) {
+      const effectiveRange = weapon.system.customRange || weaponProperties.range;
+      if (effectiveRange === 'melee') {
+        damage -= 1;
+      }
     }
     
     return damage;

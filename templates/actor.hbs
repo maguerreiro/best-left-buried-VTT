@@ -233,7 +233,7 @@
                                 <div class="col-type">{{getWeaponProperty item.system.weaponType "label" item}}</div>
                                 <div class="col-range">{{getWeaponProperty item.system.weaponType "range" item}}</div>
                                 <div class="col-stat">{{getWeaponProperty item.system.weaponType "attackStat" item}}</div>
-                                <div class="col-damage">{{getWeaponDamage item.system.weaponType item.system.isTwoHanded item.system.inMelee item}}</div>
+                                <div class="col-damage">{{getWeaponDamage item.system.weaponType item.system.isTwoHanded item.system.customRange item}}</div>
                                 <div class="col-initiative">
                                     {{#if (getWeaponProperty item.system.weaponType "initiative" item)}}
                                         {{getWeaponProperty item.system.weaponType "initiative" item}}
