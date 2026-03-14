@@ -1,0 +1,182 @@
+{{! templates/npc.hbs }}
+<div class="sheet-layout">
+    <div class="sheet-main">
+        <div class="sheet-container">
+            {{! NPC Header }}
+            <header class="character-header">
+                <div class="portrait-section">
+                    <img src="{{actor.img}}" data-edit="img" class="character-portrait" title="NPC Portrait"/>
+                </div>
+                
+                <div class="character-info">
+                    <input type="text" name="name" value="{{actor.name}}" placeholder="NPC Name" class="character-name"/>
+                    
+                    <div class="info-row">
+                        <div class="info-item">
+                            <label>Vigour</label>
+                            <div class="split-input">
+                                <input type="number" name="system.vigour.current" value="{{system.vigour.current}}" class="split-left"/>
+                                <span>/</span>
+                                <input type="number" name="system.vigour.max" value="{{system.vigour.max}}" class="split-right"/>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <label>Grip</label>
+                            <input type="number" name="system.grip.base" value="{{system.grip.base}}" class="single-input"/>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            {{! Stats Row }}
+            <div class="main-stats-row" style="grid-template-columns: repeat(5, 1fr);">
+                <div class="stat-item">
+                    <div class="stat-name-row">
+                        <button type="button" data-action="rollStatKh2" data-stat="brawn" class="stat-arrow" title="Upper Hand">
+                            <i class="fas fa-arrow-up"></i>
+                        </button>
+                        <button type="button" data-action="rollStat" data-stat="brawn" class="stat-label-button" title="Roll Brawn Check">Brawn</button>
+                        <button type="button" data-action="rollStatKl2" data-stat="brawn" class="stat-arrow" title="Against the Odds">
+                            <i class="fas fa-arrow-down"></i>
+                        </button>
+                    </div>
+                    <input type="number" name="system.brawn.base" value="{{system.brawn.base}}"/>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-name-row">
+                        <button type="button" data-action="rollStatKh2" data-stat="wit" class="stat-arrow" title="Upper Hand">
+                            <i class="fas fa-arrow-up"></i>
+                        </button>
+                        <button type="button" data-action="rollStat" data-stat="wit" class="stat-label-button" title="Roll Wit Check">Wit</button>
+                        <button type="button" data-action="rollStatKl2" data-stat="wit" class="stat-arrow" title="Against the Odds">
+                            <i class="fas fa-arrow-down"></i>
+                        </button>
+                    </div>
+                    <input type="number" name="system.wit.base" value="{{system.wit.base}}"/>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-name-row">
+                        <button type="button" data-action="rollStatKh2" data-stat="will" class="stat-arrow" title="Upper Hand">
+                            <i class="fas fa-arrow-up"></i>
+                        </button>
+                        <button type="button" data-action="rollStat" data-stat="will" class="stat-label-button" title="Roll Will Check">Will</button>
+                        <button type="button" data-action="rollStatKl2" data-stat="will" class="stat-arrow" title="Against the Odds">
+                            <i class="fas fa-arrow-down"></i>
+                        </button>
+                    </div>
+                    <input type="number" name="system.will.base" value="{{system.will.base}}"/>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-name-row">
+                        <button type="button" data-action="rollStatKh2" data-stat="observation" class="stat-arrow" title="Upper Hand">
+                            <i class="fas fa-arrow-up"></i>
+                        </button>
+                        <button type="button" data-action="rollStat" data-stat="observation" class="stat-label-button" title="Roll Observation Check">Observation</button>
+                        <button type="button" data-action="rollStatKl2" data-stat="observation" class="stat-arrow" title="Against the Odds">
+                            <i class="fas fa-arrow-down"></i>
+                        </button>
+                    </div>
+                    <input type="number" name="system.observation.base" value="{{system.observation.base}}"/>
+                </div>
+                <div class="stat-item">
+                    <label>Armor</label>
+                    <input type="number" name="system.armor.base" value="{{system.armor.base}}"/>
+                </div>
+            </div>
+
+            {{! Equipment Section }}
+            <div class="table-section">
+                <h3>Equipment</h3>
+                <div class="weapons-table">
+                    <div class="table-header">
+                        <div class="col-equip"></div>
+                        <div class="col-icon"></div>
+                        <div class="col-name">Name</div>
+                        <div class="col-type">Type</div>
+                        <div class="col-range">Range</div>
+                        <div class="col-stat">Attack Stat</div>
+                        <div class="col-damage">Damage Mod</div>
+                        <div class="col-initiative">Initiative</div>
+                        <div class="col-slots">Slots</div>
+                        <div class="col-actions">Attack</div>
+                        <div class="col-delete"></div>
+                    </div>
+                    {{#each items.weapon as |item|}}
+                    <div class="table-row" data-item-id="{{item._id}}">
+                        <div class="col-equip">
+                            <input type="checkbox" data-action="toggleEquip" data-item-id="{{item._id}}" {{checked item.system.equipped}} title="Equipped"/>
+                        </div>
+                        <div class="col-icon">
+                            <img src="{{item.img}}" class="item-icon"/>
+                        </div>
+                        <div class="col-name">
+                            <span class="item-name" data-action="openItem">{{item.name}}</span>
+                        </div>
+                        <div class="col-type">{{getWeaponProperty item.system.weaponType "label" item}}</div>
+                        <div class="col-range">{{getWeaponProperty item.system.weaponType "range" item}}</div>
+                        <div class="col-stat">{{getWeaponProperty item.system.weaponType "attackStat" item}}</div>
+                        <div class="col-damage">{{getWeaponDamage item.system.weaponType item.system.isTwoHanded item.system.customRange item}}</div>
+                        <div class="col-initiative">
+                            {{#if (getWeaponProperty item.system.weaponType "initiative" item)}}
+                                {{getWeaponProperty item.system.weaponType "initiative" item}}
+                            {{else}}
+                                0
+                            {{/if}}
+                        </div>
+                        <div class="col-slots">{{item.system.slotValue}}</div>
+                        <div class="col-actions">
+                            <button type="button" data-action="rollWeaponKh2" data-weapon-id="{{item._id}}" class="roll-button-mini" title="Upper Hand">
+                                <i class="fas fa-arrow-up"></i>
+                            </button>
+                            <button type="button" data-action="rollWeapon" data-weapon-id="{{item._id}}" class="roll-button-mini" title="Standard">
+                                <i class="fas fa-sword"></i>
+                            </button>
+                            <button type="button" data-action="rollWeaponKl2" data-weapon-id="{{item._id}}" class="roll-button-mini" title="Against the Odds">
+                                <i class="fas fa-arrow-down"></i>
+                            </button>
+                        </div>
+                        <div class="col-delete"> 
+                            <a data-action="deleteItem" class="control-button delete" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+
+            {{! Adaptations (Advancements) Section }}
+            <div class="list-section">
+                <h3>Adaptations</h3>
+                <div class="items-list">
+                    {{#each items.advancement as |item|}}
+                    <div class="list-item" data-item-id="{{item._id}}">
+                        <div class="col-icon">
+                            <img src="{{item.img}}" class="item-icon"/>
+                        </div>                                
+                        <div class="item-name" data-action="openItem">{{item.name}}</div>
+                        <div class="item-description">{{{item.enrichedDescription}}}</div>
+                        <div class="item-controls">
+                            {{#if item.system.hasUses}}
+                                <div class="uses-input">
+                                    <input type="number" name="items.{{item._id}}.system.uses.current" value="{{item.system.uses.current}}" min="0" max="{{item.system.uses.max}}" class="uses-current" data-item-id="{{item._id}}" data-field="system.uses.current"/>
+                                </div>
+                            {{else}}
+                                {{#if ../hasAnyAdaptationUses}}
+                                    <div class="uses-placeholder"></div>
+                                {{/if}}
+                            {{/if}}                                        
+                            <button type="button" data-action="rollAdvancement" data-advancement-id="{{item._id}}" class="roll-button">
+                                <i class="fas fa-dice-d20"></i>
+                            </button>
+                            <a data-action="deleteItem" class="control-button delete" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

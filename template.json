@@ -1,6 +1,6 @@
 {
   "Actor": {
-    "types": ["character"],
+    "types": ["character", "npc"],
     "character": {
       "portrait": "",
       "attack": "1d6",
@@ -53,6 +53,37 @@
       
       "race": "",
       "archetype": ""
+    },
+    
+    "npc": {
+      "brawn": {
+        "base": 0
+      },
+      
+      "wit": {
+        "base": 0
+      },
+      
+      "will": {
+        "base": 0
+      },
+      
+      "observation": {
+        "base": 0
+      },
+      
+      "vigour": {
+        "current": 10,
+        "max": 10
+      },
+      
+      "grip": {
+        "base": 4
+      },
+      
+      "armor": {
+        "base": 7
+      }
     }
   },
   

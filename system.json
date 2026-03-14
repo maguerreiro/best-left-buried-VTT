@@ -2,7 +2,7 @@
   "id": "best-left-buried_V3",
   "title": "Best Left Buried V3",
   "description": "Best Left Buried system (Foundry V13 compatible).",
-  "version": "0.5.5",
+  "version": "0.6.0",
   
   "url": "https://github.com/maguerreiro/best-left-buried-VTT",
   "manifest": "https://raw.githubusercontent.com/maguerreiro/best-left-buried-VTT/main/system.json",
@@ -20,7 +20,8 @@
 
   "documentTypes": {
     "Actor": {
-      "character": {}
+      "character": {},
+      "npc": {}
     },
     "Item": {
       "weapon": {},

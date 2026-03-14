@@ -2,6 +2,7 @@
 // Main entry point for the Best Left Buried system
 
 import { CharacterData } from "./models/character-data.js";
+import { NPCData } from "./models/npc-data.js";
 import { WeaponData, ArmorData, AdvancementData, ConsequenceData, LootData } from "./models/item-data.js";
 import { WEAPON_TYPES } from "./helpers/weapon-properties.js";
 import { ARMOR_TYPES } from "./helpers/armor-properties.js";
@@ -31,6 +32,7 @@ Hooks.once("init", () => {
   
   // Register Actor data models
   CONFIG.Actor.dataModels.character = CharacterData;
+  CONFIG.Actor.dataModels.npc = NPCData;
   
   // Register Item data models
   CONFIG.Item.dataModels.weapon = WeaponData;
@@ -55,6 +57,7 @@ Hooks.once("ready", async () => {
   try {
     // Import sheet classes dynamically
     const { CharacterSheet } = await import("../sheets/character-sheet.js");
+    const { NPCSheet } = await import("../sheets/npc-sheet.js");
     const { ItemSheet } = await import("../sheets/item-sheet.js");
     
     // Register character sheet
@@ -66,6 +69,18 @@ Hooks.once("ready", async () => {
         types: ["character"],
         makeDefault: true,
         label: "Best Left Buried Character Sheet"
+      }
+    );
+    
+    // Register NPC sheet
+    foundry.applications.apps.DocumentSheetConfig.registerSheet(
+      Actor, 
+      "best-left-buried", 
+      NPCSheet, 
+      {
+        types: ["npc"],
+        makeDefault: true,
+        label: "Best Left Buried NPC Sheet"
       }
     );
     

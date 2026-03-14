@@ -2,6 +2,18 @@
 
 Change log :
 
+# **2026-03-14**
+
+- Added NPCs
+- NPC contains: 
+    - Icon
+    - Name
+    - Vigour, Grip
+    - Brawn, Wit, Will, Observation, Armor (input) -> normal roll and modified roll
+    - Equipment
+    - Advancements -> Adaptations
+
+
 # **2026-03-13**
 
 **Weapons:**
