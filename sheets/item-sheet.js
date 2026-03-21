@@ -28,6 +28,7 @@ export class ItemSheet extends foundry.applications.api.HandlebarsApplicationMix
       submitOnChange: true
     },
     actions: {
+      editImage: ItemSheet.#onEditImage,
       updateWeaponType: ItemSheet.#onUpdateWeaponType,
       updateArmorType: ItemSheet.#onUpdateArmorType,
       updateConsequenceType: ItemSheet.#onUpdateConsequenceType,
@@ -131,6 +132,22 @@ export class ItemSheet extends foundry.applications.api.HandlebarsApplicationMix
   }
 
   // Event handlers
+  static async #onEditImage(event, target) {
+    const currentImage = this.document.img || '';
+    
+    const filePicker = new FilePicker({
+      type: "image",
+      current: currentImage,
+      callback: async (selectedPath) => {
+        await this.document.update({ img: selectedPath });
+      },
+      top: this.position.top + 40,
+      left: this.position.left + 10
+    });
+    
+    filePicker.render(true);
+  }
+
   static async #onFormSubmit(event, form, formData) {
     const updateData = foundry.utils.expandObject(formData.object);
     await this.document.update(updateData);
@@ -140,12 +157,30 @@ export class ItemSheet extends foundry.applications.api.HandlebarsApplicationMix
     const newType = target.value;
     const newIcon = DisplayManager.getWeaponIcon(newType);
     
-    await this.document.update({
-      "system.weaponType": newType,
-      "system.isTwoHanded": false,
-      "system.inMelee": false,
-      "img": newIcon
-    });
+    // Only update icon if it's still using a default weapon icon
+    const currentImg = this.document.img;
+    const isDefaultIcon = !currentImg || 
+                          currentImg === "icons/svg/item-bag.svg" ||
+                          currentImg.includes("systems/best-left-buried_V3/icons/weapon_") ||
+                          currentImg.includes("systems/best-left-buried_V3/icons/long_weapon") ||
+                          currentImg.includes("systems/best-left-buried_V3/icons/throwing_weapon") ||
+                          currentImg.includes("systems/best-left-buried_V3/icons/ranged_weapon");
+    
+    if (isDefaultIcon) {
+      await this.document.update({
+        "system.weaponType": newType,
+        "system.isTwoHanded": false,
+        "system.inMelee": false,
+        "img": newIcon
+      });
+    } else {
+      // User has set a custom icon, don't override it
+      await this.document.update({
+        "system.weaponType": newType,
+        "system.isTwoHanded": false,
+        "system.inMelee": false
+      });
+    }
   }
 
   static async #onUpdateArmorType(event, target) {

@@ -1,7 +1,7 @@
 {{! templates/item.hbs - FIXED TEMPLATE }}
 <div class="item-sheet-container">
     <header class="sheet-header">
-        <img src="{{#if item.img}}{{item.img}}{{else}}{{defaultIcon}}{{/if}}" data-edit="img" title="{{item.name}}" height="64" width="64"/>
+        <img src="{{#if item.img}}{{item.img}}{{else}}{{defaultIcon}}{{/if}}" data-action="editImage" title="{{item.name}}" height="64" width="64" style="cursor: pointer;"/>
         <h1><input name="name" type="text" value="{{item.name}}" placeholder="Item Name"/></h1>
     </header>
 
