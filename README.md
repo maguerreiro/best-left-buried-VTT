@@ -2,6 +2,9 @@
 
 Change log :
 
+# **2026-03-21**
+- Fixed not being able to upload icons for items
+
 # **2026-03-14**
 
 - Added NPCs
