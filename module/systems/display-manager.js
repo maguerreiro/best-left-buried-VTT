@@ -153,32 +153,4 @@ export class DisplayManager {
       container.scrollTop = scrollPosition;
     }
   }
-
-  /**
-   * Setup listeners for item changes that affect displays
-   * @param {Actor} character - The character actor
-   * @param {Function} updateCallback - Callback to run when items change
-   */
-  static watchItemChanges(character, updateCallback) {
-    // Listen for item updates
-    Hooks.on('updateItem', (item, changes, options, userId) => {
-      if (item.parent === character) {
-        const shouldUpdate = 
-          changes.system?.slotValue !== undefined || 
-          changes.system?.equipped !== undefined ||
-          changes.system?.description !== undefined;
-        
-        if (shouldUpdate) {
-          updateCallback();
-        }
-      }
-    });
-
-    // Listen for item creation
-    Hooks.on('createItem', (item, options, userId) => {
-      if (item.parent === character && item.system.slotValue > 0) {
-        updateCallback();
-      }
-    });
-  }
 }

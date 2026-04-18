@@ -4,11 +4,7 @@
 import { CharacterData } from "./models/character-data.js";
 import { NPCData } from "./models/npc-data.js";
 import { WeaponData, ArmorData, AdvancementData, ConsequenceData, LootData } from "./models/item-data.js";
-import { WEAPON_TYPES } from "./helpers/weapon-properties.js";
-import { ARMOR_TYPES } from "./helpers/armor-properties.js";
-import { CONSEQUENCE_TYPES } from "./helpers/item-properties.js";
 import { registerTemplateHelpers } from "./helpers/template-helpers.js";
-import { AssetPaths } from "./config/constants.js";
 import { getWeaponIconPath, isDefaultIcon } from "./config/constants.js";
 
 /**
@@ -59,22 +55,9 @@ Hooks.once("init", () => {
   Hooks.on('preUpdateItem', (item, changes) => {
     if (item.type !== 'weapon') return;
     if (!changes.system?.weaponType) return;
+    if (!isDefaultIcon(item.img)) return;
 
-    const currentImg = item.img;
-    const defaultIcons = Object.values(AssetPaths.ICONS);
-    const isDefaultIcon = !currentImg
-      || currentImg === 'icons/svg/item-bag.svg'
-      || defaultIcons.includes(currentImg);
-
-    if (!isDefaultIcon) return;
-
-    const iconMap = {
-      heavy: AssetPaths.ICONS.WEAPON_TWO_HANDED,
-      throwing: AssetPaths.ICONS.THROWING_WEAPON,
-      ranged: AssetPaths.ICONS.RANGED_WEAPON,
-      long: AssetPaths.ICONS.LONG_WEAPON
-    };
-    changes.img = iconMap[changes.system.weaponType] || AssetPaths.ICONS.WEAPON_ONE_HANDED;
+    changes.img = getWeaponIconPath(changes.system.weaponType);
   });
 
   console.log("=== BEST LEFT BURIED: DATA MODELS REGISTERED ===");

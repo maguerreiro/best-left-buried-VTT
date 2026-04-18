@@ -226,18 +226,6 @@
     height: var(--input-height-base);
 }
 
-/* original 
-.best-left-buried .info-item input[type="text"],
-.best-left-buried .info-item input[type="number"] {
-    padding: 4px 6px;
-    border: 1px solid var(--border-color);
-    background: var(--bg-primary);
-    color: var(--text-primary);
-    border-radius: 3px;
-    font-size: 0.9em;
-}
-*/
-
 .best-left-buried .character-name {
     font-size: var(--font-size-header);
     font-weight: bold;

@@ -1,7 +1,7 @@
 // sheets/item-sheet.js
 // Item sheet for Best Left Buried items
 
-import { WEAPON_TYPES, WEAPON_RANGES, ATTACK_ATTRIBUTES } from "../module/helpers/weapon-properties.js";
+import { WEAPON_TYPES, WEAPON_RANGES, ATTACK_ATTRIBUTES, calculateWeaponDamage } from "../module/helpers/weapon-properties.js";
 import { ARMOR_TYPES } from "../module/helpers/armor-properties.js";
 import { CONSEQUENCE_TYPES } from "../module/helpers/item-properties.js";
 import { DisplayManager } from "../module/systems/display-manager.js";
@@ -84,13 +84,7 @@ export class ItemSheet extends foundry.applications.api.HandlebarsApplicationMix
     const weaponData = WEAPON_TYPES[doc.system.weaponType];
     if (!weaponData) return null;
 
-    let damage = weaponData.damageMod || 0;
-    if (doc.system.isTwoHanded && weaponData.twoHandedBonus) {
-      damage += 1;
-    }
-    if (doc.system.inMelee && weaponData.meleePenalty) {
-      damage -= 1;
-    }
+    const damage = calculateWeaponDamage(doc.system, weaponData);
 
     return {
       range: weaponData.range,
