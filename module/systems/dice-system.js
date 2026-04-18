@@ -74,8 +74,7 @@ export class DiceSystem {
     
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: character }),
-      flavor: `${weapon.name}${modeLabel}: <br> <span style="color: #000000;font-size: 2em;"><strong>${this._capitalizeText(attackAttribute)}:</strong> ${attackValue} </span> <br> <span style="color: rgb(93, 20, 43);font-size: 2em;"><strong>Damage Mod:</strong> ${damageModifier >= 0 ? '+' : ''}${damageModifier}</span> `,
-      content: messageContent
+      flavor: `${weapon.name}${modeLabel}: <br> <span class="blb-chat-stat"><strong>${this._capitalizeText(attackAttribute)}:</strong> ${attackValue} </span> <br> <span class="blb-chat-damage"><strong>Damage Mod:</strong> ${damageModifier >= 0 ? '+' : ''}${damageModifier}</span> `,      content: messageContent
     });
     
     return roll;

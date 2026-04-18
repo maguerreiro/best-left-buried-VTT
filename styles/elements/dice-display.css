@@ -27,3 +27,13 @@
     opacity: 0.5;
     text-decoration: line-through;
 }
+
+.blb-chat-stat {
+    color: #000000;
+    font-size: 2em;
+}
+
+.blb-chat-damage {
+    color: var(--color-burgundy);
+    font-size: 2em;
+}
