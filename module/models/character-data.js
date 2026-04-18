@@ -1,6 +1,9 @@
 // module/models/character-data.js
 // Data model for Best Left Buried characters
 
+import { ARMOR_TYPES } from '../helpers/armor-properties.js';
+import { calculateMaxEncumbrance } from '../config/constants.js';
+
 /**
  * CharacterData - Data model defining the structure and behavior of characters
  * Extends Foundry's TypeDataModel to provide character-specific functionality
@@ -222,7 +225,7 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
 
     // ===== CALCULATE CARRYING CAPACITY =====
     // Formula: 12 + (2 × Brawn) + max(Wit, Will)
-    this.encumbranceMax = 12 + (2 * this.brawnTotal) + Math.max(this.witTotal, this.willTotal);
+    this.encumbranceMax = calculateMaxEncumbrance(this.brawnTotal, this.witTotal, this.willTotal);
     
     // Initialize current encumbrance (calculated from items below)
     this.encumbranceCurrent = 0;
@@ -235,21 +238,9 @@ export class CharacterData extends foundry.abstract.TypeDataModel {
     const armorItems = character.items.filter(item => item.type === "armor");
     for (let armor of armorItems) {
       if (armor.system.equipped) {
-        // Add bonus based on armor type
-        switch (armor.system.armorType) {
-          case "basic":
-            this.armorTotal += 1;
-            this.armorBonus += 1;
-            break;
-          case "plate":
-            this.armorTotal += 2;
-            this.armorBonus += 2;
-            break;
-          case "shield":
-            this.armorTotal += 1;
-            this.armorBonus += 1;
-            break;
-        }
+        const bonus = ARMOR_TYPES[armor.system.armorType]?.bonus || 0;
+        this.armorTotal += bonus;
+        this.armorBonus += bonus;
       }
     }
 

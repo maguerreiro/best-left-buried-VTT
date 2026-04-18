@@ -29,10 +29,8 @@ export class ItemSheet extends foundry.applications.api.HandlebarsApplicationMix
     },
     actions: {
       editImage: ItemSheet.#onEditImage,
-      updateWeaponType: ItemSheet.#onUpdateWeaponType,
       updateArmorType: ItemSheet.#onUpdateArmorType,
       updateConsequenceType: ItemSheet.#onUpdateConsequenceType,
-      rollAdvancement: ItemSheet.#onRollAdvancement
     }
   };
 
@@ -105,9 +103,7 @@ export class ItemSheet extends foundry.applications.api.HandlebarsApplicationMix
   /** @override */
   async _onRender(context, options) {
     await super._onRender(context, options);
-    
     this._updateImageDisplay();
-    this._setupWeaponTypeHandler();
   }
 
   _updateImageDisplay() {
@@ -117,19 +113,7 @@ export class ItemSheet extends foundry.applications.api.HandlebarsApplicationMix
     }
   }
 
-  _setupWeaponTypeHandler() {
-    const weaponTypeSelect = this.element?.querySelector('select[name="system.weaponType"]');
-    if (!weaponTypeSelect) return;
-    
-    weaponTypeSelect.addEventListener('change', (event) => {
-      const newType = event.target.value;
-      const newIcon = DisplayManager.getWeaponIcon(newType);
-      const img = this.element?.querySelector('header.sheet-header img');
-      if (img) {
-        img.src = newIcon;
-      }
-    });
-  }
+
 
   // Event handlers
   static async #onEditImage(event, target) {
@@ -153,35 +137,6 @@ export class ItemSheet extends foundry.applications.api.HandlebarsApplicationMix
     await this.document.update(updateData);
   }
 
-  static async #onUpdateWeaponType(event, target) {
-    const newType = target.value;
-    const newIcon = DisplayManager.getWeaponIcon(newType);
-    
-    // Only update icon if it's still using a default weapon icon
-    const currentImg = this.document.img;
-    const isDefaultIcon = !currentImg || 
-                          currentImg === "icons/svg/item-bag.svg" ||
-                          currentImg.includes("systems/best-left-buried_V3/icons/weapon_") ||
-                          currentImg.includes("systems/best-left-buried_V3/icons/long_weapon") ||
-                          currentImg.includes("systems/best-left-buried_V3/icons/throwing_weapon") ||
-                          currentImg.includes("systems/best-left-buried_V3/icons/ranged_weapon");
-    
-    if (isDefaultIcon) {
-      await this.document.update({
-        "system.weaponType": newType,
-        "system.isTwoHanded": false,
-        "system.inMelee": false,
-        "img": newIcon
-      });
-    } else {
-      // User has set a custom icon, don't override it
-      await this.document.update({
-        "system.weaponType": newType,
-        "system.isTwoHanded": false,
-        "system.inMelee": false
-      });
-    }
-  }
 
   static async #onUpdateArmorType(event, target) {
     const newArmorType = target.value;
@@ -197,30 +152,5 @@ export class ItemSheet extends foundry.applications.api.HandlebarsApplicationMix
     });
   }
 
-  static async #onRollAdvancement(event, target) {
-    const rollFormula = this.document.system.rollFormula || "2d6";
-    
-    const roll = await new Roll(rollFormula).evaluate();
-    
-    const dieResults = roll.dice[0]?.results?.map(r => r.result) || [];
-    const rollTooltip = await roll.getTooltip();
-    
-    const resultText = `
-      <div class="dice-roll">
-        <div class="dice-result">
-          <div class="dice-formula">${roll.formula}</div>
-          <h4 class="dice-total dice-results-box">
-            ${dieResults.map(r => `<div class="dice-result-box">${r}</div>`).join("")}
-          </h4>
-          <div class="dice-tooltip">${rollTooltip}</div>
-        </div>
-      </div>
-    `;
 
-    ChatMessage.create({
-      speaker: ChatMessage.getSpeaker({ actor: this.document.parent }),
-      flavor: `${this.document.name} Roll`,
-      content: resultText
-    });
-  }
 }

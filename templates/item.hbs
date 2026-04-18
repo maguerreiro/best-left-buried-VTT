@@ -20,7 +20,7 @@
 
             <div class="form-group">
                 <label>Weapon Type</label>
-                <select name="system.weaponType" data-action="updateWeaponType">
+                <select name="system.weaponType">
                     {{#each WEAPON_TYPES as |type id|}}
                         <option value="{{id}}" {{#if (eq ../system.weaponType id)}}selected{{/if}}>{{type.label}}</option>
                     {{/each}}

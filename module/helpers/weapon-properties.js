@@ -75,3 +75,34 @@ export const WEAPON_TYPES = {
         meleePenalty: true  // -1 damage when used in melee
     }
 };
+
+/**
+ * Calculate total weapon damage modifier
+ * Single source of truth for damage calculation
+ * @param {Object} weaponSystem - weapon.system data
+ * @param {Object} weaponDef - WEAPON_TYPES[type] definition
+ * @returns {number}
+ */
+export function calculateWeaponDamage(weaponSystem, weaponDef) {
+  if (!weaponDef) return 0;
+
+  const hasCustomDamage = weaponSystem.customDamageMod !== null
+    && weaponSystem.customDamageMod !== undefined;
+
+  if (hasCustomDamage) return weaponSystem.customDamageMod;
+
+  let damage = weaponDef.damageMod || 0;
+
+  if (weaponSystem.isTwoHanded && weaponDef.twoHandedBonus) {
+    damage += 1;
+  }
+
+  if (weaponDef.meleePenalty) {
+    const effectiveRange = weaponSystem.customRange || weaponDef.range;
+    if (effectiveRange === 'melee') {
+      damage -= 1;
+    }
+  }
+
+  return damage;
+}

@@ -1,8 +1,6 @@
 // module/models/item-data.js
 // Data models for Best Left Buried items
 
-import { AssetPaths } from '../config/constants.js';
-
 /**
  * WeaponData - Data model for weapon items
  */
@@ -90,48 +88,6 @@ export class WeaponData extends foundry.abstract.TypeDataModel {
         initial: ""
       })
     };
-  }
-
-  /**
-   * Prepare derived data
-   * Set default icon based on weapon type if no custom icon is set
-   */
-  prepareDerivedData() {
-    // Only set default icon if the current icon is the generic Foundry icon
-    if (!this.parent.img || this.parent.img === "icons/svg/item-bag.svg") {
-      this._setDefaultIcon();
-    }
-  }
-
-  /**
-   * Set the default icon based on weapon type
-   * @private
-   */
-  _setDefaultIcon() {
-    const weaponType = this.weaponType || "hand";
-    let iconPath;
-
-    switch (weaponType) {
-      case "heavy":
-        iconPath = AssetPaths.ICONS.WEAPON_TWO_HANDED;
-        break;
-      case "throwing":
-        iconPath = AssetPaths.ICONS.THROWING_WEAPON;
-        break;
-      case "ranged":
-        iconPath = AssetPaths.ICONS.RANGED_WEAPON;
-        break;
-      case "long":
-        iconPath = AssetPaths.ICONS.LONG_WEAPON;
-        break;
-      default:
-        iconPath = AssetPaths.ICONS.WEAPON_ONE_HANDED;
-    }
-
-    // Update the parent item's img field
-    if (this.parent) {
-      this.parent.updateSource({ img: iconPath });
-    }
   }
 }
 

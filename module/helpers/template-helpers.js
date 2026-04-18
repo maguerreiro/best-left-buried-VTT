@@ -4,6 +4,7 @@
 import { WEAPON_TYPES } from './weapon-properties.js';
 import { ARMOR_TYPES } from './armor-properties.js';
 import { CONSEQUENCE_TYPES } from './item-properties.js';
+import { calculateWeaponDamage } from './weapon-properties.js';
 
 /**
  * Register all Handlebars template helpers
@@ -52,36 +53,12 @@ export function registerTemplateHelpers() {
    * Usage: {{getWeaponDamage weaponType isTwoHanded customRange item}}
    */
   Handlebars.registerHelper('getWeaponDamage', function(weaponType, isTwoHanded, customRange, item) {
-    const weaponDefinition = WEAPON_TYPES[weaponType];
-    if (!weaponDefinition) return '+0';
-    
-    let damageModifier;
-    
-    // Check if using custom damage modifier
-    if (item && item.system && item.system.customDamageMod !== null && item.system.customDamageMod !== undefined) {
-      // Use custom damage directly (no bonuses/penalties apply)
-      damageModifier = item.system.customDamageMod;
-    } else {
-      // Start with base damage from weapon type
-      damageModifier = weaponDefinition.damageMod || 0;
-      
-      // Apply two-handed bonus if applicable
-      if (isTwoHanded && weaponDefinition.twoHandedBonus) {
-        damageModifier += 1;
-      }
-      
-      // Apply melee penalty for throwing weapons when range is set to melee
-      if (weaponDefinition.meleePenalty) {
-        // Check if custom range is melee, or if no custom range, check default range
-        const effectiveRange = customRange || weaponDefinition.range;
-        if (effectiveRange === 'melee') {
-          damageModifier -= 1;
-        }
-      }
-    }
+    const weaponDef = WEAPON_TYPES[weaponType];
+    if (!weaponDef) return '+0';
 
-    // Format with sign
-    return damageModifier >= 0 ? `+${damageModifier}` : `${damageModifier}`;
+    const weaponSystem = item?.system || { isTwoHanded, customRange };
+    const damage = calculateWeaponDamage(weaponSystem, weaponDef);
+    return damage >= 0 ? `+${damage}` : `${damage}`;
   });
 
   /**

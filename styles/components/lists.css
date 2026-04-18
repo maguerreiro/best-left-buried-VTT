@@ -23,40 +23,6 @@
     overflow: hidden;
 }
 
-.best-left-buried .list-header {
-    display: grid;
-    grid-template-columns: 30px 1fr 3fr auto;
-    align-items: center;
-    gap: var(--spacing-lg);
-    padding: var(--spacing-xs) var(--spacing-lg);
-    background: var(--color-bg-tertiary);
-    border-bottom: 2px solid var(--color-border);
-    font-weight: var(--font-weight-semibold);
-    font-size: var(--font-size-small);
-    color: var(--color-text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    position: relative;
-    bottom: -2px;
-}
-
-.best-left-buried .list-header .col-name {
-    text-align: left;
-}
-
-.best-left-buried .list-header .col-description {
-    text-align: left;
-}
-
-.best-left-buried .list-header .col-uses-header {
-    text-align: center;
-    min-width: 25px;
-}
-
-.best-left-buried .list-header .col-controls {
-    text-align: right;
-    min-width: 80px;
-}
 
 .best-left-buried .list-item {
     display: grid;

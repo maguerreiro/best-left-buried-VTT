@@ -1,7 +1,9 @@
 // module/systems/display-manager.js
 // Manages UI updates and visual display calculations
 
-import { AssetPaths } from '../config/constants.js';
+import { AssetPaths, getWeaponIconPath } from '../config/constants.js';
+import { ARMOR_TYPES } from '../helpers/armor-properties.js';
+import { calculateMaxEncumbrance } from '../config/constants.js';
 
 /**
  * DisplayManager - Handles all UI updates and display calculations
@@ -15,31 +17,7 @@ export class DisplayManager {
    * @returns {string} Path to the weapon icon
    */
   static getWeaponIcon(weaponType) {
-    const twoHandedTypes = ['heavy'];
-    
-    if (twoHandedTypes.includes(weaponType)) {
-      return AssetPaths.ICONS.WEAPON_TWO_HANDED;
-    }
-    
-    const ThrowingTypes = ['throwing'];
-    
-    if (ThrowingTypes.includes(weaponType)) {
-      return AssetPaths.ICONS.THROWING_WEAPON;
-    }
-
-    const RangedTypes = ['ranged'];
-    
-    if (RangedTypes.includes(weaponType)) {
-      return AssetPaths.ICONS.RANGED_WEAPON;
-    }
-
-    const LongTypes = ['long'];
-    
-    if (LongTypes.includes(weaponType)) {
-      return AssetPaths.ICONS.LONG_WEAPON;
-    }
-
-    return AssetPaths.ICONS.WEAPON_ONE_HANDED;
+    return getWeaponIconPath(weaponType);
   }
 
   /**
@@ -50,28 +28,9 @@ export class DisplayManager {
    */
   static getItemIcon(itemType, subType = null) {
     if (itemType === "weapon" && subType) {
-      return this.getWeaponIcon(subType);
+      return getWeaponIconPath(subType);
     }
     return AssetPaths.ICONS.ITEM_GENERIC;
-  }
-
-  /**
-   * Enrich HTML content in item descriptions
-   * @param {Array} items - Array of items to process
-   * @returns {Promise<Array>} Items with enriched descriptions
-   */
-  static async enrichItemDescriptions(items) {
-    for (const item of items) {
-      item.enrichedDescription = await foundry.applications.ux.TextEditor.enrichHTML(
-        item.system.description || "", 
-        {
-          async: true,
-          secrets: item.isOwner,
-          relativeTo: item
-        }
-      );
-    }
-    return items;
   }
 
   /**
@@ -132,7 +91,7 @@ export class DisplayManager {
       const brawnTotal = character.system.brawnTotal || character.system.brawn?.base || 0;
       const witTotal = character.system.witTotal || character.system.wit?.base || 0;
       const willTotal = character.system.willTotal || character.system.will?.base || 0;
-      const maxEncumbrance = 12 + (2 * brawnTotal) + Math.max(witTotal, willTotal);
+      const maxEncumbrance = calculateMaxEncumbrance(brawnTotal, witTotal, willTotal);
       maximumDisplay.textContent = maxEncumbrance;
     }
     
@@ -160,17 +119,7 @@ export class DisplayManager {
     );
     
     for (const armor of equippedArmor) {
-      switch (armor.system.armorType) {
-        case "basic":
-          armorBonus += 1;
-          break;
-        case "plate":
-          armorBonus += 2;
-          break;
-        case "shield":
-          armorBonus += 1;
-          break;
-      }
+      armorBonus += ARMOR_TYPES[armor.system.armorType]?.bonus || 0;
     }
     
     const totalArmor = baseArmor + armorBonus;

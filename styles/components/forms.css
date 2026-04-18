@@ -276,13 +276,6 @@
     box-sizing: border-box;
 }
 
-.best-left-buried .split-left.encumbrance-current,
-.best-left-buried .split-right.encumbrance-max {
-    background: var(--color-bg-tertiary);
-    border: 1px solid var(--color-border-light);
-    font-weight: var(--font-weight-semibold);
-}
-
 .best-left-buried .single-input {
     width: var(--stat-column-width);
     height: var(--input-height-base);

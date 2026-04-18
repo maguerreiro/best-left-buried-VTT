@@ -40,9 +40,3 @@
     gap: var(--spacing-xs);
     height: var(--button-height-base);
 }
-
-.best-left-buried .stat-input-row {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-xs);
-}

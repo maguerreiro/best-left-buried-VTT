@@ -101,19 +101,40 @@ export const AssetPaths = {
 };
 
 /**
- * Item type identifiers
+ * Map weapon type to default icon path
+ * @param {string} weaponType
+ * @returns {string}
  */
-export const ItemTypes = {
-  WEAPON: 'weapon',
-  ARMOR: 'armor',
-  ADVANCEMENT: 'advancement',
-  CONSEQUENCE: 'consequence',
-  LOOT: 'loot'
-};
+export function getWeaponIconPath(weaponType) {
+  const iconMap = {
+    heavy: AssetPaths.ICONS.WEAPON_TWO_HANDED,
+    throwing: AssetPaths.ICONS.THROWING_WEAPON,
+    ranged: AssetPaths.ICONS.RANGED_WEAPON,
+    long: AssetPaths.ICONS.LONG_WEAPON
+  };
+  return iconMap[weaponType] || AssetPaths.ICONS.WEAPON_ONE_HANDED;
+}
 
 /**
- * Actor type identifiers
+ * Check if an image path is a default system icon
+ * @param {string} imgPath
+ * @returns {boolean}
  */
-export const ActorTypes = {
-  CHARACTER: 'character'
-};
+export function isDefaultIcon(imgPath) {
+  if (!imgPath || imgPath === 'icons/svg/item-bag.svg') return true;
+  return Object.values(AssetPaths.ICONS).includes(imgPath);
+}
+
+
+/**
+ * Calculate maximum encumbrance from attribute totals
+ * @param {number} brawnTotal
+ * @param {number} witTotal
+ * @param {number} willTotal
+ * @returns {number}
+ */
+export function calculateMaxEncumbrance(brawnTotal, witTotal, willTotal) {
+  return SystemConstants.ENCUMBRANCE.BASE_CAPACITY
+    + (SystemConstants.ENCUMBRANCE.BRAWN_MULTIPLIER * brawnTotal)
+    + Math.max(witTotal, willTotal);
+}

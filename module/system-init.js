@@ -8,6 +8,8 @@ import { WEAPON_TYPES } from "./helpers/weapon-properties.js";
 import { ARMOR_TYPES } from "./helpers/armor-properties.js";
 import { CONSEQUENCE_TYPES } from "./helpers/item-properties.js";
 import { registerTemplateHelpers } from "./helpers/template-helpers.js";
+import { AssetPaths } from "./config/constants.js";
+import { getWeaponIconPath, isDefaultIcon } from "./config/constants.js";
 
 /**
  * BestLeftBuriedActor - Custom Actor class
@@ -44,6 +46,37 @@ Hooks.once("init", () => {
   // Register Handlebars template helpers
   registerTemplateHelpers();
   
+  // Set default weapon icon at creation time (not in prepareDerivedData)
+  Hooks.on('preCreateItem', (item, data) => {
+    if (item.type !== 'weapon') return;
+    if (data.img && data.img !== 'icons/svg/item-bag.svg') return;
+
+    const weaponType = data.system?.weaponType || 'hand';
+    item.updateSource({ img: getWeaponIconPath(weaponType) });
+  });
+
+  // Update weapon icon when weapon type changes (if still using a default icon)
+  Hooks.on('preUpdateItem', (item, changes) => {
+    if (item.type !== 'weapon') return;
+    if (!changes.system?.weaponType) return;
+
+    const currentImg = item.img;
+    const defaultIcons = Object.values(AssetPaths.ICONS);
+    const isDefaultIcon = !currentImg
+      || currentImg === 'icons/svg/item-bag.svg'
+      || defaultIcons.includes(currentImg);
+
+    if (!isDefaultIcon) return;
+
+    const iconMap = {
+      heavy: AssetPaths.ICONS.WEAPON_TWO_HANDED,
+      throwing: AssetPaths.ICONS.THROWING_WEAPON,
+      ranged: AssetPaths.ICONS.RANGED_WEAPON,
+      long: AssetPaths.ICONS.LONG_WEAPON
+    };
+    changes.img = iconMap[changes.system.weaponType] || AssetPaths.ICONS.WEAPON_ONE_HANDED;
+  });
+
   console.log("=== BEST LEFT BURIED: DATA MODELS REGISTERED ===");
 });
 

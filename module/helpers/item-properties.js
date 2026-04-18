@@ -1,17 +1,5 @@
 // module/helpers/item-properties.js
-// Item type definitions for advancements, consequences, and loot
-
-/**
- * Advancement type definitions
- * Currently no specific types, but structure allows for future expansion
- */
-export const ADVANCEMENT_TYPES = {};
-
-/**
- * Loot type definitions
- * Currently no specific types, but structure allows for future expansion
- */
-export const LOOT_TYPES = {};
+// Item type definitions for consequences
 
 /**
  * Consequence type definitions

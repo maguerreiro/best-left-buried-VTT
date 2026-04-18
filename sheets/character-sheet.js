@@ -61,6 +61,7 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
     this._externalTabs = null;
     this._animationFrame = null;
     this._scrollPosition = undefined;
+    this._hookIds = [];
   }
 
   /** @override */
@@ -82,7 +83,6 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
       CONSEQUENCE_TYPES,
       items: items, 
       activeTab: this.activeTab,
-      // Alignment Logic: Check if ANY item in these specific lists has uses enabled
       hasAnyAdvancementUses: items.advancement.some(i => i.system.hasUses === true),
       hasAnyConsequenceUses: items.consequence.some(i => i.system.hasUses === true),
       hasAnyLootUses: items.loot.some(i => i.system.hasUses === true),
@@ -123,22 +123,20 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
   }
 
   _prepareArmor(context) {
-    const system = context.system;
-    let armorBonus = 0;
-    let armorTotal = system.armor?.base || 7;
-    
-    for (const armor of context.items.armor) {
-      if (armor.system.equipped) {
-        if (armor.system.armorType === "basic") armorBonus += 1;
-        else if (armor.system.armorType === "plate") armorBonus += 2;
-        else if (armor.system.armorType === "shield") armorBonus += 1;
+      const system = context.system;
+      let armorBonus = 0;
+      let armorTotal = system.armor?.base || 7;
+      
+      for (const armor of context.items.armor) {
+        if (armor.system.equipped) {
+          armorBonus += ARMOR_TYPES[armor.system.armorType]?.bonus || 0;
+        }
       }
+      
+      armorTotal += armorBonus;
+      context.system.armorBonus = armorBonus;
+      context.system.armorTotal = armorTotal;
     }
-    
-    armorTotal += armorBonus;
-    context.system.armorBonus = armorBonus;
-    context.system.armorTotal = armorTotal;
-  }
 
   /** @override */
   async _onRender(context, options) {
@@ -169,37 +167,58 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
     });
   }
 
+  /**
+   * Register item-change hooks ONCE per sheet instance.
+   * Guards against re-registration on every render.
+   */
   _setupItemChangeListeners() {
-    DisplayManager.watchItemChanges(this.document, () => {
-      DisplayManager.refreshEncumbranceDisplay(this.document, this.element);
-      if (this.element) {
+    if (this._hookIds.length > 0) return;
+
+    const updateId = Hooks.on('updateItem', (item, changes) => {
+      if (item.parent !== this.document) return;
+      const sys = changes.system;
+      if (!sys) return;
+
+      const affectsDamage = sys.isTwoHanded !== undefined
+        || sys.customRange !== undefined
+        || sys.customDamageMod !== undefined
+        || sys.weaponType !== undefined;
+      const affectsEncumbrance = sys.slotValue !== undefined;
+      const affectsArmor = sys.equipped !== undefined || sys.armorType !== undefined;
+      const affectsDescription = sys.description !== undefined;
+
+      if (affectsEncumbrance || affectsArmor) {
+        DisplayManager.refreshEncumbranceDisplay(this.document, this.element);
+        DisplayManager.refreshArmorDisplay(this.document, this.element);
+      }
+      if (affectsDamage || affectsDescription) {
         this.render(false);
       }
     });
 
-    Hooks.on('updateItem', (item, changes, options, userId) => {
-      if (item.parent === this.document) {
-        // Re-render if weapon properties changed (affects damage display)
-        if (changes.system?.isTwoHanded !== undefined || 
-            changes.system?.customRange !== undefined ||
-            changes.system?.customDamageMod !== undefined) {
-          this.render(false);
-        }
-        
-        if (changes.system?.slotValue !== undefined) {
-          DisplayManager.refreshEncumbranceDisplay(this.document, this.element);
-        }
-        if (changes.system?.description !== undefined) {
-          this.render(false);
-        }
-      }
+    const createId = Hooks.on('createItem', (item) => {
+      if (item.parent !== this.document) return;
+      DisplayManager.refreshEncumbranceDisplay(this.document, this.element);
+      this.render(false);
     });
 
-    Hooks.on('createItem', (item, options, userId) => {
-      if (item.parent === this.document && item.system.slotValue > 0) {
-        DisplayManager.refreshEncumbranceDisplay(this.document, this.element);
-      }
+    const deleteId = Hooks.on('deleteItem', (item) => {
+      if (item.parent !== this.document) return;
+      this.render(false);
     });
+
+    this._hookIds = [
+      ['updateItem', updateId],
+      ['createItem', createId],
+      ['deleteItem', deleteId]
+    ];
+  }
+
+  _cleanupItemHooks() {
+    for (const [name, id] of this._hookIds) {
+      Hooks.off(name, id);
+    }
+    this._hookIds = [];
   }
 
   _createExternalTabs() {
@@ -235,6 +254,7 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
   }
 
   async close(options = {}) {
+    this._cleanupItemHooks();
     this._cleanupExternalTabs();
     return super.close(options);
   }
@@ -305,7 +325,6 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
   _attachPartListeners(partId, htmlElement, options) {
     super._attachPartListeners(partId, htmlElement, options);
     
-    // Handle uses input changes for advancements, consequences, and loot
     const usesInputs = htmlElement.querySelectorAll('.uses-current[data-item-id]');
     usesInputs.forEach(input => {
       input.addEventListener('change', async (event) => {
@@ -322,7 +341,6 @@ export class CharacterSheet extends foundry.applications.api.HandlebarsApplicati
       });
     });
     
-    // Handle quantity input changes for loot
     const quantityInputs = htmlElement.querySelectorAll('.quantity-input[data-item-id]');
     quantityInputs.forEach(input => {
       input.addEventListener('change', async (event) => {

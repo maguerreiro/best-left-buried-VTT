@@ -62,17 +62,17 @@ export const TabsBehavior = {
    */
   positionFloatingTabs(tabsContainer, sheetWindow) {
     const windowRect = sheetWindow.getBoundingClientRect();
-    const tabsX = windowRect.right;
-    const tabsY = windowRect.top; 
-    const tabsZ = Number(sheetWindow.style.zIndex); 
+    const config = SystemConstants.UI_LAYOUT.EXTERNAL_TABS;
+    const tabsX = windowRect.right + config.OFFSET_X;
+    const tabsY = windowRect.top + config.OFFSET_Y;
+    const tabsZ = Number(sheetWindow.style.zIndex);
     
     tabsContainer.style.position = 'fixed';
     tabsContainer.style.left = `${tabsX}px`;
     tabsContainer.style.top = `${tabsY}px`;
     tabsContainer.style.zIndex = tabsZ;
     
-    // Calculate clipping for tabs that extend below window
-    const tabsHeight = SystemConstants.UI_LAYOUT.EXTERNAL_TABS.HEIGHT;
+    const tabsHeight = config.WIDTH;
     const clipAmount = Math.max(0, (tabsY + tabsHeight) - windowRect.bottom);
     tabsContainer.style.clipPath = clipAmount > 0 ? `inset(0 0 ${clipAmount}px 0)` : 'none';
   },

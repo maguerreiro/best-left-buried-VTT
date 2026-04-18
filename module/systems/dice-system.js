@@ -2,6 +2,7 @@
 // Dice rolling mechanics and chat message generation
 
 import { SystemConstants, ThemeColors } from '../config/constants.js';
+import { WEAPON_TYPES, calculateWeaponDamage } from '../helpers/weapon-properties.js';
 
 /**
  * DiceSystem - Manages all dice rolling mechanics and result presentation
@@ -46,7 +47,6 @@ export class DiceSystem {
    * @returns {Promise<Roll>} The evaluated roll object
    */
   static async rollWeaponAttack(character, weapon, rollMode = SystemConstants.ROLL_MODES.STANDARD) {
-    const { WEAPON_TYPES } = await import('../helpers/weapon-properties.js');
     
     const weaponType = weapon.system.weaponType || "hand";
     const weaponProperties = WEAPON_TYPES[weaponType];
@@ -61,7 +61,7 @@ export class DiceSystem {
     const attackValue = character.system[attackAttribute + "Total"] || character.system[attackAttribute]?.base || 0;
     
     // Calculate total damage modifier
-    const damageModifier = this._calculateWeaponDamage(weapon, weaponProperties);
+    const damageModifier = calculateWeaponDamage(weapon.system, weaponProperties);
      
     // Get appropriate dice formula
     const { formula, modeLabel } = this._getWeaponAttackFormula(attackValue, damageModifier, rollMode);
@@ -179,31 +179,6 @@ export class DiceSystem {
     return { formula, modeLabel };
   }
 
-  /**
-   * Calculate total weapon damage including modifiers
-   * @private
-   */
-  static _calculateWeaponDamage(weapon, weaponProperties) {
-    // Check for custom damage mod first, then use weapon type default
-    let damage = (weapon.system.customDamageMod !== null && weapon.system.customDamageMod !== undefined)
-      ? weapon.system.customDamageMod
-      : (weaponProperties.damageMod || 0);
-    
-    // Apply two-handed bonus (only if not using custom damage)
-    if (weapon.system.isTwoHanded && weaponProperties.twoHandedBonus && weapon.system.customDamageMod === null) {
-      damage += 1;
-    }
-    
-    // Apply melee penalty for thrown weapons when range is melee (only if not using custom damage)
-    if (weaponProperties.meleePenalty && weapon.system.customDamageMod === null) {
-      const effectiveRange = weapon.system.customRange || weaponProperties.range;
-      if (effectiveRange === 'melee') {
-        damage -= 1;
-      }
-    }
-    
-    return damage;
-  }
 
   /**
    * Build HTML for attribute check chat message
