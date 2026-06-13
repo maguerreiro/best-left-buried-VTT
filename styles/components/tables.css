@@ -86,7 +86,7 @@
 
 .best-left-buried .armor-table .table-header {
     display: grid;
-    grid-template-columns: 25px 30px 1fr 4fr 110px 60px 50px 30px;
+    grid-template-columns: 25px 30px 1fr 4fr 110px 60px 60px 50px 30px;
     gap: var(--spacing-md);
     padding: 6px var(--spacing-lg);
     min-height: 32px;
@@ -95,7 +95,7 @@
 
 .best-left-buried .armor-table .table-row {
     display: grid;
-    grid-template-columns: 25px 30px 1fr 4fr 110px 60px 50px 30px;
+    grid-template-columns: 25px 30px 1fr 4fr 110px 60px 60px 50px 30px;
     gap: var(--spacing-md);
     padding: 6px var(--spacing-lg);
     min-height: 32px;
@@ -286,6 +286,6 @@
     color: var(--color-accent-primary) !important;
     border-radius: var(--radius-sm) !important;
     font-weight: var(--font-weight-semibold);
-    font-size: 0.85em;
+    font-size: 12px;
     box-sizing: border-box;
 }

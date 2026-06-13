@@ -1,3 +1,11 @@
 {
-  "blb.attackLabel": "Attack"
+
+  "TYPES.Actor.character": "Character Sheet",
+  "TYPES.Actor.npc": "NPC Sheet",
+  "TYPES.Item.weapon": "Weapon",
+  "TYPES.Item.armor": "Armor",
+  "TYPES.Item.advancement": "Advancement",
+  "TYPES.Item.consequence": "Consequence",
+  "TYPES.Item.loot": "Loot"
+
 }

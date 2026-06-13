@@ -104,4 +104,15 @@ export function registerTemplateHelpers() {
   Handlebars.registerHelper('or', function(valueA, valueB) {
     return valueA || valueB;
   });
+
+  /**
+   * Get the initiative modifier for an armor type
+   * Usage: {{getArmorInitiative armorType}}
+   */
+  Handlebars.registerHelper('getArmorInitiative', function(armorType) {
+    const armorDefinition = ARMOR_TYPES[armorType];
+    const mod = armorDefinition?.initiativeMod || 0;
+    return mod >= 0 ? `+${mod}` : `${mod}`;
+  });
+  
 }

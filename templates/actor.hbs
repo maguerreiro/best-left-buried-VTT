@@ -275,6 +275,7 @@
                                 <div class="col-description">Description</div>
                                 <div class="col-type">Type</div>
                                 <div class="col-armor">Armor</div>
+                                <div class="col-initiative">Initiative</div>
                                 <div class="col-slots">Slots</div>
                                 <div class="col-actions"></div>
                             </div>
@@ -300,6 +301,7 @@
                                     {{#if (eq item.system.armorType "plate")}}+2{{/if}}
                                     {{#if (eq item.system.armorType "shield")}}+1{{/if}}
                                 </div>
+                                <div class="col-initiative">{{getArmorInitiative item.system.armorType}}</div>
                                 <div class="col-slots">{{item.system.slotValue}}</div>
                                 <div class="col-actions">
                                     <a data-action="deleteItem" class="control-button delete" title="Delete">
