@@ -6,12 +6,43 @@ import { NPCData } from "./models/npc-data.js";
 import { WeaponData, ArmorData, AdvancementData, ConsequenceData, LootData } from "./models/item-data.js";
 import { registerTemplateHelpers } from "./helpers/template-helpers.js";
 import { getWeaponIconPath, isDefaultIcon } from "./config/constants.js";
+import { getInitiativeComponents, buildInitiativeMessageHtml } from "./systems/combat-system.js";
 
-/**
- * BestLeftBuriedActor - Custom Actor class
- * Extends the base Foundry Actor with system-specific functionality
- */
 class BestLeftBuriedActor extends Actor {}
+
+class BestLeftBuriedCombat extends Combat {
+  /** @override */
+  async rollInitiative(ids, options = {}) {
+    ids = typeof ids === "string" ? [ids] : ids;
+
+    const updates = [];
+    const messages = [];
+
+    for (const id of ids) {
+      const combatant = this.combatants.get(id);
+      if (!combatant?.actor) continue;
+
+      const components = getInitiativeComponents(combatant.actor);
+      const roll = await new Roll("1d3").evaluate();
+      const total = roll.total + components.totalMod;
+
+      updates.push({ _id: id, initiative: total });
+
+      messages.push({
+        speaker: ChatMessage.getSpeaker({ actor: combatant.actor, token: combatant.token }),
+        flavor: `${combatant.name} rolls for Initiative!`,
+        content: buildInitiativeMessageHtml(roll, components),
+        rolls: [roll],
+        sound: CONFIG.sounds.dice
+      });
+    }
+
+    if (updates.length) await this.updateEmbeddedDocuments("Combatant", updates);
+    if (messages.length) await ChatMessage.implementation.createDocuments(messages);
+
+    return this;
+  }
+}
 
 /**
  * Initialize the system
@@ -23,6 +54,7 @@ Hooks.once("init", () => {
   
   // Register custom Actor class
   CONFIG.Actor.documentClass = BestLeftBuriedActor;
+  CONFIG.Combat.documentClass = BestLeftBuriedCombat;
 
   // Initialize data model registries
   CONFIG.Actor.dataModels = CONFIG.Actor.dataModels || {};
@@ -111,7 +143,7 @@ Hooks.once("ready", async () => {
         label: "Best Left Buried Item Sheet"
       }
     );
-    
+
     console.log("=== BEST LEFT BURIED: SHEETS REGISTERED SUCCESSFULLY ===");
   } catch (error) {
     console.error("=== BEST LEFT BURIED: SHEET REGISTRATION FAILED ===", error);

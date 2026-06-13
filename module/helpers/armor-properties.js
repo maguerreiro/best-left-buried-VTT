@@ -8,14 +8,17 @@
 export const ARMOR_TYPES = {
     basic: {
         label: "Basic Armor (+1)",
-        bonus: 1
+        bonus: 1,
+        initiativeMod: 0
     },
     plate: {
         label: "Plate Armor (+2)", 
-        bonus: 2
+        bonus: 2,
+        initiativeMod: -1   // PLACEHOLDER - confirm actual value
     },
     shield: {
         label: "Shield (+1)",
-        bonus: 1
+        bonus: 1,
+        initiativeMod: 0
     }
 };

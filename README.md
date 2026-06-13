@@ -2,6 +2,9 @@
 
 Change log :
 
+# **2026-06-13**
+- Implemented combat tracker
+
 # **2026-04-19**
 - Sanitized the code
 
