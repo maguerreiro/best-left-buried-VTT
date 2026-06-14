@@ -24,14 +24,14 @@ class BestLeftBuriedCombat extends Combat {
 
       const components = getInitiativeComponents(combatant.actor);
       const roll = await new Roll("1d3").evaluate();
-      const total = roll.total + components.totalMod;
+      const total = Math.max(0, roll.total + components.totalMod);
 
       updates.push({ _id: id, initiative: total });
 
       messages.push({
         speaker: ChatMessage.getSpeaker({ actor: combatant.actor, token: combatant.token }),
         flavor: `${combatant.name} rolls for Initiative!`,
-        content: buildInitiativeMessageHtml(roll, components),
+        content: buildInitiativeMessageHtml(roll, components, total),
         rolls: [roll],
         sound: CONFIG.sounds.dice
       });

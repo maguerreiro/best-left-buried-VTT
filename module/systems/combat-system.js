@@ -51,7 +51,7 @@ export function getInitiativeComponents(actor) {
  * @param {Object} components - result of getInitiativeComponents()
  * @returns {string}
  */
-export function buildInitiativeMessageHtml(roll, components) {
+export function buildInitiativeMessageHtml(roll, components, finalTotal) {
   const dieResult = roll.dice[0]?.results?.[0]?.result ?? roll.total;
   const diceHtml = `<div class="dice-result-box">${dieResult}</div>`;
 
@@ -76,7 +76,7 @@ export function buildInitiativeMessageHtml(roll, components) {
           ${lines.join('')}
         </div>
         <div style="margin-top: 8px; font-weight: bold;">
-          Total: ${roll.total + components.totalMod}
+          Total: ${finalTotal}
         </div>
       </div>
     </div>

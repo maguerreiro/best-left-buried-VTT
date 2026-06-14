@@ -112,7 +112,8 @@ export function registerTemplateHelpers() {
   Handlebars.registerHelper('getArmorInitiative', function(armorType) {
     const armorDefinition = ARMOR_TYPES[armorType];
     const mod = armorDefinition?.initiativeMod || 0;
-    return mod >= 0 ? `+${mod}` : `${mod}`;
+    if (mod === 0) return '0';
+    return mod > 0 ? `+${mod}` : `${mod}`;
   });
   
 }
