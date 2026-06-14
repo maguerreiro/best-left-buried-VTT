@@ -6,6 +6,7 @@ import { ARMOR_TYPES } from "../module/helpers/armor-properties.js";
 import { DisplayManager } from "../module/systems/display-manager.js";
 import { RollBehavior } from "./behaviors/roll-behavior.js";
 import { ItemBehavior } from "./behaviors/item-behavior.js";
+import { TabsBehavior } from "./behaviors/tabs-behavior.js";
 
 export class NPCSheet extends foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.sheets.ActorSheetV2
@@ -45,7 +46,11 @@ export class NPCSheet extends foundry.applications.api.HandlebarsApplicationMixi
 
   constructor(...args) {
     super(...args);
+    this.activeTab = "equipment";
+    this._externalTabs = null;
+    this._animationFrame = null;
     this._scrollPosition = undefined;
+    this._hookIds = [];
   }
 
   async _prepareContext(options) {
@@ -56,7 +61,16 @@ export class NPCSheet extends foundry.applications.api.HandlebarsApplicationMixi
     const rollData = doc.getRollData();
     const items = await this._prepareItems(doc.items);
 
-    return {
+    const enrichedDescription = await foundry.applications.ux.TextEditor.enrichHTML(
+      doc.system.description || "",
+      {
+        async: true,
+        secrets: doc.isOwner,
+        relativeTo: doc
+      }
+    );
+
+    const context = {
       actor: doc,
       source: src,
       system: doc.system,
@@ -64,8 +78,14 @@ export class NPCSheet extends foundry.applications.api.HandlebarsApplicationMixi
       WEAPON_TYPES,
       ARMOR_TYPES,
       items: items,
-      hasAnyAdaptationUses: items.advancement.some(i => i.system.hasUses === true)
+      activeTab: this.activeTab,
+      enrichedDescription,
+      hasAnyAdaptationUses: items.advancement.some(i => i.system.hasUses === true),
+      hasAnyLootUses: items.loot.some(i => i.system.hasUses === true)
     };
+
+    this._prepareArmor(context);
+    return context;
   }
 
   async _prepareItems(items) {
@@ -97,16 +117,140 @@ export class NPCSheet extends foundry.applications.api.HandlebarsApplicationMixi
     return organized;
   }
 
+  _prepareArmor(context) {
+    const system = context.system;
+    let armorBonus = 0;
+    let armorTotal = system.armor?.base || 7;
+
+    for (const armor of context.items.armor) {
+      if (armor.system.equipped) {
+        armorBonus += ARMOR_TYPES[armor.system.armorType]?.bonus || 0;
+      }
+    }
+
+    armorTotal += armorBonus;
+    context.system.armorBonus = armorBonus;
+    context.system.armorTotal = armorTotal;
+  }
+
   async _onRender(context, options) {
     await super._onRender(context, options);
     
     DisplayManager.restoreScrollPosition(this.element, this._scrollPosition);
     this._scrollPosition = undefined;
+
+    this._activateTab(this.activeTab);
+    setTimeout(() => this._createExternalTabs(), 100);
     
     DisplayManager.setupPortraitSelector(this.element, this.document, this.position);
+    this._setupItemChangeListeners();
   }
 
-  // Event handlers
+  _activateTab(tabName) {
+    if (!this.element) return;
+
+    const tabContents = this.element.querySelectorAll('.tab[data-tab]');
+    tabContents.forEach(content => {
+      if (content.dataset.tab === tabName) {
+        content.classList.add('active');
+        content.style.display = 'block';
+      } else {
+        content.classList.remove('active');
+        content.style.display = 'none';
+      }
+    });
+  }
+
+  _setupItemChangeListeners() {
+    if (this._hookIds.length > 0) return;
+
+    const updateId = Hooks.on('updateItem', (item, changes) => {
+      if (item.parent !== this.document) return;
+      const sys = changes.system;
+      if (!sys) return;
+
+      const affectsDamage = sys.isTwoHanded !== undefined
+        || sys.customRange !== undefined
+        || sys.customDamageMod !== undefined
+        || sys.weaponType !== undefined;
+      const affectsArmor = sys.equipped !== undefined || sys.armorType !== undefined;
+      const affectsDescription = sys.description !== undefined;
+
+      if (affectsArmor) {
+        DisplayManager.refreshArmorDisplay(this.document, this.element);
+      }
+      if (affectsDamage || affectsDescription) {
+        this.render(false);
+      }
+    });
+
+    const createId = Hooks.on('createItem', (item) => {
+      if (item.parent !== this.document) return;
+      this.render(false);
+    });
+
+    const deleteId = Hooks.on('deleteItem', (item) => {
+      if (item.parent !== this.document) return;
+      this.render(false);
+    });
+
+    this._hookIds = [
+      ['updateItem', updateId],
+      ['createItem', createId],
+      ['deleteItem', deleteId]
+    ];
+  }
+
+   _cleanupItemHooks() {
+    for (const [name, id] of this._hookIds) {
+      Hooks.off(name, id);
+    }
+    this._hookIds = [];
+  }
+
+  _createExternalTabs() {
+    this._cleanupExternalTabs();
+
+    const windowElement = this.element;
+    if (!windowElement) return;
+
+    this._externalTabs = TabsBehavior.createFloatingTabs(
+      windowElement,
+      this.activeTab,
+      (tabId) => this._switchToTab(tabId),
+      [
+        { id: 'equipment', label: 'Equipment' },
+        { id: 'description', label: 'Description' }
+      ]
+    );
+
+    document.body.appendChild(this._externalTabs);
+
+    this._animationFrame = TabsBehavior.startPositionTracking(
+      this._externalTabs,
+      windowElement
+    );
+  }
+
+  _switchToTab(tabId) {
+    this.activeTab = tabId;
+    this._activateTab(tabId);
+    TabsBehavior.updateActiveTab(this._externalTabs, this.activeTab);
+  }
+
+  _cleanupExternalTabs() {
+    TabsBehavior.cleanupFloatingTabs(this._externalTabs, this._animationFrame);
+    this._externalTabs = null;
+    this._animationFrame = null;
+  }
+
+  async close(options = {}) {
+    this._cleanupItemHooks();
+    this._cleanupExternalTabs();
+    return super.close(options);
+  }
+
+    // Event handlers
   static async #onFormSubmit(event, form, formData) {
     const updateData = foundry.utils.expandObject(formData.object);
     await this.document.update(updateData);
@@ -171,5 +315,21 @@ export class NPCSheet extends foundry.applications.api.HandlebarsApplicationMixi
         }
       });
     });
+
+  const quantityInputs = htmlElement.querySelectorAll('.quantity-input[data-item-id]');
+    quantityInputs.forEach(input => {
+      input.addEventListener('change', async (event) => {
+        const itemId = event.target.dataset.itemId;
+        const item = this.document.items.get(itemId);
+        if (item) {
+          const newValue = parseInt(event.target.value) || 1;
+          const clampedValue = Math.max(1, newValue);
+
+          await item.update({ "system.quantity": clampedValue }, { render: false });
+          event.target.value = clampedValue;
+        }
+      });
+    });
   }
+  
 }

@@ -7,7 +7,11 @@ export class NPCData extends foundry.abstract.TypeDataModel {
     const fields = foundry.data.fields;
     
     return {
-      // Primary attributes (no bonus, just base)
+      description: new fields.StringField({
+        required: false,
+        initial: ""
+      }),
+
       brawn: new fields.SchemaField({
         base: new fields.NumberField({
           required: true,

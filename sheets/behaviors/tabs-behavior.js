@@ -16,7 +16,10 @@ export const TabsBehavior = {
    * @param {Function} onTabChange - Callback function when tabs are clicked
    * @returns {HTMLElement} The created tabs container
    */
-  createFloatingTabs(sheetWindow, activeTabId, onTabChange) {
+  createFloatingTabs(sheetWindow, activeTabId, onTabChange, tabDefinitions = [
+    { id: 'character', label: 'Character' },
+    { id: 'equipment', label: 'Equipment' }
+  ]) {
     // Create container for tabs
     const tabsContainer = document.createElement('div');
     tabsContainer.className = 'blb-external-tabs';
@@ -25,12 +28,6 @@ export const TabsBehavior = {
     const tabsNav = document.createElement('nav');
     tabsNav.className = 'sheet-tabs tabs';
     tabsNav.setAttribute('data-group', 'primary');
-
-    // Define available tabs
-    const tabDefinitions = [
-      { id: 'character', label: 'Character' },
-      { id: 'equipment', label: 'Equipment' }
-    ];
 
     // Create tab buttons
     tabDefinitions.forEach(tab => {

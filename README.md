@@ -2,6 +2,15 @@
 
 Change log :
 
+# **2026-06-14**
+- Added to the NPC sheet:
+    - Weapons
+    - Armor
+    - Loot
+    - Tabs
+    - Description tab
+- Initiative roll has a minimum of 0
+
 # **2026-06-13**
 - Implemented combat tracker
 

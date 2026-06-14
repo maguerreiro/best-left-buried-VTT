@@ -28,7 +28,7 @@
                 </div>
             </header>
 
-            {{! Stats Row }}
+            {{! Stats Row - visible in both tabs }}
             <div class="main-stats-row" style="grid-template-columns: repeat(5, 1fr);">
                 <div class="stat-item">
                     <div class="stat-name-row">
@@ -80,103 +80,211 @@
                 </div>
                 <div class="stat-item">
                     <label>Armor</label>
-                    <input type="number" name="system.armor.base" value="{{system.armor.base}}"/>
+                    <span class="armor-total">{{system.armorTotal}}</span>
                 </div>
             </div>
 
-            {{! Equipment Section }}
-            <div class="table-section">
-                <h3>Equipment</h3>
-                <div class="weapons-table">
-                    <div class="table-header">
-                        <div class="col-equip"></div>
-                        <div class="col-icon"></div>
-                        <div class="col-name">Name</div>
-                        <div class="col-type">Type</div>
-                        <div class="col-range">Range</div>
-                        <div class="col-stat">Attack Stat</div>
-                        <div class="col-damage">Damage Mod</div>
-                        <div class="col-initiative">Initiative</div>
-                        <div class="col-slots">Slots</div>
-                        <div class="col-actions">Attack</div>
-                        <div class="col-delete"></div>
-                    </div>
-                    {{#each items.weapon as |item|}}
-                    <div class="table-row" data-item-id="{{item._id}}">
-                        <div class="col-equip">
-                            <input type="checkbox" data-action="toggleEquip" data-item-id="{{item._id}}" {{checked item.system.equipped}} title="Equipped"/>
-                        </div>
-                        <div class="col-icon">
-                            <img src="{{item.img}}" class="item-icon"/>
-                        </div>
-                        <div class="col-name">
-                            <span class="item-name" data-action="openItem">{{item.name}}</span>
-                        </div>
-                        <div class="col-type">{{getWeaponProperty item.system.weaponType "label" item}}</div>
-                        <div class="col-range">{{getWeaponProperty item.system.weaponType "range" item}}</div>
-                        <div class="col-stat">{{getWeaponProperty item.system.weaponType "attackStat" item}}</div>
-                        <div class="col-damage">{{getWeaponDamage item.system.weaponType item.system.isTwoHanded item.system.customRange item}}</div>
-                        <div class="col-initiative">
-                            {{#if (getWeaponProperty item.system.weaponType "initiative" item)}}
-                                {{getWeaponProperty item.system.weaponType "initiative" item}}
-                            {{else}}
-                                0
-                            {{/if}}
-                        </div>
-                        <div class="col-slots">{{item.system.slotValue}}</div>
-                        <div class="col-actions">
-                            <button type="button" data-action="rollWeaponKh2" data-weapon-id="{{item._id}}" class="roll-button-mini" title="Upper Hand">
-                                <i class="fas fa-arrow-up"></i>
-                            </button>
-                            <button type="button" data-action="rollWeapon" data-weapon-id="{{item._id}}" class="roll-button-mini" title="Standard">
-                                <i class="fas fa-sword"></i>
-                            </button>
-                            <button type="button" data-action="rollWeaponKl2" data-weapon-id="{{item._id}}" class="roll-button-mini" title="Against the Odds">
-                                <i class="fas fa-arrow-down"></i>
-                            </button>
-                        </div>
-                        <div class="col-delete"> 
-                            <a data-action="deleteItem" class="control-button delete" title="Delete">
-                                <i class="fas fa-trash"></i>
-                            </a>
-                        </div>
-                    </div>
-                    {{/each}}
-                </div>
-            </div>
-
-            {{! Adaptations (Advancements) Section }}
-            <div class="list-section">
-                <h3>Adaptations</h3>
-                <div class="items-list">
-                    {{#each items.advancement as |item|}}
-                    <div class="list-item" data-item-id="{{item._id}}">
-                        <div class="col-icon">
-                            <img src="{{item.img}}" class="item-icon"/>
-                        </div>                                
-                        <div class="item-name" data-action="openItem">{{item.name}}</div>
-                        <div class="item-description">{{{item.enrichedDescription}}}</div>
-                        <div class="item-controls">
-                            {{#if item.system.hasUses}}
-                                <div class="uses-input">
-                                    <input type="number" name="items.{{item._id}}.system.uses.current" value="{{item.system.uses.current}}" min="0" max="{{item.system.uses.max}}" class="uses-current" data-item-id="{{item._id}}" data-field="system.uses.current"/>
+            {{! Tab content }}
+            <section class="sheet-body">
+                {{! Equipment Tab }}
+                <div class="tab {{#if (eq activeTab 'equipment')}}active{{/if}}" data-tab="equipment">
+                    {{! Weapons Table }}
+                    <div class="table-section">
+                        <h3>Weapons</h3>
+                        <div class="weapons-table">
+                            <div class="table-header">
+                                <div class="col-equip"></div>
+                                <div class="col-icon"></div>
+                                <div class="col-name">Name</div>
+                                <div class="col-type">Type</div>
+                                <div class="col-range">Range</div>
+                                <div class="col-stat">Attack Stat</div>
+                                <div class="col-damage">Damage Mod</div>
+                                <div class="col-initiative">Initiative</div>
+                                <div class="col-slots">Slots</div>
+                                <div class="col-actions">Attack</div>
+                                <div class="col-delete"></div>
+                            </div>
+                            {{#each items.weapon as |item|}}
+                            <div class="table-row" data-item-id="{{item._id}}">
+                                <div class="col-equip">
+                                    <input type="checkbox" data-action="toggleEquip" data-item-id="{{item._id}}" {{checked item.system.equipped}} title="Equipped"/>
                                 </div>
-                            {{else}}
-                                {{#if ../hasAnyAdaptationUses}}
-                                    <div class="uses-placeholder"></div>
-                                {{/if}}
-                            {{/if}}                                        
-                            <button type="button" data-action="rollAdvancement" data-advancement-id="{{item._id}}" class="roll-button">
-                                <i class="fas fa-dice-d20"></i>
-                            </button>
-                            <a data-action="deleteItem" class="control-button delete" title="Delete">
-                                <i class="fas fa-trash"></i>
-                            </a>
+                                <div class="col-icon">
+                                    <img src="{{item.img}}" class="item-icon"/>
+                                </div>
+                                <div class="col-name">
+                                    <span class="item-name" data-action="openItem">{{item.name}}</span>
+                                </div>
+                                <div class="col-type">{{getWeaponProperty item.system.weaponType "label" item}}</div>
+                                <div class="col-range">{{getWeaponProperty item.system.weaponType "range" item}}</div>
+                                <div class="col-stat">{{getWeaponProperty item.system.weaponType "attackStat" item}}</div>
+                                <div class="col-damage">{{getWeaponDamage item.system.weaponType item.system.isTwoHanded item.system.customRange item}}</div>
+                                <div class="col-initiative">
+                                    {{#if (getWeaponProperty item.system.weaponType "initiative" item)}}
+                                        {{getWeaponProperty item.system.weaponType "initiative" item}}
+                                    {{else}}
+                                        0
+                                    {{/if}}
+                                </div>
+                                <div class="col-slots">{{item.system.slotValue}}</div>
+                                <div class="col-actions">
+                                    <button type="button" data-action="rollWeaponKh2" data-weapon-id="{{item._id}}" class="roll-button-mini" title="Upper Hand">
+                                        <i class="fas fa-arrow-up"></i>
+                                    </button>
+                                    <button type="button" data-action="rollWeapon" data-weapon-id="{{item._id}}" class="roll-button-mini" title="Standard">
+                                        <i class="fas fa-sword"></i>
+                                    </button>
+                                    <button type="button" data-action="rollWeaponKl2" data-weapon-id="{{item._id}}" class="roll-button-mini" title="Against the Odds">
+                                        <i class="fas fa-arrow-down"></i>
+                                    </button>
+                                </div>
+                                <div class="col-delete"> 
+                                    <a data-action="deleteItem" class="control-button delete" title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            {{/each}}
                         </div>
                     </div>
-                    {{/each}}
+
+                    {{! Armor & Shields Table }}
+                    <div class="table-section">
+                        <h3>Armor & Shields</h3>
+                        <div class="armor-table">
+                            <div class="table-header">
+                                <div class="col-equip"></div>
+                                <div class="col-icon"></div>
+                                <div class="col-name">Name</div>
+                                <div class="col-description">Description</div>
+                                <div class="col-type">Type</div>
+                                <div class="col-armor">Armor</div>
+                                <div class="col-initiative">Initiative</div>
+                                <div class="col-slots">Slots</div>
+                                <div class="col-actions"></div>
+                            </div>
+                            {{#each items.armor as |item|}}
+                            <div class="table-row" data-item-id="{{item._id}}">
+                                <div class="col-equip">
+                                    <input type="checkbox" data-action="toggleEquip" data-item-id="{{item._id}}" {{checked item.system.equipped}} title="Equipped"/>
+                                </div>
+                                <div class="col-icon">
+                                    <img src="{{item.img}}" class="item-icon"/>
+                                </div>
+                                <div class="col-name">
+                                    <span class="item-name" data-action="openItem">{{item.name}}</span>
+                                </div>
+                                <span class="item-description">{{{item.enrichedDescription}}}</span>
+                                <div class="col-type">
+                                    {{#if (eq item.system.armorType "basic")}}Basic{{/if}}
+                                    {{#if (eq item.system.armorType "plate")}}Plate{{/if}}
+                                    {{#if (eq item.system.armorType "shield")}}Shield{{/if}}
+                                </div>
+                                <div class="col-armor">
+                                    {{#if (eq item.system.armorType "basic")}}+1{{/if}}
+                                    {{#if (eq item.system.armorType "plate")}}+2{{/if}}
+                                    {{#if (eq item.system.armorType "shield")}}+1{{/if}}
+                                </div>
+                                <div class="col-initiative">{{getArmorInitiative item.system.armorType}}</div>
+                                <div class="col-slots">{{item.system.slotValue}}</div>
+                                <div class="col-actions">
+                                    <a data-action="deleteItem" class="control-button delete" title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            {{/each}}
+                        </div>
+                    </div>
+
+                    {{! Loot Table }}
+                    <div class="table-section">
+                        <h3>Loot</h3>
+                        <div class="loot-table">
+                            <div class="table-header">
+                                <div class="col-quantity">Qty</div>
+                                <div class="col-icon"></div>
+                                <div class="col-name">Name</div>
+                                <div class="col-description">Description</div>
+                                {{#if hasAnyLootUses}}<div class="col-uses">Uses</div>{{/if}}
+                                <div class="col-value">Affluence</div>
+                                <div class="col-slots">Slots</div>
+                                <div class="col-delete"></div>
+                            </div>
+                            {{#each items.loot as |item|}}
+                            <div class="table-row" data-item-id="{{item._id}}">
+                                <div class="col-quantity">
+                                    <input type="number" name="items.{{item._id}}.system.quantity" value="{{item.system.quantity}}" min="1" class="quantity-input" data-item-id="{{item._id}}" data-field="system.quantity"/>
+                                </div>
+                                <div class="col-icon">
+                                    <img src="{{item.img}}" class="item-icon"/>
+                                </div>
+                                <div class="col-name">
+                                    <span class="item-name" data-action="openItem">{{item.name}}</span>
+                                </div>
+                                <span class="item-description">{{{item.enrichedDescription}}}</span>
+                                {{#if ../hasAnyLootUses}}
+                                <div class="col-uses">
+                                    {{#if item.system.hasUses}}
+                                        <input type="number" name="items.{{item._id}}.system.uses.current" value="{{item.system.uses.current}}" min="0" max="{{item.system.uses.max}}" class="uses-current" data-item-id="{{item._id}}" data-field="system.uses.current"/>
+                                    {{/if}}
+                                </div>
+                                {{/if}}
+                                <div class="col-value">{{item.system.affluence}}</div>
+                                <div class="col-slots">{{item.system.slotValue}}</div>
+                                <div class="col-delete">
+                                    <a data-action="deleteItem" class="control-button delete" title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            {{/each}}
+                        </div>
+                    </div>
+
+                    {{! Adaptations (Advancements) Section }}
+                    <div class="list-section">
+                        <h3>Adaptations</h3>
+                        <div class="items-list">
+                            {{#each items.advancement as |item|}}
+                            <div class="list-item" data-item-id="{{item._id}}">
+                                <div class="col-icon">
+                                    <img src="{{item.img}}" class="item-icon"/>
+                                </div>                                
+                                <div class="item-name" data-action="openItem">{{item.name}}</div>
+                                <div class="item-description">{{{item.enrichedDescription}}}</div>
+                                <div class="item-controls">
+                                    {{#if item.system.hasUses}}
+                                        <div class="uses-input">
+                                            <input type="number" name="items.{{item._id}}.system.uses.current" value="{{item.system.uses.current}}" min="0" max="{{item.system.uses.max}}" class="uses-current" data-item-id="{{item._id}}" data-field="system.uses.current"/>
+                                        </div>
+                                    {{else}}
+                                        {{#if ../hasAnyAdaptationUses}}
+                                            <div class="uses-placeholder"></div>
+                                        {{/if}}
+                                    {{/if}}                                        
+                                    <button type="button" data-action="rollAdvancement" data-advancement-id="{{item._id}}" class="roll-button">
+                                        <i class="fas fa-dice-d20"></i>
+                                    </button>
+                                    <a data-action="deleteItem" class="control-button delete" title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            {{/each}}
+                        </div>
+                    </div>
                 </div>
-            </div>
+
+                {{! Description Tab }}
+                <div class="tab {{#if (eq activeTab 'description')}}active{{/if}}" data-tab="description">
+                    <div class="form-group description-group">
+                        <label>Description</label>
+                        <prose-mirror name="system.description" button="true" editable="true" toggled="false" value="{{system.description}}">{{{enrichedDescription}}}</prose-mirror>
+                    </div>
+                </div>
+            </section>
         </div>
     </div>
 </div>
